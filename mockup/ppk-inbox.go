@@ -17,7 +17,7 @@ var PPK_INBOX_FROM_PPE models.PPKInbox = models.PPKInbox{
 	FromPPE: models.FromPPE{
 		ID:           1,
 		DateCreated:  time.Now(),
-		EstDate:      time.Date(2021, 12, 2, 8, 0, 0, 0, nil),
+		EstDate:      time.Date(2021, 12, 2, 8, 0, 0, 0, time.Now().Location()),
 		EstLaborHour: 5,
 		Worker:       "PT ABADI",
 		Worker_Email: "hdkef11@gmail.com",

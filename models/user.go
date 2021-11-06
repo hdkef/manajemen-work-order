@@ -41,11 +41,46 @@ func (u *User) Authenticate(c *gin.Context) error {
 	//get user detail from db
 	//compare hashed password
 	//if valid, set role and generate token and save to cookies
-	u.Role = "PPK"
+	u.ID = 1
+	u.FullName = "full name"
+	u.Role = "User"
 	err = u.generateTokenAndSave(c)
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func (u *User) ValidateTokenStringGetUser(token *string) error {
+	//parse token string to jwt.Token
+	parsedToken, err := jwt.Parse(*token, func(t *jwt.Token) (interface{}, error) {
+		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("there was an error")
+		}
+		return []byte(SECRET), nil
+	})
+	if err != nil {
+		return err
+	}
+
+	if !parsedToken.Valid {
+		return errors.New("token invalid")
+	}
+
+	renew := checkTokenRenew(parsedToken)
+	mapclaims := parsedToken.Claims.(jwt.MapClaims)
+	if renew {
+		//send refreshToken
+		//cast jwt.MapClaims from parsedToken.Claims
+		return errors.New(ERR_NEED_REFRESH_TOKEN)
+	}
+
+	id := int64(mapclaims["ID"].(float64))
+	u.ID = id
+	u.Username = mapclaims["Username"].(string)
+	u.FullName = mapclaims["FullName"].(string)
+	u.Role = mapclaims["Role"].(string)
+
 	return nil
 }
 
@@ -87,7 +122,7 @@ func (u *User) ValidateTokenFromCookies(c *gin.Context) error {
 		removeTokenCookie(c)
 		return err
 	}
-	mapclaims, err := ValidateTokenString(&tokenString)
+	mapclaims, err := validateTokenString(&tokenString)
 	if err != nil {
 		if err.Error() == ERR_NEED_REFRESH_TOKEN {
 			tokenString, err := createRefreshToken(mapclaims)
@@ -125,7 +160,7 @@ func SaveTokenCookie(c *gin.Context, tokenString *string) {
 	c.SetCookie(AUTH_COOKIE_NAME, *tokenString, TOKEN_EXPIRES_DUR, "/", "", false, false)
 }
 
-func ValidateTokenString(token *string) (*jwt.MapClaims, error) {
+func validateTokenString(token *string) (*jwt.MapClaims, error) {
 	//parse token string to jwt.Token
 	parsedToken, err := jwt.Parse(*token, func(t *jwt.Token) (interface{}, error) {
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {

@@ -17,7 +17,8 @@ function Login(){
         if (resJSON.ok == false){
             alert(resJSON.msg)
         }else{
-            console.log(resJSON,"berhasil")
+            //TOBE
+            window.location.href = resJSON.msg
         }
     })
 }

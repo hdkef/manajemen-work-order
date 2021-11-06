@@ -37,5 +37,9 @@ func handleLoginPost(c *gin.Context) {
 		utils.Response(c, http.StatusUnauthorized, false, err.Error())
 		return
 	}
-	utils.Response(c, http.StatusOK, true, "login berhasil")
+	//TOBE
+	switch user.Role {
+	case "User":
+		utils.Response(c, http.StatusOK, true, "http://localhost:8080/user-dashboard")
+	}
 }
