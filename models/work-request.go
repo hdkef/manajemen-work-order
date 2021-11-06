@@ -14,3 +14,15 @@ type WorkRequest struct {
 	Description string    `json:"work_request_description"`
 	Status      int64     `json:"work_request_status"`
 }
+
+func (w *WorkRequest) Create() {
+
+}
+
+func (w *WorkRequest) ChangeStatus() {
+
+}
+
+func (w *WorkRequest) Delete() {
+
+}

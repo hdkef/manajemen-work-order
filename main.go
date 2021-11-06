@@ -10,6 +10,7 @@ func main() {
 	r := gin.New()
 
 	r.LoadHTMLGlob("view/**/*")
+	r.Static("/assets", "./assets")
 
 	r.GET("/login", func(c *gin.Context) {
 		controllers.Login(c)

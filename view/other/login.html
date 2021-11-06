@@ -6,9 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <link rel="stylesheet" href="/assets/css/pico.min.css">
 </head>
 <body>
-    
+    <article>
+        <header><h1>Login</h1></header>
+        <form method="post" action="/login">
+            <input type="text" name="Username" placeholder="Username">
+            <input type="password" name="Password" placeholder="Password">
+            <button>Login</button>
+        </form>
+    </article>
 </body>
 </html>
 {{ end }}

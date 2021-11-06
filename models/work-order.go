@@ -11,4 +11,17 @@ type WorkOrder struct {
 	Worker_Email string    `json:"work_order_worker_email"`
 	Cost         float64   `json:"work_order_cost"`
 	Status       string    `json:"work_order_status"`
+	ApproverID   int64     `json:"work_order_approver_id"`
+}
+
+func (w *WorkOrder) Create() {
+
+}
+
+func (w *WorkOrder) Close() {
+
+}
+
+func (w *WorkOrder) Delete() {
+
 }
