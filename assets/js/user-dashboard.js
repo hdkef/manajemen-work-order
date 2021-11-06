@@ -1,5 +1,6 @@
 var ws
 var token
+var modal = document.getElementById("wr-modal")
 
 function initWS(){
    //TOBE
@@ -18,10 +19,17 @@ function initWS(){
    
        ws.onmessage = (e) => {
            let jsonData = JSON.parse(e.data)
-           console.log("jsonData",jsonData)
            switch (jsonData.type){
+               case "initUserFromServer":
+                   let workRequests = jsonData.Data
+                   //if data is exist then populate table
+                   if (workRequests){
+                       populateWR(workRequests)
+                   }
+                   break
                case "error":
-                   alert(jsonData.data)
+                   alert(jsonData.msg)
+                   window.location.href = "http://localhost:8080/login"
                    break
            }
        }
@@ -34,6 +42,31 @@ function initWS(){
            console.log(e,"onclose")
        }
    })
+}
+
+//to populate or create new row of work request history
+function populateWR(wrArray){
+    let tableBody = document.getElementById("table-body")
+    for (let i =0;i < wrArray.length;i++){
+        let priority = wrArray[i].work_request_priority
+        let date_created = wrArray[i].work_request_date_created
+        let task = wrArray[i].work_request_task
+        let status = wrArray[i].work_request_status
+        let location = wrArray[i].work_request_location
+        let equipment = wrArray[i].work_request_equipment
+        let newRow = document.createElement("tr")
+        let newRowInnerHTML = `<td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${status}</td><td>${location}</td><td>${equipment}</td><td><button>Detail</button><button>Cancel</button></td>`
+        newRow.innerHTML = newRowInnerHTML
+        tableBody.appendChild(newRow)
+    }
+}
+
+function showCreateWR(){
+    modal.style.display = "block"
+}
+
+function closeModalWR(){
+    modal.style.display = "none"
 }
 
 initWS()

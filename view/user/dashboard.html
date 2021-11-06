@@ -7,10 +7,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="/assets/css/pico.min.css">
+    <link rel="stylesheet" href="/assets/css/modal.css">
     <script defer src="/assets/js/user-dashboard.js"></script>
 </head>
 <body>
-    
+    <article>
+        <head><h1>User Dashboard</h1></head>
+        <button onclick="showCreateWR()">Buat Work Request</button>
+        <button>Ganti Password</button>
+    </article>
+    <article>
+        <head><h2>Riwayat</h2></head>
+        <table>
+            <thead>
+                <th>Prioritas</th>
+                <th>Tanggal Dibuat</th>
+                <th>Pekerjaan</th>
+                <th>Status</th>
+                <th>Lokasi</th>
+                <th>Nama / Tag Alat</th>
+                <th>Aksi</th>
+            </thead>
+            <tbody id="table-body">
+
+            </tbody>
+            <button>Muat Lagi</button>
+        </table>
+    </article>
+    <!-- Modal -->
+    <div id="wr-modal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <article>
+                <head><h1>Buat Work Request</h1></head>
+                <select name="Priority">
+                    <option default>pilih prioritas</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                </select>
+                <input type="text" name="Task" placeholder="pekerjaan">
+                <input type="text" name="Location" placeholder="lokasi">
+                <input type="text" name="Equipment" placeholder="nama / tag alat">
+                <textarea name="Instruction" cols="30" rows="10" placeholder="Instruksi"></textarea>
+                <textarea name="Description" cols="30" rows="10" placeholder="Description"></textarea>
+                <button>Submit</button>
+                <button onclick="closeModalWR()" style="background-color:red;border:none;">Cancel</button>
+            </article>
+        </div>
+      
+      </div>
 </body>
 </html>
 {{ end }}

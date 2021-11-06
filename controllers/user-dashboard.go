@@ -11,6 +11,7 @@ func UserDashboard(c *gin.Context) {
 	//if not authenticated then dont render pages
 	val, exist := c.Get("User")
 	if !exist {
+		c.Redirect(http.StatusTemporaryRedirect, "/login")
 		return
 	}
 
@@ -18,6 +19,9 @@ func UserDashboard(c *gin.Context) {
 
 	//role must be user
 	if user.Role != "User" {
+		//remove cookie
+		c.SetCookie(models.AUTH_COOKIE_NAME, "", -1, "/", "", false, false)
+		//response
 		c.JSON(http.StatusUnauthorized, "role bukan User")
 		return
 	}
