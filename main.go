@@ -2,6 +2,7 @@ package main
 
 import (
 	"manajemen-work-order/controllers"
+	"manajemen-work-order/middlewares"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,6 +12,7 @@ func main() {
 
 	r.LoadHTMLGlob("view/**/*")
 	r.Static("/assets", "./assets")
+	r.Use(middlewares.Auth)
 
 	r.GET("/login", func(c *gin.Context) {
 		controllers.Login(c)
@@ -35,6 +37,10 @@ func main() {
 	})
 	r.GET("/user-dashboard", func(c *gin.Context) {
 		controllers.UserDashboard(c)
+	})
+
+	r.POST("/login", func(c *gin.Context) {
+		controllers.Login(c)
 	})
 
 	r.Run()

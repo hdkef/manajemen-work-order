@@ -7,15 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="/assets/css/pico.min.css">
+    <script defer src="/assets/js/login.js"></script>
 </head>
 <body>
     <article>
         <header><h1>Login</h1></header>
-        <form method="post" action="/login">
-            <input type="text" name="Username" placeholder="Username">
-            <input type="password" name="Password" placeholder="Password">
-            <button>Login</button>
-        </form>
+        <input type="text" name="Username" placeholder="Username" id="Username">
+        <input type="password" name="Password" placeholder="Password" id="Password">
+        <button onclick="Login()">Login</button>
     </article>
 </body>
 </html>
