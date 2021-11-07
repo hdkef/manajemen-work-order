@@ -43,7 +43,7 @@ func (u *User) Authenticate(c *gin.Context) error {
 	//if valid, set role and generate token and save to cookies
 	u.ID = 1
 	u.FullName = "full name"
-	u.Role = "User"
+	u.Role = "PUM"
 	err = u.generateTokenAndSave(c)
 	if err != nil {
 		return err

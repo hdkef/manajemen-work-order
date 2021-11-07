@@ -6,12 +6,13 @@ var changepasswordmodal = document.getElementById("change-password-modal")
 var detail = document.getElementById("detail")
 var wrMap = new Map()
 var lastID = 0
+const APIHOST = "localhost:8080"
 
 function initWS(){
    //TOBE
-   fetch("http://localhost:8080/before-ws",null).then(res=>{return res.json()}).then(resJSON=>{
+   fetch(`http://${APIHOST}/token`,null).then(res=>{return res.json()}).then(resJSON=>{
        token = resJSON.msg
-       ws = new WebSocket("ws://localhost:8080/websocket")
+       ws = new WebSocket(`ws://${APIHOST}/websocket/user`)
 
        ws.onopen = (e) => {
            ws.send(
@@ -27,6 +28,9 @@ function initWS(){
            let data = jsonData.data
            let msg = jsonData.msg
            switch (jsonData.type){
+               case "changePasswordUserFromServer":
+                   alert(msg)
+                   break
                case "cancelWRUserFromServer":
                     alert(msg)
                     destroyWR(data)
@@ -48,7 +52,7 @@ function initWS(){
                    break
                case "error":
                    alert(msg)
-                   window.location.href = "http://localhost:8080/login"
+                   window.location.href = `http://${APIHOST}/login`
                    break
            }
        }
@@ -64,7 +68,6 @@ function initWS(){
 }
 
 function destroyWR(id){
-    console.log("wr id",id)
     wrMap.delete(+id)
     let wr = document.getElementById(`wr-${id}`)
     wr.parentNode.removeChild(wr)
@@ -83,7 +86,7 @@ function populateWR(wrArray,appendType){
         let equipment = wrArray[i].work_request_equipment
         let newRow = document.createElement("tr")
         newRow.id = `wr-${id}`
-        let newRowInnerHTML = `<td>${id}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${status}</td><td>${location}</td><td>${equipment}</td><td><button onclick="showDetail(${id})">Detail</button><button onclick="cancelWR(${id})">Batal</button></td>`
+        let newRowInnerHTML = `<td>${id}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${status}</td><td>${location}</td><td>${equipment}</td><td><button onclick="showDetail(${id})">Detail</button></td>`
         newRow.innerHTML = newRowInnerHTML
         wrMap.set(id,wrArray[i])
         switch(appendType){
@@ -142,8 +145,9 @@ function cancelWR(id){
     ws.send(JSON.stringify({
         type:"cancelWRUserFromClient",
         token:token,
-        wrfromclient:{work_request_id:+id}
+        idfromclient:+id
     }))
+    closeModalDetail()
 }
 
 function loadMore(){
@@ -169,9 +173,28 @@ function showDetail(id){
     let equipment = wr.work_request_equipment
     let instruction = wr.work_request_instruction
     let description = wr.work_request_description
+    let btnBatal = document.getElementById("button-cancel")
     var newHTML = `<h3>Work Request ID<h3><h4>${id}</h4><h3>Prioritas<h3><h4>${priority}</h4><h3>Tanggal Dibuat</h3><h3>${date_created}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Status</h3><h4>${status}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
     detail.innerHTML = newHTML
     detailmodal.style.display = "block"
+    btnBatal.onclick = ()=>{
+        cancelWR(id)
+    }
+}
+
+function changePwd(){
+    let oldPassword = document.getElementById("input-old-password").value
+    let newPassword = document.getElementById("input-new-password").value
+    //TOBE VALIDATION
+    ws.send(JSON.stringify({
+        type:"changePasswordUserFromClient",
+        token:token,
+        changepwdfromclient:{
+            old:oldPassword,
+            new:newPassword
+        }
+    }))
+    closeChangePassword()
 }
 
 function closeModalDetail(){

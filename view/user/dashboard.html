@@ -67,7 +67,8 @@
                 <div id="detail">
 
                 </div>
-                <button onclick="closeModalDetail()" style="background-color:darkslategrey;border:none;">Back</button>
+                <button id="button-cancel" style="background-color: red;border:none;">Batalkan</button>
+                <button onclick="closeModalDetail()" style="background-color:darkslategrey;border:none;">Kembali</button>
             </article>
         </div>
     </div>
@@ -78,9 +79,9 @@
         <div class="modal-content">
             <article>
                 <head><h1>Ganti Password</h1></head>
-                <input type="text" name="OldPassword" id="input-old-password" placeholder="Password Lama">
-                <input type="text" name="NewPassword" id="input-new-password" placeholder="Password Baru">
-                <button>Submit</button>
+                <input type="password" name="OldPassword" id="input-old-password" placeholder="Password Lama">
+                <input type="password" name="NewPassword" id="input-new-password" placeholder="Password Baru">
+                <button onclick="changePwd()">Submit</button>
                 <button onclick="closeChangePassword()" style="background-color:red;border:none;">Back</button>
             </article>
         </div>

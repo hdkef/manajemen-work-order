@@ -1,4 +1,4 @@
-package websocket
+package controllers
 
 import (
 	"manajemen-work-order/utils"
@@ -7,8 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func BeforeWS(c *gin.Context) {
-
+func Token(c *gin.Context) {
 	cookieString, err := c.Cookie("Authorization")
 	if err != nil {
 		utils.Response(c, http.StatusUnauthorized, false, err.Error())

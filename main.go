@@ -19,8 +19,8 @@ func main() {
 
 	withJWT.Use(middlewares.Auth)
 
-	withJWT.GET("/before-ws", func(c *gin.Context) {
-		websocket.BeforeWS(c)
+	withJWT.GET("/token", func(c *gin.Context) {
+		controllers.Token(c)
 	})
 	withJWT.GET("/login", func(c *gin.Context) {
 		controllers.Login(c)
@@ -51,8 +51,12 @@ func main() {
 		controllers.Login(c)
 	})
 
-	withoutJWT.GET("/websocket", func(c *gin.Context) {
-		websocket.InitWS(c)
+	//websocket route
+	withoutJWT.GET("/websocket/user", func(c *gin.Context) {
+		websocket.InitWSUser(c)
+	})
+	withoutJWT.GET("/websocket/pum", func(c *gin.Context) {
+		websocket.InitWSPUM(c)
 	})
 
 	r.Run()

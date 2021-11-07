@@ -1,12 +1,15 @@
 package controllers
 
 import (
+	"fmt"
 	"manajemen-work-order/models"
 	"manajemen-work-order/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
+
+const APIHOST = "localhost:8080"
 
 func Login(c *gin.Context) {
 	if c.Request.Method == http.MethodPost {
@@ -27,6 +30,8 @@ func redirectByRole(c *gin.Context, role string) {
 	switch role {
 	case "User":
 		c.Redirect(http.StatusTemporaryRedirect, "/user-dashboard")
+	case "PUM":
+		c.Redirect(http.StatusTemporaryRedirect, "/pum-dashboard")
 	}
 }
 
@@ -40,6 +45,8 @@ func handleLoginPost(c *gin.Context) {
 	//TOBE
 	switch user.Role {
 	case "User":
-		utils.Response(c, http.StatusOK, true, "http://localhost:8080/user-dashboard")
+		utils.Response(c, http.StatusOK, true, fmt.Sprintf("http://%s/user-dashboard", APIHOST))
+	case "PUM":
+		utils.Response(c, http.StatusOK, true, fmt.Sprintf("http://%s/pum-dashboard", APIHOST))
 	}
 }

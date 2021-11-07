@@ -7,9 +7,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pejabat Umum Dashboard</title>
     <link rel="stylesheet" href="/assets/css/pico.min.css">
+    <link rel="stylesheet" href="/assets/css/modal.css">
+    <script defer src="/assets/js/pum-dashboard.js"></script>
 </head>
 <body>
-    
+    <article>
+        <head><h1>Pejabat Umum Dashboard</h1></head>
+        <button>Ganti Password</button>
+    </article>
+    <article>
+        <head><h2>Permintaan Work Request</h2></head>
+        <table>
+            <thead>
+                <th>ID</th>
+                <th>Prioritas</th>
+                <th>Tanggal Dibuat</th>
+                <th>Pekerjaan</th>
+                <th>Lokasi</th>
+                <th>Nama / Tag Alat</th>
+                <th>Aksi</th>
+            </thead>
+            <tbody id="table-body">
+
+            </tbody>
+        </table>
+    </article>
+    <article>
+        <head><h1>Riwayat Work Request</h1></head>
+        <button>Muat Riwayat</button>
+    </article>
+
+    <!-- Modal -->
+    <div id="detail-modal" class="modal" style="display: none;">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <article>
+                <head><h1>Detail</h1></head>
+                <div id="detail">
+
+                </div>
+                <button id="button-accept" style="background-color: darkgreen;border:none;">Terima</button>
+                <button id="button-decline" style="background-color: red;border:none;">Tolak</button>
+                <button onclick="closeModalDetail()" style="background-color:darkslategrey;border:none;">Kembali</button>
+            </article>
+        </div>
+    </div>
 </body>
 </html>
 {{ end }}
