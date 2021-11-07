@@ -33,7 +33,7 @@
 
             </tbody>
         </table>
-        <button>Muat Lagi</button>
+        <button onclick="loadMore()">Muat Lagi</button>
     </article>
     <!-- Modal -->
     <div id="wr-modal" class="modal" style="display: none;">
@@ -42,18 +42,18 @@
         <div class="modal-content">
             <article>
                 <head><h1>Buat Work Request</h1></head>
-                <select name="Priority">
+                <select name="Priority" id="input-priority">
                     <option default>pilih prioritas</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                 </select>
-                <input type="text" name="Task" placeholder="pekerjaan">
-                <input type="text" name="Location" placeholder="lokasi">
-                <input type="text" name="Equipment" placeholder="nama / tag alat">
-                <textarea name="Instruction" cols="30" rows="10" placeholder="Instruksi"></textarea>
-                <textarea name="Description" cols="30" rows="10" placeholder="Description"></textarea>
-                <button>Submit</button>
+                <input type="text" name="Task" id="input-task" placeholder="pekerjaan">
+                <input type="text" name="Location" id="input-location" placeholder="lokasi">
+                <input type="text" name="Equipment" id="input-equipment" placeholder="nama / tag alat">
+                <textarea name="Instruction" id="input-instruction" cols="30" rows="10" placeholder="Instruksi"></textarea>
+                <textarea name="Description" id="input-description" cols="30" rows="10" placeholder="Description"></textarea>
+                <button onclick="createWR()">Submit</button>
                 <button onclick="closeModalWR()" style="background-color:red;border:none;">Cancel</button>
             </article>
         </div>

@@ -25,6 +25,9 @@ var onlineMap map[int64]*websocket.Conn = make(map[int64]*websocket.Conn)
 
 //various channel to handle various payload type
 var initUserFromClientChan chan models.Message = make(chan models.Message)
+var pagingUserFromClientChan chan models.Message = make(chan models.Message)
+var createWRUserFromClientChan chan models.Message = make(chan models.Message)
+var cancelWRUserFromClientChan chan models.Message = make(chan models.Message)
 
 //upgrader to upgrade http to websocket.Conn
 var upgrader websocket.Upgrader = websocket.Upgrader{
@@ -64,9 +67,16 @@ func readAndSend(cancel context.CancelFunc, ws *websocket.Conn) {
 			log.Println(err)
 			break
 		}
+
 		switch payload.Type {
 		case "initUserFromClient":
 			initUserFromClientChan <- payload
+		case "pagingUserFromClient":
+			pagingUserFromClientChan <- payload
+		case "createWRUserFromClient":
+			createWRUserFromClientChan <- payload
+		case "cancelWRUserFromClient":
+			cancelWRUserFromClientChan <- payload
 		}
 	}
 }
@@ -79,6 +89,12 @@ func receiveAndHandle(ctx context.Context) {
 			return
 		case msg := <-initUserFromClientChan:
 			initUserFromClient(msg)
+		case msg := <-pagingUserFromClientChan:
+			pagingUserFromClient(msg)
+		case msg := <-createWRUserFromClientChan:
+			createWRUserFromClient(msg)
+		case msg := <-cancelWRUserFromClientChan:
+			cancelWRUserFromClient(msg)
 		}
 	}
 }

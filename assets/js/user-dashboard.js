@@ -4,6 +4,7 @@ var wrmodal = document.getElementById("wr-modal")
 var detailmodal = document.getElementById("detail-modal")
 var detail = document.getElementById("detail")
 var wrMap = new Map()
+var lastID = 0
 
 function initWS(){
    //TOBE
@@ -22,16 +23,30 @@ function initWS(){
    
        ws.onmessage = (e) => {
            let jsonData = JSON.parse(e.data)
+           let data = jsonData.data
+           let msg = jsonData.msg
            switch (jsonData.type){
+               case "cancelWRUserFromServer":
+                    alert(msg)
+                    destroyWR(data)
+                    break
+               case "createWRUserFromServer":
+                   alert(msg)
+                   populateWR(data,"before")
+                   break
+               case "pagingUserFromServer":
+                    if (data){
+                        populateWR(data,"after")
+                    }
+                    break
                case "initUserFromServer":
-                   let workRequests = jsonData.Data
                    //if data is exist then populate table
-                   if (workRequests){
-                       populateWR(workRequests)
+                   if (data){
+                       populateWR(data,"after")
                    }
                    break
                case "error":
-                   alert(jsonData.msg)
+                   alert(msg)
                    window.location.href = "http://localhost:8080/login"
                    break
            }
@@ -47,8 +62,15 @@ function initWS(){
    })
 }
 
+function destroyWR(id){
+    console.log("wr id",id)
+    wrMap.delete(+id)
+    let wr = document.getElementById(`wr-${id}`)
+    wr.parentNode.removeChild(wr)
+}
+
 //to populate or create new row of work request history
-function populateWR(wrArray){
+function populateWR(wrArray,appendType){
     let tableBody = document.getElementById("table-body")
     for (let i =0;i < wrArray.length;i++){
         let id = wrArray[i].work_request_id
@@ -59,10 +81,20 @@ function populateWR(wrArray){
         let location = wrArray[i].work_request_location
         let equipment = wrArray[i].work_request_equipment
         let newRow = document.createElement("tr")
-        let newRowInnerHTML = `<td>${id}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${status}</td><td>${location}</td><td>${equipment}</td><td><button onclick="showDetail(${id})">Detail</button><button>Cancel</button></td>`
+        newRow.id = `wr-${id}`
+        let newRowInnerHTML = `<td>${id}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${status}</td><td>${location}</td><td>${equipment}</td><td><button onclick="showDetail(${id})">Detail</button><button onclick="cancelWR(${id})">Batal</button></td>`
         newRow.innerHTML = newRowInnerHTML
-        tableBody.appendChild(newRow)
         wrMap.set(id,wrArray[i])
+        switch(appendType){
+            case "after":
+                tableBody.appendChild(newRow)
+                break
+            case "before":
+                tableBody.prepend(newRow)
+                break
+            default:
+                tableBody.appendChild(newRow)
+        }
     }
 }
 
@@ -72,6 +104,50 @@ function showCreateWR(){
 
 function closeModalWR(){
     wrmodal.style.display = "none"
+}
+
+function createWR(){
+    let priority = document.getElementById("input-priority")
+    let task = document.getElementById("input-task")
+    let equipment = document.getElementById("input-equipment")
+    let location = document.getElementById("input-location")
+    let instruction = document.getElementById("input-instruction")
+    let description = document.getElementById("input-description")
+    //TOBE VALIDATION
+    ws.send(JSON.stringify({
+        type:"createWRUserFromClient",
+        token:token,
+        wrfromclient:{
+            work_request_priority:priority,
+            work_request_task:task,
+            work_request_equipment:equipment,
+            work_request_location:location,
+            work_request_instruction:instruction,
+            work_request_description:description,
+        }
+    }))
+    closeModalWR()
+}
+
+function cancelWR(id){
+    ws.send(JSON.stringify({
+        type:"cancelWRUserFromClient",
+        token:token,
+        wrfromclient:{work_request_id:+id}
+    }))
+}
+
+function loadMore(){
+    for (let [key,value] of wrMap.entries()){
+        if (+key > lastID){
+            lastID = +key
+        }
+    }
+    ws.send(JSON.stringify({
+        type:"pagingUserFromClient",
+        token:token,
+        last_id:lastID,
+    }))
 }
 
 function showDetail(id){

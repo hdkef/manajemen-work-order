@@ -27,3 +27,48 @@ func initUserFromClient(payload models.Message) {
 
 	utils.WSResponse(payload, "initUserFromServer", true, "", mockup.WorkRequestSlice(5, 1))
 }
+
+func pagingUserFromClient(payload models.Message) {
+	//auth
+	user := models.User{}
+
+	err := user.ValidateTokenStringGetUser(&payload.Token)
+	if err != nil {
+		utils.WSResponse(payload, "error", false, "unauthorized", nil)
+		payload.Conn.Close()
+		return
+	}
+
+	utils.WSResponse(payload, "pagingUserFromServer", true, "", mockup.WorkRequestSlice(5, 7))
+}
+
+func createWRUserFromClient(payload models.Message) {
+	//auth
+	user := models.User{}
+
+	err := user.ValidateTokenStringGetUser(&payload.Token)
+	if err != nil {
+		utils.WSResponse(payload, "error", false, "unauthorized", nil)
+		payload.Conn.Close()
+		return
+	}
+
+	//TOBE
+	utils.WSResponse(payload, "createWRUserFromServer", true, "WR berhasil dibuat", []models.WorkRequest{mockup.WorkRequest(100)})
+}
+
+func cancelWRUserFromClient(payload models.Message) {
+	//auth
+	user := models.User{}
+
+	err := user.ValidateTokenStringGetUser(&payload.Token)
+	if err != nil {
+		utils.WSResponse(payload, "error", false, "unauthorized", nil)
+		payload.Conn.Close()
+		return
+	}
+
+	//TOBE
+
+	utils.WSResponse(payload, "cancelWRUserFromServer", true, "WR berhasil dibatalkan", payload.WRFromClient.ID)
+}
