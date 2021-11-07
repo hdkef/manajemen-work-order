@@ -25,7 +25,7 @@ function initWS(){
             let data = jsonData.data
             let msg = jsonData.msg
             switch (jsonData.type){
-                case "acceptWRPUMFromServer":
+                case "resWRPUMFromServer":
                     destroyInbox(data)
                     alert(msg)
                     break
@@ -51,7 +51,6 @@ function initWS(){
 }
 
 function destroyInbox(id){
-    console.log("IDDDD",id)
     inboxMap.delete(+id)
     let inbox = document.getElementById(`inbox-${id}`)
     inbox.parentNode.removeChild(inbox)
@@ -64,6 +63,15 @@ function closeModalDetail(){
 function acceptWR(id){
     ws.send(JSON.stringify({
         type:"acceptWRPUMFromClient",
+        token:token,
+        idfromclient:+id
+    }))
+    closeModalDetail()
+}
+
+function declineWR(id){
+    ws.send(JSON.stringify({
+        type:"declineWRPUMFromClient",
         token:token,
         idfromclient:+id
     }))
@@ -109,13 +117,16 @@ function showDetail(id){
     let instruction = inboxTmp.WorkRequest.work_request_instruction
     let description = inboxTmp.WorkRequest.work_request_description
     let btnAccept = document.getElementById("button-accept")
+    var btnDecline = document.getElementById("button-decline")
     var newHTML = `<h3>Inbox ID<h3><h4>${id}</h4><h3>ID Pembuat Work Order<h3><h4>${reqid}</h4><h3>Prioritas<h3><h4>${priority}</h4><h3>Tanggal Dibuat</h3><h3>${date_created}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
     detail.innerHTML = newHTML
     detailmodal.style.display = "block"
     btnAccept.onclick = ()=>{
         acceptWR(+id)
     }
-
+    btnDecline.onclick = ()=>{
+        declineWR(+id)
+    }
 }
 
 initWS()

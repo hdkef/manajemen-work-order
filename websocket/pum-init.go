@@ -12,6 +12,7 @@ import (
 //various channel to handle various payload type
 var initPUMFromClientChan chan models.Message = make(chan models.Message)
 var acceptWRPUMFromClientChan chan models.Message = make(chan models.Message)
+var declineWRPUMFromClientChan chan models.Message = make(chan models.Message)
 
 //only upgrade and initiate websocket
 func InitWSPUM(c *gin.Context) {
@@ -50,6 +51,8 @@ func readAndSendPUM(cancel context.CancelFunc, ws *websocket.Conn) {
 			initPUMFromClientChan <- payload
 		case "acceptWRPUMFromClient":
 			acceptWRPUMFromClientChan <- payload
+		case "declineWRPUMFromClient":
+			declineWRPUMFromClientChan <- payload
 		}
 	}
 }
@@ -64,6 +67,8 @@ func receiverAndHandlePUM(ctx context.Context) {
 			initPUMFromClient(msg)
 		case msg := <-acceptWRPUMFromClientChan:
 			acceptWRPUMFromClient(msg)
+		case msg := <-declineWRPUMFromClientChan:
+			declineWRPUMFromClient(msg)
 		}
 	}
 }

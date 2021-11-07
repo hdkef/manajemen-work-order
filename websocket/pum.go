@@ -42,5 +42,21 @@ func acceptWRPUMFromClient(payload models.Message) {
 
 	//TOBE
 
-	utils.WSResponse(payload, "acceptWRPUMFromServer", true, "work request telah diteruskan", payload.IDFromClient)
+	utils.WSResponse(payload, "resWRPUMFromServer", true, "work request telah diteruskan", payload.IDFromClient)
+}
+
+func declineWRPUMFromClient(payload models.Message) {
+	//auth
+	user := models.User{}
+
+	err := user.ValidateTokenStringGetUser(&payload.Token)
+	if err != nil {
+		utils.WSResponse(payload, "error", false, "unauthorized", nil)
+		payload.Conn.Close()
+		return
+	}
+
+	//TOBE
+
+	utils.WSResponse(payload, "resWRPUMFromServer", true, "work request telah ditolak", payload.IDFromClient)
 }
