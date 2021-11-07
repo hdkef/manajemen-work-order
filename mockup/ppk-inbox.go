@@ -1,47 +1,60 @@
 package mockup
 
 import (
+	"fmt"
 	"manajemen-work-order/models"
 	"time"
 )
 
-var PPK_INBOX_FROM_PUM models.PPKInbox = models.PPKInbox{
-	FromPUM: models.FromPUM{
-		ID:          1,
+func PPKInboxFromPUM(id int64) models.FromPUM {
+	return models.FromPUM{
+		ID:          id,
 		DateCreated: time.Now(),
-		WorkRequest: WORK_REQUEST,
-	},
+		WorkRequest: WorkRequest(id),
+	}
 }
 
-var PPK_INBOX_FROM_PPE models.PPKInbox = models.PPKInbox{
-	FromPPE: models.FromPPE{
-		ID:           1,
+func PPKInboxFromPPE(id int64) models.FromPPE {
+	return models.FromPPE{
+		ID:           id,
 		DateCreated:  time.Now(),
-		EstDate:      time.Date(2021, 12, 2, 8, 0, 0, 0, time.Now().Location()),
-		EstLaborHour: 5,
-		Worker:       "PT ABADI",
-		Worker_Email: "hdkef11@gmail.com",
-		Cost:         300000,
-		WorkRequest:  WORK_REQUEST,
-	},
+		EstDate:      time.Now(),
+		EstLaborHour: id,
+		Worker:       fmt.Sprintf("worker %d", id),
+		Worker_Email: fmt.Sprintf("worker%d@email.com", id),
+		Cost:         float64(id * 1000000),
+		WorkRequest:  WorkRequest(id),
+	}
 }
 
-var PPK_INBOX_FROM_WORKER models.PPKInbox = models.PPKInbox{
-	FromWorker: models.FromWorker{
-		ID:          1,
+func PPKInboxFromWorker(id int64) models.FromWorker {
+	return models.FromWorker{
+		ID:          id,
 		DateCreated: time.Now(),
-		WorkOrder:   WORK_ORDER,
-	},
+		WorkOrder:   WorkOrder(id),
+	}
 }
 
-var PPK_INBOX_FROM_PUM_SLICE []models.FromPUM = []models.FromPUM{
-	PPK_INBOX_FROM_PUM.FromPUM, PPK_INBOX_FROM_PUM.FromPUM, PPK_INBOX_FROM_PUM.FromPUM,
+func PPKInboxFromPPESlice(num int, startfrom int) []models.FromPPE {
+	var FromPPEs []models.FromPPE
+	for i := startfrom; i <= startfrom+num; i++ {
+		FromPPEs = append(FromPPEs, PPKInboxFromPPE(int64(i)))
+	}
+	return FromPPEs
 }
 
-var PPK_INBOX_FROM_PPE_SLICE []models.FromPPE = []models.FromPPE{
-	PPK_INBOX_FROM_PPE.FromPPE, PPK_INBOX_FROM_PPE.FromPPE, PPK_INBOX_FROM_PPE.FromPPE,
+func PPKInboxFromWorkerSlice(num int, startfrom int) []models.FromWorker {
+	var FromWorkers []models.FromWorker
+	for i := startfrom; i <= startfrom+num; i++ {
+		FromWorkers = append(FromWorkers, PPKInboxFromWorker(int64(i)))
+	}
+	return FromWorkers
 }
 
-var PPK_INBOX_FROM_WORKER_SLICE []models.FromWorker = []models.FromWorker{
-	PPK_INBOX_FROM_WORKER.FromWorker, PPK_INBOX_FROM_WORKER.FromWorker, PPK_INBOX_FROM_WORKER.FromWorker,
+func PPKInboxFromPUMSlice(num int, startfrom int) []models.FromPUM {
+	var FromPUMs []models.FromPUM
+	for i := startfrom; i <= startfrom+num; i++ {
+		FromPUMs = append(FromPUMs, PPKInboxFromPUM(int64(i)))
+	}
+	return FromPUMs
 }

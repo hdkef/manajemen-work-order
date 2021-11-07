@@ -25,5 +25,5 @@ func initUserFromClient(payload models.Message) {
 	//create goroutine for ping ponger
 	go pingPonger(payload.User.ID, payload.Conn)
 
-	utils.WSResponse(payload, "initUserFromServer", true, "", []models.WorkRequest{mockup.WORK_REQUEST, mockup.WORK_REQUEST, mockup.WORK_REQUEST})
+	utils.WSResponse(payload, "initUserFromServer", true, "", mockup.WorkRequestSlice(5, 1))
 }

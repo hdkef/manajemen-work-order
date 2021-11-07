@@ -10,7 +10,7 @@ type WorkOrder struct {
 	Worker       string    `json:"work_order_worker"`
 	Worker_Email string    `json:"work_order_worker_email"`
 	Cost         float64   `json:"work_order_cost"`
-	Status       string    `json:"work_order_status"`
+	Status       int64     `json:"work_order_status"`
 	ApproverID   int64     `json:"work_order_approver_id"`
 }
 

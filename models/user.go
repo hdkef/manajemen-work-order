@@ -22,8 +22,8 @@ type User struct {
 
 const AUTH_COOKIE_NAME = "Authorization"
 const ERR_NEED_REFRESH_TOKEN = "ERR_NEED_REFRESH_TOKEN"
-const REFRESH_TOKEN_DIFF = 1
-const TOKEN_EXPIRES_DUR = 1
+const REFRESH_TOKEN_DIFF = 10000
+const TOKEN_EXPIRES_DUR = 100000
 
 var SECRET string
 

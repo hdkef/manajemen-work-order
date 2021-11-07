@@ -2,12 +2,18 @@ package mockup
 
 import "manajemen-work-order/models"
 
-var PPE_INBOX models.PPEInbox = models.PPEInbox{
-	ID:          1,
-	EstCost:     300000,
-	WorkRequest: WORK_REQUEST,
+func PPEInbox(id int64) models.PPEInbox {
+	return models.PPEInbox{
+		ID:          id,
+		EstCost:     float64(id * 1000000),
+		WorkRequest: WorkRequest(id),
+	}
 }
 
-var PPE_INBOX_SLICE []models.PPEInbox = []models.PPEInbox{
-	PPE_INBOX, PPE_INBOX, PPE_INBOX,
+func PPEInboxSlice(num int, startfrom int) []models.PPEInbox {
+	var PPEInboxs []models.PPEInbox
+	for i := startfrom; i <= startfrom+num; i++ {
+		PPEInboxs = append(PPEInboxs, PPEInbox(int64(i)))
+	}
+	return PPEInboxs
 }

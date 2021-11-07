@@ -20,6 +20,7 @@
         <head><h2>Riwayat</h2></head>
         <table>
             <thead>
+                <th>ID</th>
                 <th>Prioritas</th>
                 <th>Tanggal Dibuat</th>
                 <th>Pekerjaan</th>
@@ -31,11 +32,11 @@
             <tbody id="table-body">
 
             </tbody>
-            <button>Muat Lagi</button>
         </table>
+        <button>Muat Lagi</button>
     </article>
     <!-- Modal -->
-    <div id="wr-modal" class="modal">
+    <div id="wr-modal" class="modal" style="display: none;">
 
         <!-- Modal content -->
         <div class="modal-content">
@@ -56,8 +57,20 @@
                 <button onclick="closeModalWR()" style="background-color:red;border:none;">Cancel</button>
             </article>
         </div>
-      
-      </div>
+    </div>
+     <!-- Modal -->
+     <div id="detail-modal" class="modal" style="display: none;">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <article>
+                <head><h1>Detail</h1></head>
+                <div id="detail">
+
+                </div>
+                <button onclick="closeModalDetail()" style="background-color:darkslategrey;border:none;">Back</button>
+            </article>
+        </div>
+    </div>
 </body>
 </html>
 {{ end }}
