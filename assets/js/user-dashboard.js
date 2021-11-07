@@ -2,6 +2,7 @@ var ws
 var token
 var wrmodal = document.getElementById("wr-modal")
 var detailmodal = document.getElementById("detail-modal")
+var changepasswordmodal = document.getElementById("change-password-modal")
 var detail = document.getElementById("detail")
 var wrMap = new Map()
 var lastID = 0
@@ -100,6 +101,14 @@ function populateWR(wrArray,appendType){
 
 function showCreateWR(){
     wrmodal.style.display = "block"
+}
+
+function showChangePassword(){
+    changepasswordmodal.style.display = "block"
+}
+
+function closeChangePassword(){
+    changepasswordmodal.style.display = "none"
 }
 
 function closeModalWR(){

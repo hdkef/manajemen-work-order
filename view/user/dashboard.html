@@ -14,7 +14,7 @@
     <article>
         <head><h1>User Dashboard</h1></head>
         <button onclick="showCreateWR()">Buat Work Request</button>
-        <button>Ganti Password</button>
+        <button onclick="showChangePassword()">Ganti Password</button>
     </article>
     <article>
         <head><h2>Riwayat</h2></head>
@@ -68,6 +68,20 @@
 
                 </div>
                 <button onclick="closeModalDetail()" style="background-color:darkslategrey;border:none;">Back</button>
+            </article>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="change-password-modal" class="modal" style="display: none;">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <article>
+                <head><h1>Ganti Password</h1></head>
+                <input type="text" name="OldPassword" id="input-old-password" placeholder="Password Lama">
+                <input type="text" name="NewPassword" id="input-new-password" placeholder="Password Baru">
+                <button>Submit</button>
+                <button onclick="closeChangePassword()" style="background-color:red;border:none;">Back</button>
             </article>
         </div>
     </div>
