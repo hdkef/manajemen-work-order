@@ -1,8 +1,8 @@
 var ws
 var token
 var wrmodal = document.getElementById("wr-modal")
-var detailmodal = document.getElementById("detail-modal")
-var changepasswordmodal = document.getElementById("change-password-modal")
+var detailModal = document.getElementById("detail-modal")
+var changePasswordModal = document.getElementById("change-password-modal")
 var detail = document.getElementById("detail")
 var wrMap = new Map()
 var wrLastID = 0
@@ -62,7 +62,7 @@ function initWS(){
        }
    
        ws.onclose = (e) => {
-           console.log(e,"onclose")
+           alert("connection closed.")
        }
    })
 }
@@ -107,11 +107,11 @@ function showCreateWR(){
 }
 
 function showChangePassword(){
-    changepasswordmodal.style.display = "block"
+    changePasswordModal.style.display = "block"
 }
 
 function closeChangePassword(){
-    changepasswordmodal.style.display = "none"
+    changePasswordModal.style.display = "none"
 }
 
 function closeModalWR(){
@@ -145,7 +145,7 @@ function cancelWR(id){
     ws.send(JSON.stringify({
         type:"cancelWRUserFromClient",
         token:token,
-        idfromclient:+id
+        userrespondfromclient:{id:+id}
     }))
     closeModalDetail()
 }
@@ -176,7 +176,7 @@ function showDetail(id){
     let btnBatal = document.getElementById("button-cancel")
     var newHTML = `<h3>Work Request ID<h3><h4>${id}</h4><h3>Prioritas<h3><h4>${priority}</h4><h3>Tanggal Dibuat</h3><h3>${date_created}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Status</h3><h4>${status}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
     detail.innerHTML = newHTML
-    detailmodal.style.display = "block"
+    detailModal.style.display = "block"
     btnBatal.onclick = ()=>{
         cancelWR(id)
     }
@@ -198,7 +198,7 @@ function changePwd(){
 }
 
 function closeModalDetail(){
-    detailmodal.style.display = "none"
+    detailModal.style.display = "none"
 }
 
 initWS()

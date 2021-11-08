@@ -33,6 +33,36 @@
             </tbody>
         </table>
     </article>
+    <!-- Modal -->
+    <div id="detail-modal" class="modal" style="display: none;">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <article>
+                <head><h1>Detail</h1></head>
+                <div id="detail">
+
+                </div>
+                <button onclick="closeModalDetail()" style="background-color:darkslategrey;border:none;">Kembali</button>
+            </article>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="respond-modal" class="modal" style="display: none;">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <article>
+                <head><h1>Respon Permintaan Pengadaan</h1></head>
+                <label for="input-est-date">Tanggal Mulai Pekerjaan</label>
+                <input type="date" name="EstDate" id="input-est-date">
+                <input type="text" name="EstLaborHour" id="input-est-labor-hour" placeholder="Banyak Jam Kerja">
+                <input type="text" name="Worker" id="input-worker" placeholder="Nama Pekerja">
+                <input type="email" name="WorkerEmail" id="input-worker-email" placeholder="Email Pekerja">
+                <input type="text" name="Cost" id="input-cost" placeholder="Biaya">
+                <button id="button-respond" style="background-color: darkgreen;border: none;">Respon</button>
+                <button onclick="closeModalRespond()" style="background-color:darkslategrey;border:none;">Kembali</button>
+            </article>
+        </div>
+    </div>
 </body>
 </html>
 {{ end }}

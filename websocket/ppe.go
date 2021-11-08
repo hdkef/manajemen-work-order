@@ -25,3 +25,17 @@ func initPPEFromClient(payload models.Message) {
 
 	utils.WSResponse(payload, "initPPEFromServer", true, "", mockup.PPEInboxSlice(5, 1))
 }
+
+func respondPPEFromClient(payload models.Message) {
+	//auth
+	user := models.User{}
+
+	err := user.ValidateTokenStringGetUser(&payload.Token)
+	if err != nil {
+		utils.WSResponse(payload, "error", false, "unauthorized", nil)
+		payload.Conn.Close()
+		return
+	}
+
+	utils.WSResponse(payload, "respondPPEFromServer", true, "", payload.PPERespond.ID)
+}

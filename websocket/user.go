@@ -70,5 +70,5 @@ func cancelWRUserFromClient(payload models.Message) {
 
 	//TOBE
 
-	utils.WSResponse(payload, "cancelWRUserFromServer", true, "WR berhasil dibatalkan", payload.IDFromClient)
+	utils.WSResponse(payload, "cancelWRUserFromServer", true, "WR berhasil dibatalkan", payload.UserRespond.ID)
 }

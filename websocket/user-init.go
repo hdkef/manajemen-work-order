@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"manajemen-work-order/models"
+	"manajemen-work-order/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -43,6 +44,7 @@ func readAndSendUser(cancel context.CancelFunc, ws *websocket.Conn) {
 	for {
 		err := ws.ReadJSON(&payload)
 		if err != nil {
+			utils.WSResponse(payload, "error", false, err.Error(), nil)
 			log.Println(err)
 			break
 		}

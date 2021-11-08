@@ -42,7 +42,7 @@ func acceptWRPUMFromClient(payload models.Message) {
 
 	//TOBE
 
-	utils.WSResponse(payload, "resWRPUMFromServer", true, "work request telah diteruskan", payload.IDFromClient)
+	utils.WSResponse(payload, "resWRPUMFromServer", true, "work request telah diteruskan", payload.PUMRespond.ID)
 }
 
 func declineWRPUMFromClient(payload models.Message) {
@@ -58,7 +58,7 @@ func declineWRPUMFromClient(payload models.Message) {
 
 	//TOBE
 
-	utils.WSResponse(payload, "resWRPUMFromServer", true, "work request telah ditolak", payload.IDFromClient)
+	utils.WSResponse(payload, "resWRPUMFromServer", true, "work request telah ditolak", payload.PUMRespond.ID)
 }
 
 func loadHistoryPUMFromClient(payload models.Message) {

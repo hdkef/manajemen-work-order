@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"manajemen-work-order/models"
+	"manajemen-work-order/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -11,6 +12,7 @@ import (
 
 //various channel to handle various payload type
 var initPPEFromClientChan chan models.Message = make(chan models.Message)
+var respondPPEFromClientChan chan models.Message = make(chan models.Message)
 
 //only upgrade and initiate websocket
 func InitWSPPE(c *gin.Context) {
@@ -40,6 +42,7 @@ func readAndSendPPE(cancel context.CancelFunc, ws *websocket.Conn) {
 	for {
 		err := ws.ReadJSON(&payload)
 		if err != nil {
+			utils.WSResponse(payload, "error", false, err.Error(), nil)
 			log.Println(err)
 			break
 		}
@@ -47,6 +50,8 @@ func readAndSendPPE(cancel context.CancelFunc, ws *websocket.Conn) {
 		switch payload.Type {
 		case "initPPEFromClient":
 			initPPEFromClientChan <- payload
+		case "respondPPEFromClient":
+			respondPPEFromClientChan <- payload
 		}
 	}
 }
@@ -59,6 +64,8 @@ func receiverAndHandlePPE(ctx context.Context) {
 			return
 		case msg := <-initPPEFromClientChan:
 			initPPEFromClient(msg)
+		case msg := <-respondPPEFromClientChan:
+			respondPPEFromClient(msg)
 		}
 	}
 }

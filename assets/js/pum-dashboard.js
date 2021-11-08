@@ -2,7 +2,8 @@ var ws
 var token
 var inboxMap = new Map()
 var historyMap = new Map()
-var detailmodal = document.getElementById("detail-modal")
+var detailModal = document.getElementById("detail-modal")
+var detail = document.getElementById("detail")
 var changepasswordmodal = document.getElementById("change-password-modal")
 var historyLastID = 0
 
@@ -53,7 +54,7 @@ function initWS(){
         }
     
         ws.onclose = (e) => {
-            console.log(e,"onclose")
+            alert("connection closed.")
         }
     })
     
@@ -102,14 +103,14 @@ function destroyInbox(id){
 }
 
 function closeModalDetail(){
-    detailmodal.style.display = "none"
+    detailModal.style.display = "none"
 }
 
 function acceptWR(id){
     ws.send(JSON.stringify({
         type:"acceptWRPUMFromClient",
         token:token,
-        idfromclient:+id
+        pumrespondfromclient:{id:+id}
     }))
     closeModalDetail()
 }
@@ -118,7 +119,7 @@ function declineWR(id){
     ws.send(JSON.stringify({
         type:"declineWRPUMFromClient",
         token:token,
-        idfromclient:+id
+        pumrespondfromclient:{id:+id}
     }))
     closeModalDetail()
 }
@@ -184,7 +185,7 @@ function showDetail(id){
     var btnDecline = document.getElementById("button-decline")
     var newHTML = `<h3>Inbox ID<h3><h4>${id}</h4><h3>ID Pembuat Work Order<h3><h4>${reqid}</h4><h3>Prioritas<h3><h4>${priority}</h4><h3>Tanggal Dibuat</h3><h3>${date_created}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
     detail.innerHTML = newHTML
-    detailmodal.style.display = "block"
+    detailModal.style.display = "block"
     btnAccept.onclick = ()=>{
         acceptWR(+id)
     }
