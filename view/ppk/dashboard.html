@@ -7,9 +7,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pejabat Pemberi Komitmen Dashboard</title>
     <link rel="stylesheet" href="/assets/css/pico.min.css">
+    <link rel="stylesheet" href="/assets/css/modal.css">
+    <script defer src="/assets/js/ppk-dashboard.js"></script>
 </head>
 <body>
-    
+    <article>
+        <head><h1>Pejabat Pemberi Komitmen Dashboard</h1></head>
+        <button>Ganti Password</button>
+    </article>
+    <article>
+        <head><h2>Inbox dari Pejabat Umum</h2></head>
+        <table>
+            <thead>
+                <th>ID</th>
+                <th>Prioritas</th>
+                <th>Tanggal Dibuat</th>
+                <th>Pekerjaan</th>
+                <th>Lokasi</th>
+                <th>Nama / Tag Alat</th>
+                <th>Aksi</th>
+            </thead>
+            <tbody id="table-body-pum">
+
+            </tbody>
+        </table>
+    </article>
+    <article>
+        <head><h2>Inbox dari Pejabat Pengadaan</h2></head>
+        <table>
+            <thead>
+                <th>ID</th>
+                <th>Pekerjaan</th>
+                <th>Tanggal Mulai</th>
+                <th>Pekerja</th>
+                <th>Email Pekerja</th>
+                <th>Biaya</th>
+                <th>Aksi</th>
+            </thead>
+            <tbody id="table-body-ppe">
+
+            </tbody>
+        </table>
+    </article>
+    <article>
+        <head><h2>Inbox dari Pekerja</h2></head>
+        <table>
+            <thead>
+                <th>ID</th>
+                <th>Tanggal</th>
+                <th>Pekerjaan</th>
+                <th>Nama / Tag Alat</th>
+                <th>Lokasi</th>
+                <th>Pekerja</th>
+                <th>Email Pekerja</th>
+                <th>Aksi</th>
+            </thead>
+            <tbody id="table-body-worker">
+
+            </tbody>
+        </table>
+    </article>
 </body>
 </html>
 {{ end }}

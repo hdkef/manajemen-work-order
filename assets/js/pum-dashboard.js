@@ -42,7 +42,7 @@ function initWS(){
                     alert(msg)
                     break
                 case "initPUMFromServer":
-                    populateInbox(data,"after")
+                    populateInbox(data)
                     break
                 case "error":
                     alert(msg)
@@ -146,7 +146,7 @@ function populateHistory(historyArray){
 }
 
 //to populate or create new row of inbox
-function populateInbox(inboxArray,appendType){
+function populateInbox(inboxArray){
     let tableBody = document.getElementById("table-body-inbox")
     for (let i =0;i < inboxArray.length;i++){
         let id = inboxArray[i].pum_inbox_id
@@ -160,16 +160,7 @@ function populateInbox(inboxArray,appendType){
         let newRowInnerHTML = `<td>${id}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${location}</td><td>${equipment}</td><td><button onclick="showDetail(${id})">Detail</button></td>`
         newRow.innerHTML = newRowInnerHTML
         inboxMap.set(id,inboxArray[i])
-        switch(appendType){
-            case "after":
-                tableBody.appendChild(newRow)
-                break
-            case "before":
-                tableBody.prepend(newRow)
-                break
-            default:
-                tableBody.appendChild(newRow)
-        }
+        tableBody.appendChild(newRow)
     }
 }
 

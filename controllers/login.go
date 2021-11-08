@@ -52,5 +52,7 @@ func handleLoginPost(c *gin.Context) {
 		utils.Response(c, http.StatusOK, true, fmt.Sprintf("http://%s/pum-dashboard", APIHOST))
 	case "PPE":
 		utils.Response(c, http.StatusOK, true, fmt.Sprintf("http://%s/ppe-dashboard", APIHOST))
+	case "PPK":
+		utils.Response(c, http.StatusOK, true, fmt.Sprintf("http://%s/ppk-dashboard", APIHOST))
 	}
 }
