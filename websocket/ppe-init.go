@@ -13,6 +13,7 @@ import (
 //various channel to handle various payload type
 var initPPEFromClientChan chan models.Message = make(chan models.Message)
 var respondPPEFromClientChan chan models.Message = make(chan models.Message)
+var loadHistoryPPEFromClientChan chan models.Message = make(chan models.Message)
 
 //only upgrade and initiate websocket
 func InitWSPPE(c *gin.Context) {
@@ -52,6 +53,8 @@ func readAndSendPPE(cancel context.CancelFunc, ws *websocket.Conn) {
 			initPPEFromClientChan <- payload
 		case "respondPPEFromClient":
 			respondPPEFromClientChan <- payload
+		case "loadHistoryPPEFromClient":
+			loadHistoryPPEFromClientChan <- payload
 		}
 	}
 }
@@ -66,6 +69,8 @@ func receiverAndHandlePPE(ctx context.Context) {
 			initPPEFromClient(msg)
 		case msg := <-respondPPEFromClientChan:
 			respondPPEFromClient(msg)
+		case msg := <-loadHistoryPPEFromClientChan:
+			loadHistoryPPEFromClient(msg)
 		}
 	}
 }

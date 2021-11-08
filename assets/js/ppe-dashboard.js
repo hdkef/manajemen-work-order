@@ -3,6 +3,9 @@ var token
 var inboxMap = new Map()
 var detailModal = document.getElementById("detail-modal")
 var respondModal = document.getElementById("respond-modal")
+var changepasswordmodal = document.getElementById("change-password-modal")
+var historyMap = new Map()
+var historyLastID = 0
 
 var detail = document.getElementById("detail")
 const APIHOST = "localhost:8080"
@@ -25,6 +28,12 @@ function initWS(){
             let data = jsonData.data
             let msg = jsonData.msg
             switch (jsonData.type){
+                case "loadHistoryPPEFromServer":
+                    populateHistory(data)
+                    break
+                case "changePasswordFromServer":
+                   alert(msg)
+                   break
                 case "respondPPEFromServer":
                     destroyInbox(data)
                     break
@@ -127,6 +136,63 @@ function destroyInbox(id){
     inboxMap.delete(+id)
     let inbox = document.getElementById(`inbox-${id}`)
     inbox.parentNode.removeChild(inbox)
+}
+
+function showChangePassword(){
+    changepasswordmodal.style.display = "block"
+}
+
+function closeChangePassword(){
+    changepasswordmodal.style.display = "none"
+}
+
+function changePwd(){
+    let oldPassword = document.getElementById("input-old-password").value
+    let newPassword = document.getElementById("input-new-password").value
+    //TOBE VALIDATION
+    ws.send(JSON.stringify({
+        type:"changePasswordFromClient",
+        token:token,
+        changepwdfromclient:{
+            old:oldPassword,
+            new:newPassword
+        }
+    }))
+    closeChangePassword()
+}
+
+function loadHistory(){
+    for (let [key,_] of historyMap.entries()){
+        if (+key > historyLastID){
+            historyLastID = +key
+        }
+    }
+    ws.send(JSON.stringify({
+        type:"loadHistoryPPEFromClient",
+        token:token,
+        last_id:historyLastID,
+    }))
+}
+
+function populateHistory(historyArray){
+    let tableBody = document.getElementById("table-body-history")
+    for (let i =0;i < historyArray.length;i++){
+        let id = historyArray[i].ppe_inbox_id
+        let priority = historyArray[i].WorkRequest.work_request_priority
+        let date_created = historyArray[i].WorkRequest.work_request_date_created
+        let task = historyArray[i].WorkRequest.work_request_task
+        let estCost = historyArray[i].ppe_inbox_est_cost
+        let location = historyArray[i].WorkRequest.work_request_location
+        let equipment = historyArray[i].WorkRequest.work_request_equipment
+        let status = historyArray[i].WorkRequest.work_request_status
+        let newRow = document.createElement("tr")
+        newRow.id = `history-${id}`
+        //tobe
+        let newRowInnerHTML = `<td>${id}</td><td>${status}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${estCost}</td><td>${location}</td><td>${equipment}</td><td><button>Detail</button></td>`
+        newRow.innerHTML = newRowInnerHTML
+        historyMap.set(id,historyArray[i])
+        tableBody.appendChild(newRow)
+    }
 }
 
 initWS()

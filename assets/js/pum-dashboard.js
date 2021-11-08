@@ -135,8 +135,8 @@ function populateHistory(historyArray){
         let equipment = historyArray[i].WorkRequest.work_request_equipment
         let status = historyArray[i].WorkRequest.work_request_status
         let newRow = document.createElement("tr")
-        newRow.id = `inbox-${id}`
-        let newRowInnerHTML = `<td>${id}</td><td>${status}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${location}</td><td>${equipment}</td><td><button onclick="showDetail(${id})">Detail</button></td>`
+        newRow.id = `history-${id}`
+        let newRowInnerHTML = `<td>${id}</td><td>${status}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${location}</td><td>${equipment}</td><td><button>Detail</button></td>`
         newRow.innerHTML = newRowInnerHTML
         historyMap.set(id,historyArray[i])
         tableBody.appendChild(newRow)
