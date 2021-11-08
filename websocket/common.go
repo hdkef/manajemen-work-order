@@ -2,6 +2,8 @@ package websocket
 
 import (
 	"fmt"
+	"manajemen-work-order/models"
+	"manajemen-work-order/utils"
 	"net/http"
 	"time"
 
@@ -25,6 +27,9 @@ var upgrader websocket.Upgrader = websocket.Upgrader{
 		return true
 	},
 }
+
+//common channel
+var changePasswordFromClientChan chan models.Message = make(chan models.Message)
 
 //pingPonger will ping websocket conn and delete onlineMap if return error for defined time range
 func pingPonger(ID int64, ws *websocket.Conn) {
@@ -53,4 +58,19 @@ func pingPonger(ID int64, ws *websocket.Conn) {
 			}
 		}
 	}
+}
+
+func changePasswordFromClient(payload models.Message) {
+	//auth
+	user := models.User{}
+
+	err := user.ValidateTokenStringGetUser(&payload.Token)
+	if err != nil {
+		utils.WSResponse(payload, "error", false, "unauthorized", nil)
+		payload.Conn.Close()
+		return
+	}
+
+	//TOBE
+	utils.WSResponse(payload, "changePasswordFromServer", true, "password telah diganti", nil)
 }

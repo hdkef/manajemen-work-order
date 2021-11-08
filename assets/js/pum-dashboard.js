@@ -1,7 +1,10 @@
 var ws
 var token
 var inboxMap = new Map()
+var historyMap = new Map()
 var detailmodal = document.getElementById("detail-modal")
+var changepasswordmodal = document.getElementById("change-password-modal")
+var historyLastID = 0
 
 var APIHOST = "localhost:8080"
 
@@ -25,6 +28,12 @@ function initWS(){
             let data = jsonData.data
             let msg = jsonData.msg
             switch (jsonData.type){
+                case "loadHistoryPUMFromServer":
+                    populateHistory(data)
+                    break
+                case "changePasswordFromServer":
+                   alert(msg)
+                   break
                 case "resWRPUMFromServer":
                     destroyInbox(data)
                     alert(msg)
@@ -48,6 +57,42 @@ function initWS(){
         }
     })
     
+}
+
+function loadHistory(){
+    for (let [key,_] of historyMap.entries()){
+        if (+key > historyLastID){
+            historyLastID = +key
+        }
+    }
+    ws.send(JSON.stringify({
+        type:"loadHistoryPUMFromClient",
+        token:token,
+        last_id:historyLastID,
+    }))
+}
+
+function showChangePassword(){
+    changepasswordmodal.style.display = "block"
+}
+
+function closeChangePassword(){
+    changepasswordmodal.style.display = "none"
+}
+
+function changePwd(){
+    let oldPassword = document.getElementById("input-old-password").value
+    let newPassword = document.getElementById("input-new-password").value
+    //TOBE VALIDATION
+    ws.send(JSON.stringify({
+        type:"changePasswordFromClient",
+        token:token,
+        changepwdfromclient:{
+            old:oldPassword,
+            new:newPassword
+        }
+    }))
+    closeChangePassword()
 }
 
 function destroyInbox(id){
@@ -78,9 +123,28 @@ function declineWR(id){
     closeModalDetail()
 }
 
+function populateHistory(historyArray){
+    let tableBody = document.getElementById("table-body-history")
+    for (let i =0;i < historyArray.length;i++){
+        let id = historyArray[i].pum_inbox_id
+        let priority = historyArray[i].WorkRequest.work_request_priority
+        let date_created = historyArray[i].WorkRequest.work_request_date_created
+        let task = historyArray[i].WorkRequest.work_request_task
+        let location = historyArray[i].WorkRequest.work_request_location
+        let equipment = historyArray[i].WorkRequest.work_request_equipment
+        let status = historyArray[i].WorkRequest.work_request_status
+        let newRow = document.createElement("tr")
+        newRow.id = `inbox-${id}`
+        let newRowInnerHTML = `<td>${id}</td><td>${status}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${location}</td><td>${equipment}</td><td><button onclick="showDetail(${id})">Detail</button></td>`
+        newRow.innerHTML = newRowInnerHTML
+        historyMap.set(id,historyArray[i])
+        tableBody.appendChild(newRow)
+    }
+}
+
 //to populate or create new row of inbox
 function populateInbox(inboxArray,appendType){
-    let tableBody = document.getElementById("table-body")
+    let tableBody = document.getElementById("table-body-inbox")
     for (let i =0;i < inboxArray.length;i++){
         let id = inboxArray[i].pum_inbox_id
         let priority = inboxArray[i].WorkRequest.work_request_priority

@@ -60,3 +60,17 @@ func declineWRPUMFromClient(payload models.Message) {
 
 	utils.WSResponse(payload, "resWRPUMFromServer", true, "work request telah ditolak", payload.IDFromClient)
 }
+
+func loadHistoryPUMFromClient(payload models.Message) {
+	user := models.User{}
+
+	err := user.ValidateTokenStringGetUser(&payload.Token)
+	if err != nil {
+		utils.WSResponse(payload, "error", false, "unauthorized", nil)
+		payload.Conn.Close()
+		return
+	}
+
+	//TOBE
+	utils.WSResponse(payload, "loadHistoryPUMFromServer", true, "", mockup.PUMInboxSlice(5, 1))
+}

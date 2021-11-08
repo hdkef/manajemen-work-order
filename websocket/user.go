@@ -72,18 +72,3 @@ func cancelWRUserFromClient(payload models.Message) {
 
 	utils.WSResponse(payload, "cancelWRUserFromServer", true, "WR berhasil dibatalkan", payload.IDFromClient)
 }
-
-func changePasswordUserFromClient(payload models.Message) {
-	//auth
-	user := models.User{}
-
-	err := user.ValidateTokenStringGetUser(&payload.Token)
-	if err != nil {
-		utils.WSResponse(payload, "error", false, "unauthorized", nil)
-		payload.Conn.Close()
-		return
-	}
-
-	//TOBE
-	utils.WSResponse(payload, "changePasswordUserFromServer", true, "password telah diganti", nil)
-}

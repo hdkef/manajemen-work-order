@@ -5,7 +5,7 @@ var detailmodal = document.getElementById("detail-modal")
 var changepasswordmodal = document.getElementById("change-password-modal")
 var detail = document.getElementById("detail")
 var wrMap = new Map()
-var lastID = 0
+var wrLastID = 0
 const APIHOST = "localhost:8080"
 
 function initWS(){
@@ -28,7 +28,7 @@ function initWS(){
            let data = jsonData.data
            let msg = jsonData.msg
            switch (jsonData.type){
-               case "changePasswordUserFromServer":
+               case "changePasswordFromServer":
                    alert(msg)
                    break
                case "cancelWRUserFromServer":
@@ -152,14 +152,14 @@ function cancelWR(id){
 
 function loadMore(){
     for (let [key,value] of wrMap.entries()){
-        if (+key > lastID){
-            lastID = +key
+        if (+key > wrLastID){
+            wrLastID = +key
         }
     }
     ws.send(JSON.stringify({
         type:"pagingUserFromClient",
         token:token,
-        last_id:lastID,
+        last_id:wrLastID,
     }))
 }
 
@@ -187,7 +187,7 @@ function changePwd(){
     let newPassword = document.getElementById("input-new-password").value
     //TOBE VALIDATION
     ws.send(JSON.stringify({
-        type:"changePasswordUserFromClient",
+        type:"changePasswordFromClient",
         token:token,
         changepwdfromclient:{
             old:oldPassword,

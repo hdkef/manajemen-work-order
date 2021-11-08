@@ -13,6 +13,8 @@ import (
 var initPUMFromClientChan chan models.Message = make(chan models.Message)
 var acceptWRPUMFromClientChan chan models.Message = make(chan models.Message)
 var declineWRPUMFromClientChan chan models.Message = make(chan models.Message)
+var changePasswordPUMFromClientChan chan models.Message = make(chan models.Message)
+var loadHistoryPUMFromClientChan chan models.Message = make(chan models.Message)
 
 //only upgrade and initiate websocket
 func InitWSPUM(c *gin.Context) {
@@ -53,6 +55,10 @@ func readAndSendPUM(cancel context.CancelFunc, ws *websocket.Conn) {
 			acceptWRPUMFromClientChan <- payload
 		case "declineWRPUMFromClient":
 			declineWRPUMFromClientChan <- payload
+		case "changePasswordPUMFromClient":
+			changePasswordPUMFromClientChan <- payload
+		case "loadHistoryPUMFromClient":
+			loadHistoryPUMFromClientChan <- payload
 		}
 	}
 }
@@ -69,6 +75,10 @@ func receiverAndHandlePUM(ctx context.Context) {
 			acceptWRPUMFromClient(msg)
 		case msg := <-declineWRPUMFromClientChan:
 			declineWRPUMFromClient(msg)
+		case msg := <-changePasswordPUMFromClientChan:
+			changePasswordFromClient(msg)
+		case msg := <-loadHistoryPUMFromClientChan:
+			loadHistoryPUMFromClient(msg)
 		}
 	}
 }

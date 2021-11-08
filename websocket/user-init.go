@@ -78,7 +78,7 @@ func receiverAndHandleUser(ctx context.Context) {
 		case msg := <-cancelWRUserFromClientChan:
 			cancelWRUserFromClient(msg)
 		case msg := <-changePasswordUserFromClientChan:
-			changePasswordUserFromClient(msg)
+			changePasswordFromClient(msg)
 		}
 	}
 }

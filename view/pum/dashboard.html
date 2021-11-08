@@ -13,7 +13,7 @@
 <body>
     <article>
         <head><h1>Pejabat Umum Dashboard</h1></head>
-        <button>Ganti Password</button>
+        <button onclick="showChangePassword()">Ganti Password</button>
     </article>
     <article>
         <head><h2>Permintaan Work Request</h2></head>
@@ -27,14 +27,29 @@
                 <th>Nama / Tag Alat</th>
                 <th>Aksi</th>
             </thead>
-            <tbody id="table-body">
+            <tbody id="table-body-inbox">
 
             </tbody>
         </table>
     </article>
     <article>
         <head><h1>Riwayat Work Request</h1></head>
-        <button>Muat Riwayat</button>
+        <table>
+            <thead>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Prioritas</th>
+                <th>Tanggal Dibuat</th>
+                <th>Pekerjaan</th>
+                <th>Lokasi</th>
+                <th>Nama / Tag Alat</th>
+                <th>Aksi</th>
+            </thead>
+            <tbody id="table-body-history">
+
+            </tbody>
+        </table>
+        <button onclick="loadHistory()">Muat Riwayat</button>
     </article>
 
     <!-- Modal -->
@@ -49,6 +64,20 @@
                 <button id="button-accept" style="background-color: darkgreen;border:none;">Terima</button>
                 <button id="button-decline" style="background-color: red;border:none;">Tolak</button>
                 <button onclick="closeModalDetail()" style="background-color:darkslategrey;border:none;">Kembali</button>
+            </article>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="change-password-modal" class="modal" style="display: none;">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <article>
+                <head><h1>Ganti Password</h1></head>
+                <input type="password" name="OldPassword" id="input-old-password" placeholder="Password Lama">
+                <input type="password" name="NewPassword" id="input-new-password" placeholder="Password Baru">
+                <button onclick="changePwd()">Submit</button>
+                <button onclick="closeChangePassword()" style="background-color:red;border:none;">Back</button>
             </article>
         </div>
     </div>
