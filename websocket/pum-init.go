@@ -33,7 +33,7 @@ func InitWSPUM(c *gin.Context) {
 	go receiverAndHandlePUM(ctx)
 }
 
-//readAndSendUser read incoming payload, assign websocket.Conn to payload and send to corresponding channel
+//readAndSendPUM read incoming payload, assign websocket.Conn to payload and send to corresponding channel
 func readAndSendPUM(cancel context.CancelFunc, ws *websocket.Conn) {
 	var payload models.Message = models.Message{
 		Conn: ws,
@@ -62,7 +62,7 @@ func readAndSendPUM(cancel context.CancelFunc, ws *websocket.Conn) {
 	}
 }
 
-//receiverAndHandlePUMP receive payload from channel and handle to corresponding function
+//receiverAndHandlePUM receive payload from channel and handle to corresponding function
 func receiverAndHandlePUM(ctx context.Context) {
 	for {
 		select {

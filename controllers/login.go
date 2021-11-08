@@ -32,6 +32,8 @@ func redirectByRole(c *gin.Context, role string) {
 		c.Redirect(http.StatusTemporaryRedirect, "/user-dashboard")
 	case "PUM":
 		c.Redirect(http.StatusTemporaryRedirect, "/pum-dashboard")
+	case "PPE":
+		c.Redirect(http.StatusTemporaryRedirect, "ppe-dashboard")
 	}
 }
 
@@ -48,5 +50,7 @@ func handleLoginPost(c *gin.Context) {
 		utils.Response(c, http.StatusOK, true, fmt.Sprintf("http://%s/user-dashboard", APIHOST))
 	case "PUM":
 		utils.Response(c, http.StatusOK, true, fmt.Sprintf("http://%s/pum-dashboard", APIHOST))
+	case "PPE":
+		utils.Response(c, http.StatusOK, true, fmt.Sprintf("http://%s/ppe-dashboard", APIHOST))
 	}
 }

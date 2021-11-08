@@ -58,6 +58,9 @@ func main() {
 	withoutJWT.GET("/websocket/pum", func(c *gin.Context) {
 		websocket.InitWSPUM(c)
 	})
+	withoutJWT.GET("/websocket/ppe", func(c *gin.Context) {
+		websocket.InitWSPPE(c)
+	})
 
 	r.Run()
 }
