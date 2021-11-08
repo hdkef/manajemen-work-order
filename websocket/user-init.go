@@ -14,7 +14,6 @@ var initUserFromClientChan chan models.Message = make(chan models.Message)
 var pagingUserFromClientChan chan models.Message = make(chan models.Message)
 var createWRUserFromClientChan chan models.Message = make(chan models.Message)
 var cancelWRUserFromClientChan chan models.Message = make(chan models.Message)
-var changePasswordUserFromClientChan chan models.Message = make(chan models.Message)
 
 //only upgrade and initiate websocket
 func InitWSUser(c *gin.Context) {
@@ -57,8 +56,8 @@ func readAndSendUser(cancel context.CancelFunc, ws *websocket.Conn) {
 			createWRUserFromClientChan <- payload
 		case "cancelWRUserFromClient":
 			cancelWRUserFromClientChan <- payload
-		case "changePasswordUserFromClient":
-			changePasswordUserFromClientChan <- payload
+		case "changePasswordFromClient":
+			changePasswordFromClientChan <- payload
 		}
 	}
 }
@@ -77,7 +76,7 @@ func receiverAndHandleUser(ctx context.Context) {
 			createWRUserFromClient(msg)
 		case msg := <-cancelWRUserFromClientChan:
 			cancelWRUserFromClient(msg)
-		case msg := <-changePasswordUserFromClientChan:
+		case msg := <-changePasswordFromClientChan:
 			changePasswordFromClient(msg)
 		}
 	}
