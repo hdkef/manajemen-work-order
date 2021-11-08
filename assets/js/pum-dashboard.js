@@ -3,7 +3,9 @@ var token
 var inboxMap = new Map()
 var historyMap = new Map()
 var detailModal = document.getElementById("detail-modal")
+var historyModal = document.getElementById("history-modal")
 var detail = document.getElementById("detail")
+var historyDetail = document.getElementById("history-detail")
 var changepasswordmodal = document.getElementById("change-password-modal")
 var historyLastID = 0
 
@@ -136,7 +138,7 @@ function populateHistory(historyArray){
         let status = historyArray[i].WorkRequest.work_request_status
         let newRow = document.createElement("tr")
         newRow.id = `history-${id}`
-        let newRowInnerHTML = `<td>${id}</td><td>${status}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${location}</td><td>${equipment}</td><td><button>Detail</button></td>`
+        let newRowInnerHTML = `<td>${id}</td><td>${status}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${location}</td><td>${equipment}</td><td><button onclick="showHistoryDetail(${id})">Detail</button></td>`
         newRow.innerHTML = newRowInnerHTML
         historyMap.set(id,historyArray[i])
         tableBody.appendChild(newRow)
@@ -169,6 +171,26 @@ function populateInbox(inboxArray,appendType){
                 tableBody.appendChild(newRow)
         }
     }
+}
+
+function showHistoryDetail(id){
+    let obj = inboxMap.get(id)
+    let priority = obj.WorkRequest.work_request_priority
+    let reqid = obj.WorkRequest.work_request_id
+    let dateCreated = obj.WorkRequest.work_request_date_created
+    let task = obj.WorkRequest.work_request_task
+    let location = obj.WorkRequest.work_request_location
+    let equipment = obj.WorkRequest.work_request_equipment
+    let status = obj.WorkRequest.work_request_status
+    let instruction = obj.WorkRequest.work_request_instruction
+    let description = obj.WorkRequest.work_request_description
+    var newHTML = `<h3>Inbox ID<h3><h4>${id}</h4><h3>ID Pembuat Work Order<h3><h4>${reqid}</h4><h3>Status</h3><h4>${status}</h4><h3>Prioritas<h3><h4>${priority}</h4><h3>Tanggal Dibuat</h3><h3>${dateCreated}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
+    historyDetail.innerHTML = newHTML
+    historyModal.style.display = "block"
+}
+
+function closeHistoryDetail(){
+    historyModal.style.display = "none"
 }
 
 function showDetail(id){

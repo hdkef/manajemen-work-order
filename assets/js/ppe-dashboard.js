@@ -96,15 +96,32 @@ function showRespond(id){
 function showDetail(id){
     let inboxTmp = inboxMap.get(id)
     let reqid = inboxTmp.WorkRequest.work_request_id
-    let est_cost = inboxTmp.ppe_inbox_est_cost
+    let estCost = inboxTmp.ppe_inbox_estCost
     let priority = inboxTmp.WorkRequest.work_request_priority
-    let date_created = inboxTmp.WorkRequest.work_request_date_created
+    let dateCreated = inboxTmp.WorkRequest.work_request_date_created
     let task = inboxTmp.WorkRequest.work_request_task
     let location = inboxTmp.WorkRequest.work_request_location
     let equipment = inboxTmp.WorkRequest.work_request_equipment
     let instruction = inboxTmp.WorkRequest.work_request_instruction
     let description = inboxTmp.WorkRequest.work_request_description
-    var newHTML = `<h3>Inbox ID<h3><h4>${id}</h4><h3>ID Pembuat Work Order<h3><h4>${reqid}</h4><h3>Prioritas<h3><h4>${priority}</h4><h3>Tanggal Dibuat</h3><h3>${date_created}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Perkiraan Biaya</h3><h4>${est_cost}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
+    var newHTML = `<h3>Inbox ID<h3><h4>${id}</h4><h3>ID Pembuat Work Order<h3><h4>${reqid}</h4><h3>Prioritas<h3><h4>${priority}</h4><h3>Tanggal Dibuat</h3><h3>${dateCreated}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Perkiraan Biaya</h3><h4>${estCost}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
+    detail.innerHTML = newHTML
+    detailModal.style.display = "block"
+}
+
+function showHistoryDetail(id){
+    let obj = historyMap.get(id)
+    let reqid = obj.WorkRequest.work_request_id
+    let priority = obj.WorkRequest.work_request_priority
+    let dateCreated = obj.WorkRequest.work_request_date_created
+    let task = obj.WorkRequest.work_request_task
+    let estCost = obj.ppe_inbox_est_cost
+    let location = obj.WorkRequest.work_request_location
+    let equipment = obj.WorkRequest.work_request_equipment
+    let status = obj.WorkRequest.work_request_status
+    let instruction = obj.WorkRequest.work_request_instruction
+    let description = obj.WorkRequest.work_request_description
+    var newHTML = `<h3>Inbox ID<h3><h4>${id}</h4><h3>ID Pembuat Work Order<h3><h4>${reqid}</h4><h3>Status</h3><h4>${status}</h4><h3>Prioritas<h3><h4>${priority}</h4><h3>Tanggal Dibuat</h3><h3>${dateCreated}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Perkiraan Biaya</h3><h4>${estCost}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
     detail.innerHTML = newHTML
     detailModal.style.display = "block"
 }
@@ -188,7 +205,7 @@ function populateHistory(historyArray){
         let newRow = document.createElement("tr")
         newRow.id = `history-${id}`
         //tobe
-        let newRowInnerHTML = `<td>${id}</td><td>${status}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${estCost}</td><td>${location}</td><td>${equipment}</td><td><button>Detail</button></td>`
+        let newRowInnerHTML = `<td>${id}</td><td>${status}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${estCost}</td><td>${location}</td><td>${equipment}</td><td><button onclick="showHistoryDetail(${id})">Detail</button></td>`
         newRow.innerHTML = newRowInnerHTML
         historyMap.set(id,historyArray[i])
         tableBody.appendChild(newRow)
