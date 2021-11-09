@@ -15,6 +15,9 @@ var initPPKFromClientChan chan models.Message = make(chan models.Message)
 var inboxPUMFromClientChan chan models.Message = make(chan models.Message)
 var inboxPPEFromClientChan chan models.Message = make(chan models.Message)
 var inboxWorkerFromClientChan chan models.Message = make(chan models.Message)
+var ppkRespondPUMFromClientChan chan models.Message = make(chan models.Message)
+var createWOFromClientChan chan models.Message = make(chan models.Message)
+var ppkRespondWorkerFromClientChan chan models.Message = make(chan models.Message)
 
 //only upgrade and initiate websocket
 func InitWSPPK(c *gin.Context) {
@@ -58,6 +61,12 @@ func readAndSendPPK(cancel context.CancelFunc, ws *websocket.Conn) {
 			inboxPPEFromClientChan <- payload
 		case "inboxWorkerFromClient":
 			inboxWorkerFromClientChan <- payload
+		case "ppkRespondPUMFromClient":
+			ppkRespondPUMFromClientChan <- payload
+		case "createWOFromClient":
+			createWOFromClientChan <- payload
+		case "ppkRespondWorkerFromClient":
+			ppkRespondWorkerFromClientChan <- payload
 		}
 	}
 }
@@ -76,6 +85,12 @@ func receiverAndHandlePPK(ctx context.Context) {
 			inboxPPEFromClient(msg)
 		case msg := <-inboxWorkerFromClientChan:
 			inboxWorkerFromClient(msg)
+		case msg := <-ppkRespondPUMFromClientChan:
+			ppkRespondPUMFromClient(msg)
+		case msg := <-createWOFromClientChan:
+			createWOFromClient(msg)
+		case msg := <-ppkRespondWorkerFromClientChan:
+			ppkRespondWorkerFromClient(msg)
 		}
 	}
 }

@@ -130,12 +130,12 @@ function populateHistory(historyArray){
     let tableBody = document.getElementById("table-body-history")
     for (let i =0;i < historyArray.length;i++){
         let id = historyArray[i].pum_inbox_id
-        let priority = historyArray[i].WorkRequest.work_request_priority
-        let date_created = historyArray[i].WorkRequest.work_request_date_created
-        let task = historyArray[i].WorkRequest.work_request_task
-        let location = historyArray[i].WorkRequest.work_request_location
-        let equipment = historyArray[i].WorkRequest.work_request_equipment
-        let status = historyArray[i].WorkRequest.work_request_status
+        let priority = historyArray[i].WorkRequest.priority
+        let date_created = historyArray[i].WorkRequest.date_created
+        let task = historyArray[i].WorkRequest.task
+        let location = historyArray[i].WorkRequest.location
+        let equipment = historyArray[i].WorkRequest.equipment
+        let status = historyArray[i].WorkRequest.status
         let newRow = document.createElement("tr")
         newRow.id = `history-${id}`
         let newRowInnerHTML = `<td>${id}</td><td>${status}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${location}</td><td>${equipment}</td><td><button onclick="showHistoryDetail(${id})">Detail</button></td>`
@@ -150,11 +150,11 @@ function populateInbox(inboxArray){
     let tableBody = document.getElementById("table-body-inbox")
     for (let i =0;i < inboxArray.length;i++){
         let id = inboxArray[i].pum_inbox_id
-        let priority = inboxArray[i].WorkRequest.work_request_priority
-        let date_created = inboxArray[i].WorkRequest.work_request_date_created
-        let task = inboxArray[i].WorkRequest.work_request_task
-        let location = inboxArray[i].WorkRequest.work_request_location
-        let equipment = inboxArray[i].WorkRequest.work_request_equipment
+        let priority = inboxArray[i].WorkRequest.priority
+        let date_created = inboxArray[i].WorkRequest.date_created
+        let task = inboxArray[i].WorkRequest.task
+        let location = inboxArray[i].WorkRequest.location
+        let equipment = inboxArray[i].WorkRequest.equipment
         let newRow = document.createElement("tr")
         newRow.id = `inbox-${id}`
         let newRowInnerHTML = `<td>${id}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${location}</td><td>${equipment}</td><td><button onclick="showDetail(${id})">Detail</button></td>`
@@ -166,16 +166,16 @@ function populateInbox(inboxArray){
 
 function showHistoryDetail(id){
     let obj = inboxMap.get(id)
-    let priority = obj.WorkRequest.work_request_priority
-    let reqid = obj.WorkRequest.work_request_id
-    let dateCreated = obj.WorkRequest.work_request_date_created
-    let task = obj.WorkRequest.work_request_task
-    let location = obj.WorkRequest.work_request_location
-    let equipment = obj.WorkRequest.work_request_equipment
-    let status = obj.WorkRequest.work_request_status
-    let instruction = obj.WorkRequest.work_request_instruction
-    let description = obj.WorkRequest.work_request_description
-    var newHTML = `<h3>Inbox ID<h3><h4>${id}</h4><h3>ID Pembuat Work Order<h3><h4>${reqid}</h4><h3>Status</h3><h4>${status}</h4><h3>Prioritas<h3><h4>${priority}</h4><h3>Tanggal Dibuat</h3><h3>${dateCreated}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
+    let priority = obj.WorkRequest.priority
+    let wrid = obj.WorkRequest.id
+    let dateCreated = obj.WorkRequest.date_created
+    let task = obj.WorkRequest.task
+    let location = obj.WorkRequest.location
+    let equipment = obj.WorkRequest.equipment
+    let status = obj.WorkRequest.status
+    let instruction = obj.WorkRequest.instruction
+    let description = obj.WorkRequest.description
+    var newHTML = `<h3>Inbox ID<h3><h4>${id}</h4><h3>ID Pembuat Work Order<h3><h4>${wrid}</h4><h3>Status</h3><h4>${status}</h4><h3>Prioritas<h3><h4>${priority}</h4><h3>Tanggal Dibuat</h3><h3>${dateCreated}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
     historyDetail.innerHTML = newHTML
     historyModal.style.display = "block"
 }
@@ -186,17 +186,17 @@ function closeHistoryDetail(){
 
 function showDetail(id){
     let inboxTmp = inboxMap.get(id)
-    let reqid = inboxTmp.WorkRequest.work_request_id
-    let priority = inboxTmp.WorkRequest.work_request_priority
-    let date_created = inboxTmp.WorkRequest.work_request_date_created
-    let task = inboxTmp.WorkRequest.work_request_task
-    let location = inboxTmp.WorkRequest.work_request_location
-    let equipment = inboxTmp.WorkRequest.work_request_equipment
-    let instruction = inboxTmp.WorkRequest.work_request_instruction
-    let description = inboxTmp.WorkRequest.work_request_description
+    let wrid = inboxTmp.WorkRequest.id
+    let priority = inboxTmp.WorkRequest.priority
+    let date_created = inboxTmp.WorkRequest.date_created
+    let task = inboxTmp.WorkRequest.task
+    let location = inboxTmp.WorkRequest.location
+    let equipment = inboxTmp.WorkRequest.equipment
+    let instruction = inboxTmp.WorkRequest.instruction
+    let description = inboxTmp.WorkRequest.description
     let btnAccept = document.getElementById("button-accept")
     var btnDecline = document.getElementById("button-decline")
-    var newHTML = `<h3>Inbox ID<h3><h4>${id}</h4><h3>ID Pembuat Work Order<h3><h4>${reqid}</h4><h3>Prioritas<h3><h4>${priority}</h4><h3>Tanggal Dibuat</h3><h3>${date_created}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
+    var newHTML = `<h3>Inbox ID<h3><h4>${id}</h4><h3>ID Pembuat Work Order<h3><h4>${wrid}</h4><h3>Prioritas<h3><h4>${priority}</h4><h3>Tanggal Dibuat</h3><h3>${date_created}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
     detail.innerHTML = newHTML
     detailModal.style.display = "block"
     btnAccept.onclick = ()=>{

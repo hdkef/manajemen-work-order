@@ -77,13 +77,13 @@ function destroyWR(id){
 function populateWR(wrArray,appendType){
     let tableBody = document.getElementById("table-body")
     for (let i =0;i < wrArray.length;i++){
-        let id = wrArray[i].work_request_id
-        let priority = wrArray[i].work_request_priority
-        let date_created = wrArray[i].work_request_date_created
-        let task = wrArray[i].work_request_task
-        let status = wrArray[i].work_request_status
-        let location = wrArray[i].work_request_location
-        let equipment = wrArray[i].work_request_equipment
+        let id = wrArray[i].id
+        let priority = wrArray[i].priority
+        let date_created = wrArray[i].date_created
+        let task = wrArray[i].task
+        let status = wrArray[i].status
+        let location = wrArray[i].location
+        let equipment = wrArray[i].equipment
         let newRow = document.createElement("tr")
         newRow.id = `wr-${id}`
         let newRowInnerHTML = `<td>${id}</td><td>${priority}</td><td>${date_created}</td><td>${task}</td><td>${status}</td><td>${location}</td><td>${equipment}</td><td><button onclick="showDetail(${id})">Detail</button></td>`
@@ -130,12 +130,12 @@ function createWR(){
         type:"createWRUserFromClient",
         token:token,
         wrfromclient:{
-            work_request_priority:priority,
-            work_request_task:task,
-            work_request_equipment:equipment,
-            work_request_location:location,
-            work_request_instruction:instruction,
-            work_request_description:description,
+            priority:priority,
+            task:task,
+            equipment:equipment,
+            location:location,
+            instruction:instruction,
+            description:description,
         }
     }))
     closeModalWR()
@@ -165,14 +165,14 @@ function loadMore(){
 
 function showDetail(id){
     let wr = wrMap.get(id)
-    let priority = wr.work_request_priority
-    let date_created = wr.work_request_date_created
-    let task = wr.work_request_task
-    let status = wr.work_request_status
-    let location = wr.work_request_location
-    let equipment = wr.work_request_equipment
-    let instruction = wr.work_request_instruction
-    let description = wr.work_request_description
+    let priority = wr.priority
+    let date_created = wr.date_created
+    let task = wr.task
+    let status = wr.status
+    let location = wr.location
+    let equipment = wr.equipment
+    let instruction = wr.instruction
+    let description = wr.description
     let btnBatal = document.getElementById("button-cancel")
     var newHTML = `<h3>Work Request ID<h3><h4>${id}</h4><h3>Prioritas<h3><h4>${priority}</h4><h3>Tanggal Dibuat</h3><h3>${date_created}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Status</h3><h4>${status}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
     detail.innerHTML = newHTML

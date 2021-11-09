@@ -42,17 +42,17 @@
         <div class="modal-content">
             <article>
                 <head><h1>Buat Work Request</h1></head>
-                <select name="Priority" id="input-priority">
+                <select id="input-priority">
                     <option default>pilih prioritas</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                 </select>
-                <input type="text" name="Task" id="input-task" placeholder="pekerjaan">
-                <input type="text" name="Location" id="input-location" placeholder="lokasi">
-                <input type="text" name="Equipment" id="input-equipment" placeholder="nama / tag alat">
-                <textarea name="Instruction" id="input-instruction" cols="30" rows="10" placeholder="Instruksi"></textarea>
-                <textarea name="Description" id="input-description" cols="30" rows="10" placeholder="Description"></textarea>
+                <input type="text" id="input-task" placeholder="pekerjaan">
+                <input type="text" id="input-location" placeholder="lokasi">
+                <input type="text" id="input-equipment" placeholder="nama / tag alat">
+                <textarea id="input-instruction" cols="30" rows="10" placeholder="Instruksi"></textarea>
+                <textarea id="input-description" cols="30" rows="10" placeholder="Description"></textarea>
                 <button onclick="createWR()">Submit</button>
                 <button onclick="closeModalWR()" style="background-color:red;border:none;">Cancel</button>
             </article>
@@ -79,8 +79,8 @@
         <div class="modal-content">
             <article>
                 <head><h1>Ganti Password</h1></head>
-                <input type="password" name="OldPassword" id="input-old-password" placeholder="Password Lama">
-                <input type="password" name="NewPassword" id="input-new-password" placeholder="Password Baru">
+                <input type="password" id="input-old-password" placeholder="Password Lama">
+                <input type="password" id="input-new-password" placeholder="Password Baru">
                 <button onclick="changePwd()">Submit</button>
                 <button onclick="closeChangePassword()" style="background-color:red;border:none;">Back</button>
             </article>

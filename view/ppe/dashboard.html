@@ -73,11 +73,11 @@
             <article>
                 <head><h1>Respon Permintaan Pengadaan</h1></head>
                 <label for="input-est-date">Tanggal Mulai Pekerjaan</label>
-                <input type="date" name="EstDate" id="input-est-date">
-                <input type="text" name="EstLaborHour" id="input-est-labor-hour" placeholder="Banyak Jam Kerja">
-                <input type="text" name="Worker" id="input-worker" placeholder="Nama Pekerja">
-                <input type="email" name="WorkerEmail" id="input-worker-email" placeholder="Email Pekerja">
-                <input type="text" name="Cost" id="input-cost" placeholder="Biaya">
+                <input type="date" id="input-est-date">
+                <input type="text" id="input-est-labor-hour" placeholder="Banyak Jam Kerja">
+                <input type="text" id="input-worker" placeholder="Nama Pekerja">
+                <input type="email" id="input-worker-email" placeholder="Email Pekerja">
+                <input type="text" id="input-cost" placeholder="Biaya">
                 <button id="button-respond" style="background-color: darkgreen;border: none;">Respon</button>
                 <button onclick="closeModalRespond()" style="background-color:darkslategrey;border:none;">Kembali</button>
             </article>
@@ -90,8 +90,8 @@
         <div class="modal-content">
             <article>
                 <head><h1>Ganti Password</h1></head>
-                <input type="password" name="OldPassword" id="input-old-password" placeholder="Password Lama">
-                <input type="password" name="NewPassword" id="input-new-password" placeholder="Password Baru">
+                <input type="password" id="input-old-password" placeholder="Password Lama">
+                <input type="password" id="input-new-password" placeholder="Password Baru">
                 <button onclick="changePwd()">Submit</button>
                 <button onclick="closeChangePassword()" style="background-color:red;border:none;">Back</button>
             </article>

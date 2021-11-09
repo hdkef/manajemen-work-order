@@ -81,6 +81,50 @@
             </article>
         </div>
     </div>
+    <!-- Modal -->
+    <div id="respond-pum-modal" class="modal" style="display: none;">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <article>
+                <head><h1>Respon ke Pejabat Pengadaan</h1></head>
+                <input type="text" id="pum-input-est-cost" placeholder="Perkiraan Biaya">
+                <button id="pum-button-submit">Submit</button>
+                <button style="background-color: red;border: none;">Tolak</button>
+                <button onclick="closePUMRespond()" style="background-color: darkslategrey;border: none;">Kembali</button>
+            </article>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="create-wo-modal" class="modal" style="display: none;">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <article>
+                <head><h1>Buat Work Order</h1></head>
+                <label for="wo-input-est-date">Tanggal Mulai Pengerjaan</label>
+                <input type="date" id="wo-input-est-date">
+                <input type="text" id="wo-input-est-labor-hour" placeholder="Jumlah Waktu Kerja">
+                <input type="text" id="wo-input-worker" placeholder="Pekerja">
+                <input type="email" id="wo-input-worker-email" placeholder="Email Pekerja">
+                <input type="text" id="wo-input-cost" placeholder="Biaya">
+                <button id="wo-button-submit" style="background-color: green;border: none;">Submit</button>
+                <button style="background-color: red;border: none;">Tolak</button>
+                <button onclick="closeCreateWO()" style="background-color: darkslategrey;border: none;">Kembali</button>
+            </article>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="respond-worker-modal" class="modal" style="display: none;">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <article>
+                <head><h1>Closing Work Order</h1></head>
+                <textarea id="worker-input-msg" cols="30" rows="10" placeholder="Pesan"></textarea>
+                <button id="worker-button-rev" style="background-color: red;border: none;">Revisi</button>
+                <button id="worker-button-acc" style="background-color: green;border: none;">Terima</button>
+                <button onclick="closeWorkerRespond()" style="background-color: darkslategrey;border: none;">Kembali</button>
+            </article>
+        </div>
+    </div>
 </body>
 </html>
 {{ end }}

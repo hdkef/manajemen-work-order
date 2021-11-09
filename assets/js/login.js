@@ -1,5 +1,4 @@
 function Login(){
-    console.log("executed")
     let usernameInput  = document.getElementById("Username")
     let passwordInput = document.getElementById("Password")
     let username = usernameInput.value

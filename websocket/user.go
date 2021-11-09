@@ -20,10 +20,10 @@ func initUserFromClient(payload models.Message) {
 	}
 
 	//assign id websocket conn to online map
-	onlineMap[payload.User.ID] = payload.Conn
+	onlineMap[user.ID] = payload.Conn
 
 	//create goroutine for ping ponger
-	go pingPonger(payload.User.ID, payload.Conn)
+	go pingPonger(user.ID, payload.Conn)
 
 	utils.WSResponse(payload, "initUserFromServer", true, "", mockup.WorkRequestSlice(5, 1))
 }
