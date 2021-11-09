@@ -3,6 +3,8 @@ var token
 var pumMap = new Map()
 var ppeMap = new Map()
 var workerMap = new Map()
+var detailModal = document.getElementById("detail-modal")
+var detail = document.getElementById("detail")
 
 const APIHOST = "localhost:8080"
 
@@ -74,7 +76,7 @@ function populateInboxPUM(pumArray){
         let equipment = pumArray[i].WorkRequest.work_request_equipment
         let newRow = document.createElement("tr")
         newRow.id = `pum-${id}`
-        let newRowInnerHTML = `<td>${id}</td><td>${priority}</td><td>${dateCreated}</td><td>${task}</td><td>${location}</td><td>${equipment}</td><td><button>Detail</button><button>Respon</button></td>`
+        let newRowInnerHTML = `<td>${id}</td><td>${priority}</td><td>${dateCreated}</td><td>${task}</td><td>${location}</td><td>${equipment}</td><td><button onclick="showPUMDetail(${id})">Detail</button><button>Respon</button></td>`
         newRow.innerHTML = newRowInnerHTML
         pumMap.set(id,pumArray[i])
         tableBody.appendChild(newRow)
@@ -92,7 +94,7 @@ function populateInboxPPE(ppeArray){
         let cost = ppeArray[i].ppk_inbox_from_ppe_cost
         let newRow = document.createElement("tr")
         newRow.id = `pum-${id}`
-        let newRowInnerHTML = `<td>${id}</td><td>${task}</td><td>${estDate}</td><td>${worker}</td><td>${workerEmail}</td><td>${cost}</td><td><button>Detail</button><button>Buat WO</button></td>`
+        let newRowInnerHTML = `<td>${id}</td><td>${task}</td><td>${estDate}</td><td>${worker}</td><td>${workerEmail}</td><td>${cost}</td><td><button onclick="showPPEDetail(${id})">Detail</button><button>Buat WO</button></td>`
         newRow.innerHTML = newRowInnerHTML
         ppeMap.set(id,ppeArray[i])
         tableBody.appendChild(newRow)
@@ -111,11 +113,69 @@ function populateInboxWorker(workerArray){
         let workerEmail = workerArray[i].WorkOrder.work_order_worker_email
         let newRow = document.createElement("tr")
         newRow.id = `pum-${id}`
-        let newRowInnerHTML = `<td>${id}</td><td>${dateCreated}</td><td>${task}</td><td>${equipment}</td><td>${location}</td><td>${worker}</td><td>${workerEmail}</td><td><button>Terima</button><button>Revisi</button></td>`
+        let newRowInnerHTML = `<td>${id}</td><td>${dateCreated}</td><td>${task}</td><td>${equipment}</td><td>${location}</td><td>${worker}</td><td>${workerEmail}</td><td><button onclick="showWorkerDetail(${id})">Detail</button><button>Respon</buton></td>`
         newRow.innerHTML = newRowInnerHTML
         workerMap.set(id,workerArray[i])
         tableBody.appendChild(newRow)
     }
+}
+
+function showPUMDetail(id){
+    let obj = pumMap.get(id)
+    let reqid = obj.WorkRequest.work_request_id
+    let dateCreated = obj.ppk_inbox_from_pum_date_created
+    let priority = obj.WorkRequest.work_request_priority
+    let task = obj.WorkRequest.work_request_task
+    let location = obj.WorkRequest.work_request_location
+    let equipment = obj.WorkRequest.work_request_equipment
+    let instruction = obj.WorkRequest.work_request_instruction
+    let description = obj.WorkRequest.work_request_description
+    let newHTML =  `<h3>Work Request ID</h3><h4>${reqid}</h4><h3>Tanggal Dibuat</h3><h4>${dateCreated}</h4><h3>Prioritas</h3><h4>${priority}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Location</h3><h4>${location}</h4><h3>Nama / Tag Alat</h3><h4>${equipment}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Deskripsi</h3><p>${description}</p>`
+    detail.innerHTML = newHTML
+    detailModal.style.display = "block"
+}
+
+function showPPEDetail(id){
+    let obj = ppeMap.get(id)
+    let task = obj.WorkRequest.work_request_task
+    let reqid = obj.WorkRequest.work_request_id
+    let dateCreated = obj.ppk_inbox_from_ppe_date_created
+    let estDate = obj.ppk_inbox_from_ppe_est_date
+    let estLaborHour = obj.ppk_inbox_from_ppe_est_labor_hour
+    let worker = obj.ppk_inbox_from_ppe_worker
+    let workerEmail = obj.ppk_inbox_from_ppe_worker_email
+    let cost = obj.ppk_inbox_from_ppe_cost
+    let priority = obj.WorkRequest.work_request_priority
+    let location = obj.WorkRequest.work_request_location
+    let equipment = obj.WorkRequest.work_request_equipment
+    let instruction = obj.WorkRequest.work_request_instruction
+    let description = obj.WorkRequest.work_request_description
+
+    detailModal.style.display = "block"
+}
+
+function showWorkerDetail(id){
+    let obj = workerMap.get(id)
+    let dateCreated = obj.ppk_inbox_from_worker_date_created
+    let woid = obj.WorkOrder.work_order_id
+    let estDate = obj.WorkOrder.work_order_est_date
+    let estLaborHour = obj.WorkOrder.work_order_est_labor_hour
+    let worker = obj.WorkOrder.work_order_worker
+    let workerEmail = obj.WorkOrder.work_order_worker_email
+    let cost = obj.WorkOrder.work_order_cost
+    let task = obj.WorkRequest.work_request_task
+    let wrid = obj.WorkRequest.work_request_id
+    let priority = obj.WorkRequest.work_request_priority
+    let location = obj.WorkRequest.work_request_location
+    let equipment = obj.WorkRequest.work_request_equipment
+    let instruction = obj.WorkRequest.work_request_instruction
+    let description = obj.WorkRequest.work_request_description
+
+    detailModal.style.display = "block"
+}
+
+function closeModalDetail(){
+    detailModal.style.display = "none"
 }
 
 initWS()
