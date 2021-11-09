@@ -137,8 +137,8 @@ function showPUMDetail(id){
 
 function showPPEDetail(id){
     let obj = ppeMap.get(id)
+    let wrid = obj.WorkRequest.work_request_id
     let task = obj.WorkRequest.work_request_task
-    let reqid = obj.WorkRequest.work_request_id
     let dateCreated = obj.ppk_inbox_from_ppe_date_created
     let estDate = obj.ppk_inbox_from_ppe_est_date
     let estLaborHour = obj.ppk_inbox_from_ppe_est_labor_hour
@@ -150,7 +150,8 @@ function showPPEDetail(id){
     let equipment = obj.WorkRequest.work_request_equipment
     let instruction = obj.WorkRequest.work_request_instruction
     let description = obj.WorkRequest.work_request_description
-
+    let newHTML = `<h3>Work Request ID</h3><h4>${wrid}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Tanggal Dibuat</h3><h4>${dateCreated}</h4><h3>Tanggal Mulai Pekerjaan</h3><h4>${estDate}</h4><h3>Banyak Jam Kerja</h3><h4>${estLaborHour}</h4><h3>Pekerja</h3><h4>${worker}</h4><h3>Email Pekerja</h3><h4>${workerEmail}</h4><h3>Biaya</h3><h4>${cost}</h4><h3>Prioritas</h3><h4>${priority}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Alat / Nama Alat</h3><h4>${equipment}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Description</h3><p>${description}</p>`
+    detail.innerHTML = newHTML
     detailModal.style.display = "block"
 }
 
@@ -163,14 +164,15 @@ function showWorkerDetail(id){
     let worker = obj.WorkOrder.work_order_worker
     let workerEmail = obj.WorkOrder.work_order_worker_email
     let cost = obj.WorkOrder.work_order_cost
-    let task = obj.WorkRequest.work_request_task
-    let wrid = obj.WorkRequest.work_request_id
-    let priority = obj.WorkRequest.work_request_priority
-    let location = obj.WorkRequest.work_request_location
-    let equipment = obj.WorkRequest.work_request_equipment
-    let instruction = obj.WorkRequest.work_request_instruction
-    let description = obj.WorkRequest.work_request_description
-
+    let task = obj.WorkOrder.WorkRequest.work_request_task
+    let wrid = obj.WorkOrder.WorkRequest.work_request_id
+    let priority = obj.WorkOrder.WorkRequest.work_request_priority
+    let location = obj.WorkOrder.WorkRequest.work_request_location
+    let equipment = obj.WorkOrder.WorkRequest.work_request_equipment
+    let instruction = obj.WorkOrder.WorkRequest.work_request_instruction
+    let description = obj.WorkOrder.WorkRequest.work_request_description
+    let newHTML = `<h3>Work Request ID</h3><h4>${wrid}</h4><h3>Work Order ID</h3><h4>${woid}</h4><h3>Pekerjaan</h3><h4>${task}</h4><h3>Tanggal Dibuat</h3><h4>${dateCreated}</h4><h3>Tanggal Mulai Pekerjaan</h3><h4>${estDate}</h4><h3>Banyak Jam Kerja</h3><h4>${estLaborHour}</h4><h3>Pekerja</h3><h4>${worker}</h4><h3>Email Pekerja</h3><h4>${workerEmail}</h4><h3>Biaya</h3><h4>${cost}</h4><h3>Prioritas</h3><h4>${priority}</h4><h3>Lokasi</h3><h4>${location}</h4><h3>Alat / Nama Alat</h3><h4>${equipment}</h4><h3>Instruksi</h3><p>${instruction}</p><h3>Description</h3><p>${description}</p>`
+    detail.innerHTML = newHTML
     detailModal.style.display = "block"
 }
 
