@@ -47,12 +47,13 @@ func main() {
 	ppp.POST("/:ppp_id/no/kela/:kela_id", controllers.PPPNOKELA)
 
 	rp.POST("/new/:ppp_id/:kelb_ppp_id", controllers.RP)
-	rp.POST("/:rp_id/ok/bdmu/:bdmu_id", controllers.RPOKBDMU)
-	rp.POST("/:rp_id/no/bdmu/:bdmu_id", controllers.RPNOBDMU)
-	rp.POST("/:rp_id/ok/bdmup/:bdmup_id", controllers.RPOKBDMUP)
-	rp.POST("/:rp_id/no/bdmup/:bdmup_id", controllers.RPNOBDMUP)
+
 	rp.POST("/:rp_id/ok/kela/:kela_id", controllers.RPOKKELA)
 	rp.POST("/:rp_id/no/kela/:kela_id", controllers.RPNOKELA)
+	rp.POST("/:rp_id/ok/bdmup/:bdmup_id", controllers.RPOKBDMUP)
+	rp.POST("/:rp_id/no/bdmup/:bdmup_id", controllers.RPNOBDMUP)
+	rp.POST("/:rp_id/ok/bdmu/:bdmu_id", controllers.RPOKBDMU)
+	rp.POST("/:rp_id/no/bdmu/:bdmu_id", controllers.RPNOBDMU)
 
 	perkiraanBiaya.POST("/:id/ulp", controllers.PerkiraanBiayaULP)
 	perkiraanBiaya.POST("/:id/ppe", controllers.PerkiraanBiayaULP)

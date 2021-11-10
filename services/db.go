@@ -112,6 +112,24 @@ func initTable(db *sql.DB) error {
 		return err
 	}
 
+	err = createTableBDMUPRP(tx, ctx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	err = createTableBDMURP(tx, ctx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	err = createTablePPKRP(tx, ctx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
@@ -151,6 +169,18 @@ func createTableRP(tx *sql.Tx, ctx context.Context) error {
 
 func createTableKELARP(tx *sql.Tx, ctx context.Context) error {
 	return tx.QueryRowContext(ctx, table.KELA_RP_CREATION).Err()
+}
+
+func createTableBDMUPRP(tx *sql.Tx, ctx context.Context) error {
+	return tx.QueryRowContext(ctx, table.BDMUP_RP_CREATION).Err()
+}
+
+func createTableBDMURP(tx *sql.Tx, ctx context.Context) error {
+	return tx.QueryRowContext(ctx, table.BDMU_RP_CREATION).Err()
+}
+
+func createTablePPKRP(tx *sql.Tx, ctx context.Context) error {
+	return tx.QueryRowContext(ctx, table.PPK_RP_CREATION).Err()
 }
 
 func insertSuperAdmin(tx *sql.Tx, ctx context.Context) error {
