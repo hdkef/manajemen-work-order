@@ -2,68 +2,70 @@ package main
 
 import (
 	"manajemen-work-order/controllers"
-	"manajemen-work-order/middlewares"
-	"manajemen-work-order/websocket"
+	"manajemen-work-order/services"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+
+	db, err := services.DB()
+	if err != nil {
+		panic(err)
+	}
+	defer db.Close()
+
 	r := gin.New()
 
-	r.LoadHTMLGlob("view/**/*")
-	r.Static("/assets", "./assets")
-
-	withoutJWT := r.Group("")
-	withJWT := r.Group("")
-
-	withJWT.Use(middlewares.Auth)
-
-	withJWT.GET("/token", func(c *gin.Context) {
-		controllers.Token(c)
-	})
-	withJWT.GET("/login", func(c *gin.Context) {
-		controllers.Login(c)
-	})
-	withJWT.GET("/wo-detail/:id", func(c *gin.Context) {
-		controllers.WODetail(c)
-	})
-	withJWT.GET("/wr-detail/:id", func(c *gin.Context) {
-		controllers.WRDetail(c)
-	})
-	withJWT.GET("/wo-progress/:id", func(c *gin.Context) {
-		controllers.WOProgress(c)
-	})
-	withJWT.GET("/ppe-dashboard", func(c *gin.Context) {
-		controllers.PPEDashboard(c)
-	})
-	withJWT.GET("/ppk-dashboard", func(c *gin.Context) {
-		controllers.PPKDashboard(c)
-	})
-	withJWT.GET("/pum-dashboard", func(c *gin.Context) {
-		controllers.PUMDashboard(c)
-	})
-	withJWT.GET("/user-dashboard", func(c *gin.Context) {
-		controllers.UserDashboard(c)
+	//add DB to gin context middleware
+	r.Use(func(c *gin.Context) {
+		c.Set("DB", db)
 	})
 
-	withJWT.POST("/login", func(c *gin.Context) {
-		controllers.Login(c)
-	})
+	r.Static("archive", "archive")
 
-	//websocket route
-	withoutJWT.GET("/websocket/user", func(c *gin.Context) {
-		websocket.InitWSUser(c)
-	})
-	withoutJWT.GET("/websocket/pum", func(c *gin.Context) {
-		websocket.InitWSPUM(c)
-	})
-	withoutJWT.GET("/websocket/ppe", func(c *gin.Context) {
-		websocket.InitWSPPE(c)
-	})
-	withoutJWT.GET("/websocket/ppk", func(c *gin.Context) {
-		websocket.InitWSPPK(c)
-	})
+	//backend
+	api := r.Group("/api/v1")
+	entity := api.Group("/entity")
+	ppp := api.Group("/ppp")
+	rp := api.Group("/rp")
+	perkiraanBiaya := api.Group("/perkiraan-biaya")
+	spk := api.Group("/spk")
+	pengadaan := api.Group("/pengadaan")
+
+	//post route
+	api.POST("/login", controllers.Login)
+
+	entity.POST("", controllers.EntityPost)
+
+	ppp.POST("", controllers.PPPPost)
+	ppp.POST("/:id/ok/bdmu", controllers.PPPOKBDMU)
+	ppp.POST("/:id/no/bdmu", controllers.PPPNOBDMU)
+	ppp.POST("/:id/ok/bdmup", controllers.PPPOKBDMUP)
+	ppp.POST("/:id/no/bdmup", controllers.PPPNOBDMUP)
+	ppp.POST("/:id/ok/kela", controllers.PPPOKKELA)
+	ppp.POST("/:id/no/kela", controllers.PPPNOKELA)
+
+	rp.POST("", controllers.RP)
+	rp.POST("/:id/ok/bdmu", controllers.RPOKBDMU)
+	rp.POST("/:id/no/bdmu", controllers.RPNOBDMU)
+	rp.POST("/:id/ok/bdmup", controllers.RPOKBDMUP)
+	rp.POST("/:id/no/bdmup", controllers.RPNOBDMUP)
+	rp.POST("/:id/ok/kela", controllers.RPOKKELA)
+	rp.POST("/:id/no/kela", controllers.RPNOKELA)
+
+	perkiraanBiaya.POST("/:id/ulp", controllers.PerkiraanBiayaULP)
+	perkiraanBiaya.POST("/:id/ppe", controllers.PerkiraanBiayaULP)
+
+	spk.POST("", controllers.SPK)
+	spk.POST("/:id/lapor", controllers.SPKLapor)
+	spk.POST("/:id/ok", controllers.SPKOK)
+	spk.POST("/:id/no", controllers.SPKNO)
+
+	pengadaan.POST("", controllers.Pengadaan)
+
+	//route delete
+	entity.DELETE("/:id", controllers.EntityDelete)
 
 	r.Run()
 }
