@@ -64,7 +64,7 @@ func PPPPost(c *gin.Context) {
 		return
 	}
 
-	res, err := payload.InsertTx(tx, ctx, entity.ID, 0, 0, 0)
+	res, err := payload.InsertTx(tx, ctx, entity.ID)
 	if err != nil {
 		services.RemoveFile(path)
 		tx.Rollback()
@@ -118,8 +118,14 @@ func PPPOKBDMU(c *gin.Context) {
 	}
 
 	//extract id from param
-	val := c.Params.ByName("id")
-	id, err := strconv.ParseInt(val, 10, 64)
+	val := c.Params.ByName("ppp_id")
+	pppid, err := strconv.ParseInt(val, 10, 64)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+	val2 := c.Params.ByName("bdmu_id")
+	bdmuid, err := strconv.ParseInt(val2, 10, 64)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -142,7 +148,7 @@ func PPPOKBDMU(c *gin.Context) {
 	}
 
 	ppp := models.PPP{
-		ID:     id,
+		ID:     pppid,
 		Status: "ON ROUTE TO BDMUP",
 		BDMUID: entity.ID,
 	}
@@ -156,9 +162,20 @@ func PPPOKBDMU(c *gin.Context) {
 
 	//store to dbmup_ppp
 	bdmupppp := models.BDMUPPPP{
-		PPPID: id,
+		PPPID: pppid,
 	}
 	_, err = bdmupppp.InsertTx(tx, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		tx.Rollback()
+		return
+	}
+
+	//delete bdmu_ppp
+	bdmuppp := models.BDMUPPP{
+		ID: bdmuid,
+	}
+	_, err = bdmuppp.DeleteTx(tx, ctx)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		tx.Rollback()
@@ -194,8 +211,14 @@ func PPPOKBDMUP(c *gin.Context) {
 	}
 
 	//extract id from param
-	val := c.Params.ByName("id")
-	id, err := strconv.ParseInt(val, 10, 64)
+	val := c.Params.ByName("ppp_id")
+	pppid, err := strconv.ParseInt(val, 10, 64)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+	val2 := c.Params.ByName("bdmup_id")
+	bdmupid, err := strconv.ParseInt(val2, 10, 64)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -218,7 +241,7 @@ func PPPOKBDMUP(c *gin.Context) {
 	}
 
 	ppp := models.PPP{
-		ID:      id,
+		ID:      pppid,
 		Status:  "ON ROUTE TO KELA",
 		BDMUPID: entity.ID,
 	}
@@ -232,9 +255,21 @@ func PPPOKBDMUP(c *gin.Context) {
 
 	//store to kela_ppp
 	kelappp := models.KELAPPP{
-		PPPID: id,
+		PPPID: pppid,
 	}
 	_, err = kelappp.InsertTx(tx, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		tx.Rollback()
+		return
+	}
+
+	//delete bdmup_ppp
+	bdmupppp := models.BDMUPPPP{
+		ID: bdmupid,
+	}
+
+	_, err = bdmupppp.DeleteTx(tx, ctx)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		tx.Rollback()
@@ -270,8 +305,15 @@ func PPPOKKELA(c *gin.Context) {
 	}
 
 	//extract id from param
-	val := c.Params.ByName("id")
-	id, err := strconv.ParseInt(val, 10, 64)
+	val := c.Params.ByName("ppp_id")
+	pppid, err := strconv.ParseInt(val, 10, 64)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	val2 := c.Params.ByName("kela_id")
+	kelaid, err := strconv.ParseInt(val2, 10, 64)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -294,7 +336,7 @@ func PPPOKKELA(c *gin.Context) {
 	}
 
 	ppp := models.PPP{
-		ID:     id,
+		ID:     pppid,
 		Status: "ON ROUTE TO KELB",
 		KELAID: entity.ID,
 	}
@@ -308,9 +350,20 @@ func PPPOKKELA(c *gin.Context) {
 
 	//store to kelb_ppp
 	kelbppp := models.KELBPPP{
-		PPPID: id,
+		PPPID: pppid,
 	}
 	_, err = kelbppp.InsertTx(tx, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		tx.Rollback()
+		return
+	}
+
+	//delete kela_ppp
+	kelappp := models.KELAPPP{
+		ID: kelaid,
+	}
+	_, err = kelappp.DeleteTx(tx, ctx)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		tx.Rollback()

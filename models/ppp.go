@@ -23,11 +23,11 @@ type PPP struct {
 	KELAID      int64     `json:"kela_id"`
 }
 
-func (x *PPP) InsertTx(tx *sql.Tx, ctx context.Context, creatorid int64, bdmuid int64, bdmupid int64, kelaid int64) (sql.Result, error) {
+func (x *PPP) InsertTx(tx *sql.Tx, ctx context.Context, creatorid int64) (sql.Result, error) {
 
 	date := time.Now()
 
-	return tx.ExecContext(ctx, fmt.Sprintf("INSERT INTO %s(date_created,creator_id, doc, status, perihal, nota, sifat, pekerjaan, bdmu_id, bdmup_id, kela_id) VALUES (?,?,?,?,?,?,?,?,?,?,?)", table.PPP), date, creatorid, x.Doc, x.Status, x.Perihal, x.Nota, x.Sifat, x.Pekerjaan, bdmuid, bdmupid, kelaid)
+	return tx.ExecContext(ctx, fmt.Sprintf("INSERT INTO %s(date_created,creator_id, doc, status, perihal, nota, sifat, pekerjaan) VALUES (?,?,?,?,?,?,?,?)", table.PPP), date, creatorid, x.Doc, x.Status, x.Perihal, x.Nota, x.Sifat, x.Pekerjaan)
 }
 
 func (x *PPP) UpdateStatusAndBDMUIDTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
@@ -40,4 +40,8 @@ func (x *PPP) UpdateStatusAndBDMUPIDTx(tx *sql.Tx, ctx context.Context) (sql.Res
 
 func (x *PPP) UpdateStatusAndKELAIDTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
 	return tx.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=?,kela_id=? WHERE id=?", table.PPP), x.Status, x.KELAID, x.ID)
+}
+
+func (x *PPP) UpdateStatusTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
+	return tx.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=?", table.PPP), x.Status)
 }

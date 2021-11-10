@@ -76,25 +76,37 @@ func initTable(db *sql.DB) error {
 		return err
 	}
 
-	err = createBDMUPPP(tx, ctx)
+	err = createTableBDMUPPP(tx, ctx)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	err = createBDMUPPPP(tx, ctx)
+	err = createTableBDMUPPPP(tx, ctx)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	err = createKELAPPP(tx, ctx)
+	err = createTableKELAPPP(tx, ctx)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	err = createKELBPPP(tx, ctx)
+	err = createTableKELBPPP(tx, ctx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	err = createTableRP(tx, ctx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	err = createTableKELARP(tx, ctx)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -117,20 +129,28 @@ func createTablePPP(tx *sql.Tx, ctx context.Context) error {
 	return tx.QueryRowContext(ctx, table.PPP_CREATION).Err()
 }
 
-func createBDMUPPP(tx *sql.Tx, ctx context.Context) error {
+func createTableBDMUPPP(tx *sql.Tx, ctx context.Context) error {
 	return tx.QueryRowContext(ctx, table.BDMU_PPP_CREATION).Err()
 }
 
-func createBDMUPPPP(tx *sql.Tx, ctx context.Context) error {
+func createTableBDMUPPPP(tx *sql.Tx, ctx context.Context) error {
 	return tx.QueryRowContext(ctx, table.BDMUP_PPP_CREATION).Err()
 }
 
-func createKELAPPP(tx *sql.Tx, ctx context.Context) error {
+func createTableKELAPPP(tx *sql.Tx, ctx context.Context) error {
 	return tx.QueryRowContext(ctx, table.KELA_PPP_CREATION).Err()
 }
 
-func createKELBPPP(tx *sql.Tx, ctx context.Context) error {
+func createTableKELBPPP(tx *sql.Tx, ctx context.Context) error {
 	return tx.QueryRowContext(ctx, table.KELB_PPP_CREATION).Err()
+}
+
+func createTableRP(tx *sql.Tx, ctx context.Context) error {
+	return tx.QueryRowContext(ctx, table.RP_CREATION).Err()
+}
+
+func createTableKELARP(tx *sql.Tx, ctx context.Context) error {
+	return tx.QueryRowContext(ctx, table.KELA_RP_CREATION).Err()
 }
 
 func insertSuperAdmin(tx *sql.Tx, ctx context.Context) error {

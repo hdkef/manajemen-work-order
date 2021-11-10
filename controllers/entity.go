@@ -30,9 +30,24 @@ func EntityPost(c *gin.Context) {
 	password := c.PostForm("password")
 	role := c.PostForm("role")
 	email := c.PostForm("email")
+
+	//validate for empty
+	err = services.IsNotEmpty(fullname, username, password, role, email)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
+		return
+	}
+
 	signature, err := c.FormFile("signature")
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//validation for email
+	err = services.IsEmail(email)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
 		return
 	}
 
@@ -53,20 +68,6 @@ func EntityPost(c *gin.Context) {
 		Signature: signaturePath,
 	}
 
-	//validation for empty
-	err = services.IsNotEmpty(payload.Fullname, payload.Password, payload.Username, payload.Role, payload.Email)
-	if err != nil {
-		services.RemoveFile(signaturePath)
-		services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
-		return
-	}
-	//validation for email
-	err = services.IsEmail(payload.Email)
-	if err != nil {
-		services.RemoveFile(signaturePath)
-		services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
-		return
-	}
 	//hash password
 	hashedPass, err := services.HashPassword(&payload.Password)
 	if err != nil {

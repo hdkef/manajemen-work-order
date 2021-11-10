@@ -18,3 +18,7 @@ func (x *KELAPPP) InsertTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) 
 	date := time.Now()
 	return tx.ExecContext(ctx, fmt.Sprintf("INSERT INTO %s (date_created,ppp_id) VALUES (?,?)", table.KELA_PPP), date, x.PPPID)
 }
+
+func (x *KELAPPP) DeleteTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
+	return tx.ExecContext(ctx, fmt.Sprintf("DELETE FROM %s WHERE ID=?", table.KELA_PPP), x.ID)
+}
