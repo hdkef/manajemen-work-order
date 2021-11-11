@@ -63,7 +63,8 @@ func main() {
 	spk.POST("/:id/ok", controllers.SPKOK)
 	spk.POST("/:id/no", controllers.SPKNO)
 
-	pengadaan.POST("", controllers.Pengadaan)
+	pengadaan.POST("/:perkiraan_biaya_id/ulp/:inbox_id", controllers.PengadaanFromULP)
+	pengadaan.POST("/:perkiraan_biaya_id/ppe/:inbox_id", controllers.PengadaanFromPPE)
 
 	//route delete
 	entity.DELETE("/:id", controllers.EntityDelete)

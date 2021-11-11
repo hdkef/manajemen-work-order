@@ -28,8 +28,8 @@ func PerkiraanBiayaHelper(c *gin.Context, role string) {
 		return
 	}
 
-	if entity.Role != role {
-		services.SendBasicResponse(c, http.StatusUnauthorized, false, "NOT KELB")
+	if entity.Role != "PPK" {
+		services.SendBasicResponse(c, http.StatusUnauthorized, false, `NOT PPK`)
 		return
 	}
 
