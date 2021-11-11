@@ -178,6 +178,12 @@ func initTable(db *sql.DB) error {
 		return err
 	}
 
+	err = createTableRPREJECTED(tx, ctx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
@@ -261,6 +267,10 @@ func createTableEmailSession(tx *sql.Tx, ctx context.Context) error {
 
 func createTablePPKSPK(tx *sql.Tx, ctx context.Context) error {
 	return tx.QueryRowContext(ctx, table.PPK_SPK_CREATION).Err()
+}
+
+func createTableRPREJECTED(tx *sql.Tx, ctx context.Context) error {
+	return tx.QueryRowContext(ctx, table.RP_REJECTED_CREATION).Err()
 }
 
 func insertSuperAdmin(tx *sql.Tx, ctx context.Context) error {

@@ -32,6 +32,7 @@ func main() {
 	perkiraanBiaya := api.Group("/perkiraan-biaya")
 	spk := api.Group("/spk")
 	pengadaan := api.Group("/pengadaan")
+	rpRejected := api.Group("/rp-rejected")
 
 	//post route
 	api.POST("/login", controllers.Login)
@@ -40,20 +41,14 @@ func main() {
 
 	ppp.POST("", controllers.PPPPost)
 	ppp.POST("/:ppp_id/ok/bdmu/:bdmu_id", controllers.PPPOKBDMU)
-	ppp.POST("/:ppp_id/no/bdmu/:bdmu_id", controllers.PPPNOBDMU)
 	ppp.POST("/:ppp_id/ok/bdmup/:bdmup_id", controllers.PPPOKBDMUP)
-	ppp.POST("/:ppp_id/no/bdmup/:bdmup_id", controllers.PPPNOBDMUP)
 	ppp.POST("/:ppp_id/ok/kela/:kela_id", controllers.PPPOKKELA)
-	ppp.POST("/:ppp_id/no/kela/:kela_id", controllers.PPPNOKELA)
 
 	rp.POST("/new/:ppp_id/:kelb_ppp_id", controllers.RP)
 
 	rp.POST("/:rp_id/ok/kela/:kela_id", controllers.RPOKKELA)
-	rp.POST("/:rp_id/no/kela/:kela_id", controllers.RPNOKELA)
 	rp.POST("/:rp_id/ok/bdmup/:bdmup_id", controllers.RPOKBDMUP)
-	rp.POST("/:rp_id/no/bdmup/:bdmup_id", controllers.RPNOBDMUP)
 	rp.POST("/:rp_id/ok/bdmu/:bdmu_id", controllers.RPOKBDMU)
-	rp.POST("/:rp_id/no/bdmu/:bdmu_id", controllers.RPNOBDMU)
 
 	perkiraanBiaya.POST("/ulp/:rp_id/:ppk_rp_id", controllers.ULPPerkiraanBiaya)
 	perkiraanBiaya.POST("/ppe/:rp_id/:ppk_rp_id", controllers.PPEPerkiraanBiaya)
@@ -65,6 +60,8 @@ func main() {
 
 	pengadaan.POST("/:perkiraan_biaya_id/ulp/:inbox_id", controllers.PengadaanFromULP)
 	pengadaan.POST("/:perkiraan_biaya_id/ppe/:inbox_id", controllers.PengadaanFromPPE)
+
+	rpRejected.POST("/:rp_id", controllers.RPRejectedPost)
 
 	//route delete
 	entity.DELETE("/:id", controllers.EntityDelete)

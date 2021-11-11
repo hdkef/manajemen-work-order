@@ -193,10 +193,6 @@ func PPPOKBDMU(c *gin.Context) {
 	services.SendBasicResponse(c, http.StatusOK, true, "PPP routed to BDMUP")
 }
 
-func PPPNOBDMU(c *gin.Context) {
-
-}
-
 func PPPOKBDMUP(c *gin.Context) {
 	//validate entity must be bdmu
 	entity, err := services.ValidateTokenFromHeader(c)
@@ -287,10 +283,6 @@ func PPPOKBDMUP(c *gin.Context) {
 	services.SendBasicResponse(c, http.StatusOK, true, "PPP routed to KELA")
 }
 
-func PPPNOBDMUP(c *gin.Context) {
-
-}
-
 func PPPOKKELA(c *gin.Context) {
 	//validate entity must be bdmu
 	entity, err := services.ValidateTokenFromHeader(c)
@@ -379,8 +371,4 @@ func PPPOKKELA(c *gin.Context) {
 
 	//response
 	services.SendBasicResponse(c, http.StatusOK, true, "PPP routed to KELB")
-}
-
-func PPPNOKELA(c *gin.Context) {
-
 }

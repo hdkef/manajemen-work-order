@@ -234,10 +234,6 @@ func RPOKKELA(c *gin.Context) {
 	services.SendBasicResponse(c, http.StatusOK, true, "RP routed to BDMUP")
 }
 
-func RPNOKELA(c *gin.Context) {
-
-}
-
 func RPOKBDMUP(c *gin.Context) {
 	//validate entity must be bdmu
 	entity, err := services.ValidateTokenFromHeader(c)
@@ -328,10 +324,6 @@ func RPOKBDMUP(c *gin.Context) {
 	services.SendBasicResponse(c, http.StatusOK, true, "RP routed to BDMU")
 }
 
-func RPNOBDMUP(c *gin.Context) {
-
-}
-
 func RPOKBDMU(c *gin.Context) {
 	//validate entity must be bdmu
 	entity, err := services.ValidateTokenFromHeader(c)
@@ -420,8 +412,4 @@ func RPOKBDMU(c *gin.Context) {
 
 	//response
 	services.SendBasicResponse(c, http.StatusOK, true, "RP routed to PPK")
-}
-
-func RPNOBDMU(c *gin.Context) {
-
 }
