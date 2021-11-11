@@ -58,7 +58,7 @@ func main() {
 	perkiraanBiaya.POST("/ulp/:rp_id/:ppk_rp_id", controllers.ULPPerkiraanBiaya)
 	perkiraanBiaya.POST("/ppe/:rp_id/:ppk_rp_id", controllers.PPEPerkiraanBiaya)
 
-	spk.POST("/new/:pengadaan_id/:spk_pengadaan_id", controllers.SPK)
+	spk.POST("/new/:pengadaan_id/:ppk_pengadaan_id", controllers.SPKPost)
 	spk.POST("/:id/lapor", controllers.SPKLapor)
 	spk.POST("/:id/ok", controllers.SPKOK)
 	spk.POST("/:id/no", controllers.SPKNO)

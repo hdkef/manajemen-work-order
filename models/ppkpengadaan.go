@@ -18,3 +18,7 @@ func (x *PPKPengadaan) InsertTx(tx *sql.Tx, ctx context.Context) (sql.Result, er
 	date := time.Now()
 	return tx.ExecContext(ctx, fmt.Sprintf("INSERT INTO %s (date_created,pengadaan_id) VALUES (?,?)", table.PPK_PENGADAAN), date, x.PengadaanID)
 }
+
+func (x *PPKPengadaan) DeleteTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
+	return tx.ExecContext(ctx, fmt.Sprintf("DELETE FROM %s WHERE id=?", table.PPK_PENGADAAN), x.ID)
+}

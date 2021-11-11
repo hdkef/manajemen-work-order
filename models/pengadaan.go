@@ -13,7 +13,7 @@ type Pengadaan struct {
 	CreatorID        int64     `json:"creator_id"`
 	DateCreated      time.Time `json:"date_created"`
 	Doc              string    `json:"doc"`
-	PerkiraanBiayaID int64     `json:""perkiraan_biaya_id`
+	PerkiraanBiayaID int64     `json:"perkiraan_biaya_id"`
 }
 
 func (x *Pengadaan) InsertTx(tx *sql.Tx, ctx context.Context, creatorid int64) (sql.Result, error) {
