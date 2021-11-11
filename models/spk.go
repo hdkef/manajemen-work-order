@@ -27,3 +27,17 @@ func (x *SPK) InsertTx(tx *sql.Tx, ctx context.Context, creatorid int64) (sql.Re
 func (x *SPK) UpdateStatus(db *sql.DB, ctx context.Context) (sql.Result, error) {
 	return db.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=? WHERE id=?", table.SPK), x.Status, x.ID)
 }
+
+func (x *SPK) UpdateStatusTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
+	return tx.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=? WHERE id=?", table.SPK), x.Status, x.ID)
+}
+
+func (x *SPK) FindWorkerEmailTx(tx *sql.Tx, ctx context.Context) (string, error) {
+	var workerEmail string
+
+	err := tx.QueryRowContext(ctx, fmt.Sprintf("SELECT worker_email FROM %s WHERE id=?", table.SPK), x.ID).Scan(&workerEmail)
+	if err != nil {
+		return "", err
+	}
+	return workerEmail, nil
+}

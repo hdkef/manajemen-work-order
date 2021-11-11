@@ -60,8 +60,8 @@ func main() {
 
 	spk.POST("/new/:pengadaan_id/:ppk_pengadaan_id", controllers.SPKPost)
 	spk.POST("/:id/lapor", controllers.SPKLapor)
-	spk.POST("/:id/ok", controllers.SPKOK)
-	spk.POST("/:id/no", controllers.SPKNO)
+	spk.POST("/:id/ok/:ppk_spk_id", controllers.SPKOK)
+	spk.POST("/:id/no/:ppk_spk_id", controllers.SPKNO)
 
 	pengadaan.POST("/:perkiraan_biaya_id/ulp/:inbox_id", controllers.PengadaanFromULP)
 	pengadaan.POST("/:perkiraan_biaya_id/ppe/:inbox_id", controllers.PengadaanFromPPE)
