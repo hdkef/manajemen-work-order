@@ -37,3 +37,7 @@ func (x *RP) UpdateStatusAndBDMUPIDTx(tx *sql.Tx, ctx context.Context) (sql.Resu
 func (x *RP) UpdateStatusAndKELAIDTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
 	return tx.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=?,kela_id=? WHERE id=?", table.RP), x.Status, x.KELAID, x.ID)
 }
+
+func (x *RP) UpdateStatusTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
+	return tx.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=? WHERE id=?", table.RP), x.Status, x.ID)
+}

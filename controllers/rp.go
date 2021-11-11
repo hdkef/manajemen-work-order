@@ -52,7 +52,6 @@ func RP(c *gin.Context) {
 
 	err = c.SaveUploadedFile(doc, docPath)
 	if err != nil {
-		services.RemoveFile(docPath)
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
@@ -60,6 +59,7 @@ func RP(c *gin.Context) {
 	//extract db
 	db, err := services.GetDB(c)
 	if err != nil {
+		services.RemoveFile(docPath)
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
@@ -68,6 +68,7 @@ func RP(c *gin.Context) {
 	ctx := context.Background()
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
+		services.RemoveFile(docPath)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -80,6 +81,7 @@ func RP(c *gin.Context) {
 	}
 	res, err := rp.InsertTx(tx, ctx, entity.ID)
 	if err != nil {
+		services.RemoveFile(docPath)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -87,6 +89,7 @@ func RP(c *gin.Context) {
 
 	lastInsertedID, err := res.LastInsertId()
 	if err != nil {
+		services.RemoveFile(docPath)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -98,6 +101,7 @@ func RP(c *gin.Context) {
 	}
 	_, err = kelarp.InsertTx(tx, ctx)
 	if err != nil {
+		services.RemoveFile(docPath)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -109,6 +113,7 @@ func RP(c *gin.Context) {
 	}
 	_, err = kelbppp.DeleteTx(tx, ctx)
 	if err != nil {
+		services.RemoveFile(docPath)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -116,10 +121,12 @@ func RP(c *gin.Context) {
 
 	//change status of ppp
 	ppp := models.PPP{
-		ID: pppid,
+		ID:     pppid,
+		Status: "RP is created",
 	}
 	_, err = ppp.UpdateStatusTx(tx, ctx)
 	if err != nil {
+		services.RemoveFile(docPath)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -127,6 +134,7 @@ func RP(c *gin.Context) {
 
 	err = tx.Commit()
 	if err != nil {
+		services.RemoveFile(docPath)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -275,7 +283,7 @@ func RPOKBDMUP(c *gin.Context) {
 
 	rp := models.RP{
 		ID:     rpid,
-		Status: "ON ROUTE TO BDMUP",
+		Status: "ON ROUTE TO BDMU",
 		KELAID: entity.ID,
 	}
 

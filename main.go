@@ -55,10 +55,10 @@ func main() {
 	rp.POST("/:rp_id/ok/bdmu/:bdmu_id", controllers.RPOKBDMU)
 	rp.POST("/:rp_id/no/bdmu/:bdmu_id", controllers.RPNOBDMU)
 
-	perkiraanBiaya.POST("/:id/ulp", controllers.PerkiraanBiayaULP)
-	perkiraanBiaya.POST("/:id/ppe", controllers.PerkiraanBiayaULP)
+	perkiraanBiaya.POST("/ulp/:rp_id/:ppk_rp_id", controllers.ULPPerkiraanBiaya)
+	perkiraanBiaya.POST("/ppe/:rp_id/:ppk_rp_id", controllers.PPEPerkiraanBiaya)
 
-	spk.POST("", controllers.SPK)
+	spk.POST("/new/:pengadaan_id/:spk_pengadaan_id", controllers.SPK)
 	spk.POST("/:id/lapor", controllers.SPKLapor)
 	spk.POST("/:id/ok", controllers.SPKOK)
 	spk.POST("/:id/no", controllers.SPKNO)

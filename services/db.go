@@ -130,6 +130,24 @@ func initTable(db *sql.DB) error {
 		return err
 	}
 
+	err = createTablePerkiraanBiaya(tx, ctx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	err = createTableULPPerkiraanBiaya(tx, ctx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	err = createTablePPEPerkiraanBiaya(tx, ctx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
@@ -181,6 +199,18 @@ func createTableBDMURP(tx *sql.Tx, ctx context.Context) error {
 
 func createTablePPKRP(tx *sql.Tx, ctx context.Context) error {
 	return tx.QueryRowContext(ctx, table.PPK_RP_CREATION).Err()
+}
+
+func createTablePerkiraanBiaya(tx *sql.Tx, ctx context.Context) error {
+	return tx.QueryRowContext(ctx, table.PERKIRAAN_BIAYA_CREATION).Err()
+}
+
+func createTableULPPerkiraanBiaya(tx *sql.Tx, ctx context.Context) error {
+	return tx.QueryRowContext(ctx, table.ULP_PERKIRAAN_BIAYA_CREATION).Err()
+}
+
+func createTablePPEPerkiraanBiaya(tx *sql.Tx, ctx context.Context) error {
+	return tx.QueryRowContext(ctx, table.PPE_PERKIRAAN_BIAYA_CREATION).Err()
 }
 
 func insertSuperAdmin(tx *sql.Tx, ctx context.Context) error {
