@@ -23,3 +23,7 @@ func (x *SPK) InsertTx(tx *sql.Tx, ctx context.Context, creatorid int64) (sql.Re
 
 	return tx.ExecContext(ctx, fmt.Sprintf("INSERT %s (creator_id,date_created,doc,pengadaan_id,status, worker_email) VALUES (?,?,?,?,?,?)", table.SPK), creatorid, date, x.Doc, x.PengadaanID, x.Status, x.WorkerEmail)
 }
+
+func (x *SPK) UpdateStatus(db *sql.DB, ctx context.Context) (sql.Result, error) {
+	return db.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=? WHERE id=?", table.SPK), x.Status, x.ID)
+}

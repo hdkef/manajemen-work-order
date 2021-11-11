@@ -69,5 +69,9 @@ func main() {
 	//route delete
 	entity.DELETE("/:id", controllers.EntityDelete)
 
+	//route edit
+
+	spk.PUT("/:id", controllers.SPKEdit)
+
 	r.Run()
 }

@@ -50,7 +50,7 @@ func PerkiraanBiayaHelper(c *gin.Context, role string) {
 	//decode payload
 	estCostString := c.PostForm("est_cost")
 
-	estCostFloat, err := strconv.ParseFloat(estCostString, 10)
+	estCostFloat, err := strconv.ParseFloat(estCostString, 64)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
 		return

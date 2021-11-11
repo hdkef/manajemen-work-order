@@ -159,6 +159,71 @@ func SPKPost(c *gin.Context) {
 
 }
 
+func SPKEdit(c *gin.Context) {
+	//get spk_id from params
+	idString := c.Params.ByName("id")
+	spkid, err := strconv.ParseInt(idString, 10, 64)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusBadRequest, true, err.Error())
+		return
+	}
+
+	//decode payload
+	status := c.PostForm("status")
+	pinString := c.PostForm("pin")
+	pin, err := strconv.ParseInt(pinString, 10, 64)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusBadRequest, true, err.Error())
+		return
+	}
+
+	//validate
+	err = services.IsNotEmpty(status)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusBadRequest, true, err.Error())
+		return
+	}
+
+	//extract db
+	db, err := services.GetDB(c)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//get pin from db
+	ctx := context.Background()
+	emailSessionMdl := models.EmailSession{
+		SPKID: spkid,
+	}
+
+	emailSessionFromDB, err := emailSessionMdl.FindOneBySPKID(db, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//compare pin
+	if emailSessionFromDB.PIN != pin {
+		services.SendBasicResponse(c, http.StatusUnauthorized, false, "wrong pin")
+		return
+	}
+
+	//update status spk
+	spk := models.SPK{
+		ID:     spkid,
+		Status: status,
+	}
+	_, err = spk.UpdateStatus(db, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	services.SendBasicResponse(c, http.StatusOK, true, "spk progress updated")
+
+}
+
 func SPKLapor(c *gin.Context) {
 
 }
