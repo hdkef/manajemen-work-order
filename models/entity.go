@@ -32,3 +32,23 @@ func (x *Entity) Delete(db *sql.DB, ctx context.Context) error {
 func (x *Entity) ChangePWD(db *sql.DB, ctx context.Context) error {
 	return db.QueryRowContext(ctx, fmt.Sprintf("UPDATE %s SET password=? WHERE id=?", table.ENTITY), x.Password, x.ID).Err()
 }
+
+func (x *Entity) FindAll(db *sql.DB, ctx context.Context) ([]Entity, error) {
+	var result []Entity
+
+	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,fullname,username,password,email,role,signature FROM %s", table.ENTITY))
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var tmp Entity
+		err = rows.Scan(&tmp.ID, &tmp.Fullname, &tmp.Username, &tmp.Password, &tmp.Email, &tmp.Role, &tmp.Signature)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, tmp)
+	}
+
+	return result, nil
+}

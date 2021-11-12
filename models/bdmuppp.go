@@ -36,7 +36,7 @@ func (x *BDMUPPP) Delete(db *sql.DB, ctx context.Context) (sql.Result, error) {
 	return db.ExecContext(ctx, fmt.Sprintf("DELETE FROM %s WHERE ID=?", table.BDMU_PPP), x.ID)
 }
 
-func (x *BDMUPPP) Get(db *sql.DB, ctx context.Context) ([]BDMUPPP, error) {
+func (x *BDMUPPP) FindAll(db *sql.DB, ctx context.Context) ([]BDMUPPP, error) {
 	var result []BDMUPPP
 	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT x.id,x.date_created,x.ppp_id,y.date_created,y.creator_id,y.doc,y.status,y.perihal,y.nota,y.pekerjaan,y.sifat,y.reason,y.bdmu_id,y.bmdup_id,y.kela_id FROM %s AS x JOIN %s AS y ON x.ppp_id = y.id", table.BDMU_PPP, table.PPP))
 	if err != nil {

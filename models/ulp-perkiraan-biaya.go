@@ -29,7 +29,7 @@ func (x *ULPPerkiraanBiaya) Delete(db *sql.DB, ctx context.Context) (sql.Result,
 	return db.ExecContext(ctx, fmt.Sprintf("DELETE FROM %s WHERE ID=?", table.ULP_PERKIRAAN_BIAYA), x.ID)
 }
 
-func (x *ULPPerkiraanBiaya) Get(db *sql.DB, ctx context.Context) ([]ULPPerkiraanBiaya, error) {
+func (x *ULPPerkiraanBiaya) FindAll(db *sql.DB, ctx context.Context) ([]ULPPerkiraanBiaya, error) {
 	var result []ULPPerkiraanBiaya
 	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT x.id,x.date_created,x.perkiraan_biaya_id,y.date_created,y.rp_id,y.creator_id,y.est_cost,y.doc FROM %s AS x JOIN %s AS y ON x.perkiraan_biaya_id = y.id", table.ULP_PERKIRAAN_BIAYA, table.PERKIRAAN_BIAYA))
 	if err != nil {

@@ -27,7 +27,7 @@ func (x *PPKPengadaan) Delete(db *sql.DB, ctx context.Context) (sql.Result, erro
 	return db.ExecContext(ctx, fmt.Sprintf("DELETE FROM %s WHERE ID=?", table.PPK_PENGADAAN), x.ID)
 }
 
-func (x *PPKPengadaan) Get(db *sql.DB, ctx context.Context) ([]PPKPengadaan, error) {
+func (x *PPKPengadaan) FindAll(db *sql.DB, ctx context.Context) ([]PPKPengadaan, error) {
 	var result []PPKPengadaan
 	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,date_created,pengadaan_id FROM %s", table.PPK_PENGADAAN))
 	if err != nil {

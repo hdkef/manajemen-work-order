@@ -35,7 +35,7 @@ func (x *KELBPPP) Delete(db *sql.DB, ctx context.Context) (sql.Result, error) {
 	return db.ExecContext(ctx, fmt.Sprintf("DELETE FROM %s WHERE ID=?", table.KELB_PPP), x.ID)
 }
 
-func (x *KELBPPP) Get(db *sql.DB, ctx context.Context) ([]KELBPPP, error) {
+func (x *KELBPPP) FindAll(db *sql.DB, ctx context.Context) ([]KELBPPP, error) {
 	var result []KELBPPP
 	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT x.id,x.date_created,x.ppp_id,y.date_created,y.creator_id,y.doc,y.status,y.perihal,y.nota,y.pekerjaan,y.sifat,y.reason,y.bdmu_id,y.bmdup_id,y.kela_id FROM %s AS x JOIN %s AS y ON x.ppp_id = y.id", table.KELB_PPP, table.PPP))
 	if err != nil {

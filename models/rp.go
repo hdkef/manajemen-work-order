@@ -69,3 +69,33 @@ func (x *RP) FindPPPIDTx(tx *sql.Tx, ctx context.Context) (int64, error) {
 	}
 	return pppid, nil
 }
+
+func (x *RP) FindAll(db *sql.DB, ctx context.Context) ([]RP, error) {
+	var result []RP
+
+	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,creator_id,date_created,doc,status,ppp_id,bdmu_id,bdmup_id,kela_id FROM %s", table.RP))
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var tmpRepo RPRepo
+		err = rows.Scan(&tmpRepo.ID, &tmpRepo.CreatorID, &tmpRepo.DateCreated, &tmpRepo.Doc, &tmpRepo.Status, &tmpRepo.PPPID, &tmpRepo.BDMUID, &tmpRepo.BDMUPID, &tmpRepo.KELAID)
+		if err != nil {
+			return nil, err
+		}
+		tmp := RP{
+			ID:          tmpRepo.ID,
+			CreatorID:   tmpRepo.CreatorID,
+			DateCreated: tmpRepo.DateCreated,
+			Doc:         tmpRepo.Doc,
+			Status:      tmpRepo.Status,
+			PPPID:       tmpRepo.PPPID,
+			BDMUID:      tmpRepo.BDMUID.Int64,
+			BDMUPID:     tmpRepo.BDMUPID.Int64,
+			KELAID:      tmpRepo.KELAID.Int64,
+		}
+		result = append(result, tmp)
+	}
+	return result, nil
+}

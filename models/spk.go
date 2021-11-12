@@ -41,3 +41,23 @@ func (x *SPK) FindWorkerEmailTx(tx *sql.Tx, ctx context.Context) (string, error)
 	}
 	return workerEmail, nil
 }
+
+func (x *SPK) FindAll(db *sql.DB, ctx context.Context) ([]SPK, error) {
+	var result []SPK
+
+	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,creator_id,date_created,doc,pengadaan_id,status,worker_email FROM %s", table.SPK))
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var tmp SPK
+		err = rows.Scan(&tmp.ID, &tmp.CreatorID, &tmp.DateCreated, &tmp.Doc, &tmp.PengadaanID, &tmp.Status, &tmp.WorkerEmail)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, tmp)
+	}
+
+	return result, nil
+}
