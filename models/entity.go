@@ -28,3 +28,7 @@ func (x *Entity) Insert(db *sql.DB, ctx context.Context) error {
 func (x *Entity) Delete(db *sql.DB, ctx context.Context) error {
 	return db.QueryRowContext(ctx, fmt.Sprintf("DELETE FROM %s WHERE id=?", table.ENTITY), x.ID).Err()
 }
+
+func (x *Entity) ChangePWD(db *sql.DB, ctx context.Context) error {
+	return db.QueryRowContext(ctx, fmt.Sprintf("UPDATE %s SET password=? WHERE id=?", table.ENTITY), x.Password, x.ID).Err()
+}

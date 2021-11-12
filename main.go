@@ -57,6 +57,7 @@ func main() {
 
 	//post route
 	api.POST("/login", controllers.Login)
+	api.POST("/changepwd", controllers.ChangePWD)
 
 	entity.POST("", controllers.EntityPost)
 
