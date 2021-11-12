@@ -58,7 +58,6 @@ func main() {
 
 	//post route
 	api.POST("/login", controllers.Login)
-	api.POST("/changepwd", controllers.ChangePWD)
 
 	entity.POST("", controllers.EntityPost)
 
@@ -91,8 +90,8 @@ func main() {
 	entity.DELETE("/:id", controllers.EntityDelete)
 	bdmuppp.DELETE("/:id", controllers.BDMUPPPDelete)
 	bdmupppp.DELETE("/:id", controllers.BDMUPPPPDelete)
-	kela.DELETE("/:id", controllers.KELAPPPDelete)
-	kelb.DELETE("/:id", controllers.KELBPPPDelete)
+	kelappp.DELETE("/:id", controllers.KELAPPPDelete)
+	kelbppp.DELETE("/:id", controllers.KELBPPPDelete)
 	bdmurp.DELETE("/:id", controllers.BDMURPDelete)
 	bdmuprp.DELETE("/:id", controllers.BDMUPRPDelete)
 	kelarp.DELETE("/:id", controllers.KELARPDelete)
@@ -101,6 +100,7 @@ func main() {
 	//route edit
 
 	spk.PUT("/:id", controllers.SPKEdit)
+	api.PUT("/changepwd", controllers.ChangePWD)
 
 	//route get
 	bdmuppp.GET("", controllers.BDMUPPPGet)
