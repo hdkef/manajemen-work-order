@@ -292,10 +292,10 @@ func RPOKBDMUP(c *gin.Context) {
 	}
 
 	//store to bdmu_rp
-	bdmuprp := models.BDMUPRP{
+	bdmurp := models.BDMURP{
 		RPID: rpid,
 	}
-	_, err = bdmuprp.InsertTx(tx, ctx)
+	_, err = bdmurp.InsertTx(tx, ctx)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		tx.Rollback()

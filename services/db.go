@@ -29,7 +29,7 @@ func init() {
 }
 
 func DB() (*sql.DB, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", DBUSER, DBPASS, DBHOST, DBPORT, DBNAME)
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", DBUSER, DBPASS, DBHOST, DBPORT, DBNAME)
 
 	db, err := sql.Open("mysql", dsn)
 	if err != nil {

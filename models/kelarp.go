@@ -44,7 +44,7 @@ func (x *KELARP) FindAll(db *sql.DB, ctx context.Context) ([]KELARP, error) {
 
 	for rows.Next() {
 		var tmpRepo KELARPRepo
-		err = rows.Scan(&tmpRepo.ID, &tmpRepo.DateCreated, &tmpRepo.RPID, &tmpRepo.RP.CreatorID, &tmpRepo.RP.DateCreated, &tmpRepo.RP.Doc, &tmpRepo.RP.Status, &tmpRepo.RP.Reason, tmpRepo.RP.BDMUID, &tmpRepo.RP.BDMUPID, &tmpRepo.RP.KELAID)
+		err = rows.Scan(&tmpRepo.ID, &tmpRepo.DateCreated, &tmpRepo.RPID, &tmpRepo.RP.CreatorID, &tmpRepo.RP.DateCreated, &tmpRepo.RP.Doc, &tmpRepo.RP.Status, &tmpRepo.RP.Reason, &tmpRepo.RP.BDMUID, &tmpRepo.RP.BDMUPID, &tmpRepo.RP.KELAID)
 		if err != nil {
 			return nil, err
 		}

@@ -124,7 +124,7 @@ func SPKPost(c *gin.Context) {
 	}
 
 	//create random int
-	pin := rand.Int63()
+	pin := rand.Int63n(8)
 
 	emailSession := models.EmailSession{
 		SPKID: lastInsertedID,
@@ -148,7 +148,7 @@ func SPKPost(c *gin.Context) {
 
 	//TOBE send email to worker
 	emailMsg := fmt.Sprintf("work order has been created click this link to see details. Please submit work progression to http://localhost:8080/spk/progress and use work order id of %d and pin %d", lastInsertedID, pin)
-	fmt.Println(emailMsg)
+
 	err = services.SendEmail(workerEmail, "Email dari Server", emailMsg)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusOK, true, fmt.Sprintf("spk is created but failed to send. Please send email manually (%s) work order id %d with pin %d", workerEmail, lastInsertedID, pin))

@@ -9,14 +9,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func PPEPekiraanBiayaGet(c *gin.Context) {
+func PPKRPDelete(c *gin.Context) {
+
+}
+
+func PPKRPGet(c *gin.Context) {
 	//validate entity that entity role is super-admin
 	_, err := services.ValidateTokenFromHeader(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
 	}
-	mdl := models.PPEPerkiraanBiaya{}
+	mdl := models.PPKRP{}
 	//extract db
 	ctx := context.Background()
 	db, err := services.GetDB(c)

@@ -30,7 +30,7 @@ func (x *PPKSPK) Delete(db *sql.DB, ctx context.Context) (sql.Result, error) {
 
 func (x *PPKSPK) FindAll(db *sql.DB, ctx context.Context) ([]PPKSPK, error) {
 	var result []PPKSPK
-	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT x.id,x.date_created,x.spk_id,y.date_created,y.doc,y.pengadaan_id,y.status,y.worker_email FROM %s AS x JOIN ON %s AS y ON x.spk_id = y.id", table.PPK_SPK, table.SPK))
+	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT x.id,x.date_created,x.spk_id,y.date_created,y.doc,y.pengadaan_id,y.status,y.worker_email FROM %s AS x JOIN %s AS y ON x.spk_id = y.id", table.PPK_SPK, table.SPK))
 	if err != nil {
 		return nil, err
 	}

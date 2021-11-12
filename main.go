@@ -48,6 +48,7 @@ func main() {
 	bdmurp := bdmu.Group("/rp")
 	bdmuprp := bdmup.Group("/rp")
 	kelarp := kela.Group("/rp")
+	ppkrp := ppk.Group("/rp")
 
 	ulpperkiraanbiaya := ulp.Group("/perkiraan_biaya")
 	ppeperkiraanbiaya := ppe.Group("/perkiraan_biaya")
@@ -94,7 +95,8 @@ func main() {
 	kelb.DELETE("/:id", controllers.KELBPPPDelete)
 	bdmurp.DELETE("/:id", controllers.BDMURPDelete)
 	bdmuprp.DELETE("/:id", controllers.BDMUPRPDelete)
-	kela.DELETE("/:id", controllers.KELARPDelete)
+	kelarp.DELETE("/:id", controllers.KELARPDelete)
+	ppkrp.DELETE("/:id", controllers.PPKRPDelete)
 
 	//route edit
 
@@ -107,6 +109,7 @@ func main() {
 	kelbppp.GET("", controllers.KELBPPPGet)
 	bdmurp.GET("", controllers.BDMURPGet)
 	bdmuprp.GET("", controllers.BDMUPRPGet)
+	ppkrp.GET("", controllers.PPKRPGet)
 	kelarp.GET("", controllers.KELARPGet)
 	ulpperkiraanbiaya.GET("", controllers.ULPPekiraanBiayaGet)
 	ppeperkiraanbiaya.GET("", controllers.PPEPekiraanBiayaGet)
