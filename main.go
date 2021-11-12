@@ -50,8 +50,8 @@ func main() {
 	kelarp := kela.Group("/rp")
 	ppkrp := ppk.Group("/rp")
 
-	ulpperkiraanbiaya := ulp.Group("/perkiraan_biaya")
-	ppeperkiraanbiaya := ppe.Group("/perkiraan_biaya")
+	ulpperkiraanbiaya := ulp.Group("/perkiraan-biaya")
+	ppeperkiraanbiaya := ppe.Group("/perkiraan-biaya")
 
 	ppkpengadaan := ppk.Group("/pengadaan")
 	ppkspk := ppk.Group("/spk")
@@ -69,7 +69,7 @@ func main() {
 
 	ppp.POST("/:ppp_id/no", controllers.PPPNO)
 
-	rp.POST("/new/:ppp_id/:kelb_ppp_id", controllers.RP)
+	rp.POST("/new/:ppp_id/:kelb_ppp_id", controllers.RPPost)
 
 	rp.POST("/:rp_id/ok/kela/:kela_id", controllers.RPOKKELA)
 	rp.POST("/:rp_id/ok/bdmup/:bdmup_id", controllers.RPOKBDMUP)
@@ -115,6 +115,12 @@ func main() {
 	ppeperkiraanbiaya.GET("", controllers.PPEPekiraanBiayaGet)
 	ppkpengadaan.GET("", controllers.PPKPengadaanGet)
 	ppkspk.GET("", controllers.PPKSPKGet)
+
+	ppp.GET("", controllers.PPPGet)
+	rp.GET("", controllers.RPGet)
+	perkiraanBiaya.GET("", controllers.PerkiraanBiayaGet)
+	pengadaan.GET("", controllers.PengadaanGet)
+	spk.GET("", controllers.SPKGet)
 
 	r.Run()
 }

@@ -13,6 +13,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func SPKGet(c *gin.Context) {
+	//validate entity that entity role is super-admin
+	_, err := services.ValidateTokenFromHeader(c)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
+		return
+	}
+	mdl := models.SPK{}
+	//extract db
+	ctx := context.Background()
+	db, err := services.GetDB(c)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+	res, err := mdl.FindAll(db, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, res)
+}
+
 func SPKPost(c *gin.Context) {
 	//validate entity must be ppk
 	entity, err := services.ValidateTokenFromHeader(c)

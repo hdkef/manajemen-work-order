@@ -13,7 +13,30 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RP(c *gin.Context) {
+func RPGet(c *gin.Context) {
+	//validate entity that entity role is super-admin
+	_, err := services.ValidateTokenFromHeader(c)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
+		return
+	}
+	mdl := models.RP{}
+	//extract db
+	ctx := context.Background()
+	db, err := services.GetDB(c)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+	res, err := mdl.FindAll(db, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, res)
+}
+
+func RPPost(c *gin.Context) {
 	//validate entity must be kelb
 	entity, err := services.ValidateTokenFromHeader(c)
 	if err != nil {
