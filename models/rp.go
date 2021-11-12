@@ -18,6 +18,20 @@ type RP struct {
 	BDMUID      int64     `json:"bdmu_id"`
 	BDMUPID     int64     `json:"bdmup_id"`
 	KELAID      int64     `json:"kela_id"`
+	Reason      string    `json:"reason"`
+}
+
+type RPRepo struct {
+	ID          int64
+	CreatorID   int64
+	DateCreated time.Time
+	Doc         string
+	Status      string
+	PPPID       int64
+	BDMUID      sql.NullInt64
+	BDMUPID     sql.NullInt64
+	KELAID      sql.NullInt64
+	Reason      sql.NullString
 }
 
 func (x *RP) InsertTx(tx *sql.Tx, ctx context.Context, creatorid int64) (sql.Result, error) {
@@ -40,4 +54,18 @@ func (x *RP) UpdateStatusAndKELAIDTx(tx *sql.Tx, ctx context.Context) (sql.Resul
 
 func (x *RP) UpdateStatusTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
 	return tx.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=? WHERE id=?", table.RP), x.Status, x.ID)
+}
+
+func (x *RP) UpdateStatusAndReasonTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
+	return tx.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=?,reason=? WHERE id=?", table.RP), x.Status, x.Reason, x.ID)
+}
+
+func (x *RP) FindPPPIDTx(tx *sql.Tx, ctx context.Context) (int64, error) {
+	var pppid int64
+
+	err := tx.QueryRowContext(ctx, fmt.Sprintf("SELECT ppp_id FROM %s WHERE id=?", table.RP), x.ID).Scan(&pppid)
+	if err != nil {
+		return 0, err
+	}
+	return pppid, nil
 }

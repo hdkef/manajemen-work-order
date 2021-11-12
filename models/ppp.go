@@ -21,6 +21,23 @@ type PPP struct {
 	BDMUID      int64     `json:"bdmu_id"`
 	BDMUPID     int64     `json:"bdmup_id"`
 	KELAID      int64     `json:"kela_id"`
+	Reason      string    `json:"reason"`
+}
+
+type PPPRepo struct {
+	ID          int64
+	DateCreated time.Time
+	CreatorID   int64
+	Doc         string
+	Status      string
+	Perihal     string
+	Nota        string
+	Pekerjaan   string
+	Sifat       string
+	BDMUID      sql.NullInt64
+	BDMUPID     sql.NullInt64
+	KELAID      sql.NullInt64
+	Reason      sql.NullString
 }
 
 func (x *PPP) InsertTx(tx *sql.Tx, ctx context.Context, creatorid int64) (sql.Result, error) {
@@ -43,5 +60,13 @@ func (x *PPP) UpdateStatusAndKELAIDTx(tx *sql.Tx, ctx context.Context) (sql.Resu
 }
 
 func (x *PPP) UpdateStatusTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
-	return tx.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=?", table.PPP), x.Status)
+	return tx.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=? WHERE id=?", table.PPP), x.Status, x.ID)
+}
+
+func (x *PPP) UpdateStatusAndReasonTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
+	return tx.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=?,reason=? WHERE id=?", table.PPP), x.Status, x.Reason, x.ID)
+}
+
+func (x *PPP) UpdateStatusAndReason(db *sql.DB, ctx context.Context) (sql.Result, error) {
+	return db.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=?,reason=? WHERE id=?", table.PPP), x.Status, x.Reason, x.ID)
 }

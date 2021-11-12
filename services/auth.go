@@ -21,11 +21,12 @@ func init() {
 
 func GenerateTokenFromEntity(entity *models.Entity) (string, error) {
 	newToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"ID":       entity.ID,
-		"Fullname": entity.Fullname,
-		"Username": entity.Username,
-		"Email":    entity.Email,
-		"Role":     entity.Role,
+		"ID":        entity.ID,
+		"Fullname":  entity.Fullname,
+		"Username":  entity.Username,
+		"Email":     entity.Email,
+		"Role":      entity.Role,
+		"Signature": entity.Signature,
 	})
 	signedToken, err := newToken.SignedString([]byte(SECRET))
 	if err != nil {
@@ -65,11 +66,12 @@ func validateTokenString(token *string) (models.Entity, error) {
 	mapclaims := parsedToken.Claims.(jwt.MapClaims)
 
 	return models.Entity{
-		ID:       int64(mapclaims["ID"].(float64)),
-		Fullname: mapclaims["Fullname"].(string),
-		Username: mapclaims["Username"].(string),
-		Email:    mapclaims["Email"].(string),
-		Role:     mapclaims["Role"].(string),
+		ID:        int64(mapclaims["ID"].(float64)),
+		Fullname:  mapclaims["Fullname"].(string),
+		Username:  mapclaims["Username"].(string),
+		Email:     mapclaims["Email"].(string),
+		Role:      mapclaims["Role"].(string),
+		Signature: mapclaims["Signature"].(string),
 	}, nil
 }
 

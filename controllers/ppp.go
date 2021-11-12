@@ -372,3 +372,64 @@ func PPPOKKELA(c *gin.Context) {
 	//response
 	services.SendBasicResponse(c, http.StatusOK, true, "PPP routed to KELB")
 }
+
+func PPPNO(c *gin.Context) {
+	//validate entity must be bdmu || bdmup || kela
+	entity, err := services.ValidateTokenFromHeader(c)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
+		return
+	}
+
+	if entity.Role != "BDMU" && entity.Role != "BDMUP" && entity.Role != "KELA" {
+		services.SendBasicResponse(c, http.StatusUnauthorized, false, "NOT BDMU")
+		return
+	}
+
+	//extract ppp_id from param
+	val := c.Params.ByName("ppp_id")
+	pppid, err := strconv.ParseInt(val, 10, 64)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//decode payload
+	ppp := models.PPP{}
+
+	err = json.NewDecoder(c.Request.Body).Decode(&ppp)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//validation
+	err = services.IsNotEmpty(ppp.Reason)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//extract db
+	db, err := services.GetDB(c)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//change status ppp
+
+	ctx := context.Background()
+
+	ppp.ID = pppid
+	ppp.Status = "REJECTED"
+
+	_, err = ppp.UpdateStatusAndReason(db, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//send respond
+	services.SendBasicResponse(c, http.StatusOK, true, "ppp rejected")
+}

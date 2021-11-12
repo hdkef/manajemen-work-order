@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"manajemen-work-order/models"
 	"manajemen-work-order/services"
@@ -412,4 +413,100 @@ func RPOKBDMU(c *gin.Context) {
 
 	//response
 	services.SendBasicResponse(c, http.StatusOK, true, "RP routed to PPK")
+}
+
+func RPNO(c *gin.Context) {
+	//validate entity must be bdmu || bdmup || kela
+	entity, err := services.ValidateTokenFromHeader(c)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
+		return
+	}
+
+	if entity.Role != "BDMU" && entity.Role != "BDMUP" && entity.Role != "KELA" {
+		services.SendBasicResponse(c, http.StatusUnauthorized, false, "NOT BDMU")
+		return
+	}
+
+	//extract rp_id from param
+	val := c.Params.ByName("rp_id")
+	rpid, err := strconv.ParseInt(val, 10, 64)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//decode payload
+	rp := models.RP{}
+
+	err = json.NewDecoder(c.Request.Body).Decode(&rp)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//validation
+	err = services.IsNotEmpty(rp.Reason)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//extract db
+	db, err := services.GetDB(c)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//change status rp
+	ctx := context.Background()
+	tx, err := db.BeginTx(ctx, nil)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		tx.Rollback()
+		return
+	}
+
+	rp.ID = rpid
+	rp.Status = "REJECTED"
+
+	_, err = rp.UpdateStatusAndReasonTx(tx, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		tx.Rollback()
+		return
+	}
+
+	//get ppp_id
+	pppid, err := rp.FindPPPIDTx(tx, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		tx.Rollback()
+		return
+	}
+
+	//change status ppp
+	ppp := models.PPP{
+		ID:     pppid,
+		Status: "RP REJECTED",
+		Reason: rp.Reason,
+	}
+
+	_, err = ppp.UpdateStatusAndReasonTx(tx, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		tx.Rollback()
+		return
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		tx.Rollback()
+		return
+	}
+
+	//send
+	services.SendBasicResponse(c, http.StatusOK, true, "rp rejected")
 }

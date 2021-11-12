@@ -22,3 +22,26 @@ func (x *PPKPengadaan) InsertTx(tx *sql.Tx, ctx context.Context) (sql.Result, er
 func (x *PPKPengadaan) DeleteTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
 	return tx.ExecContext(ctx, fmt.Sprintf("DELETE FROM %s WHERE id=?", table.PPK_PENGADAAN), x.ID)
 }
+
+func (x *PPKPengadaan) Delete(db *sql.DB, ctx context.Context) (sql.Result, error) {
+	return db.ExecContext(ctx, fmt.Sprintf("DELETE FROM %s WHERE ID=?", table.PPK_PENGADAAN), x.ID)
+}
+
+func (x *PPKPengadaan) Get(db *sql.DB, ctx context.Context) ([]PPKPengadaan, error) {
+	var result []PPKPengadaan
+	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,date_created,pengadaan_id FROM %s", table.PPK_PENGADAAN))
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var tmp PPKPengadaan
+		err = rows.Scan(&tmp.ID, &tmp.DateCreated, &tmp.PengadaanID)
+		if err != nil {
+			return nil, err
+		}
+		result = append(result, tmp)
+	}
+
+	return result, nil
+}
