@@ -147,7 +147,7 @@ func SPKPost(c *gin.Context) {
 	}
 
 	//create random int
-	pin := rand.Int63n(8)
+	pin := int64(rand.Int31())
 
 	emailSession := models.EmailSession{
 		SPKID: lastInsertedID,
