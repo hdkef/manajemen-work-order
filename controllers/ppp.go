@@ -13,7 +13,7 @@ import (
 
 func PPPGet(c *gin.Context) {
 	//validate entity that entity role is super-admin
-	_, err := services.ValidateTokenFromHeader(c)
+	_, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -37,7 +37,7 @@ func PPPGet(c *gin.Context) {
 func PPPPost(c *gin.Context) {
 
 	//validate entity
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -129,7 +129,7 @@ func PPPPost(c *gin.Context) {
 
 func PPPOKBDMU(c *gin.Context) {
 	//validate entity must be bdmu
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -218,7 +218,7 @@ func PPPOKBDMU(c *gin.Context) {
 
 func PPPOKBDMUP(c *gin.Context) {
 	//validate entity must be bdmu
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -308,7 +308,7 @@ func PPPOKBDMUP(c *gin.Context) {
 
 func PPPOKKELA(c *gin.Context) {
 	//validate entity must be bdmu
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -398,7 +398,7 @@ func PPPOKKELA(c *gin.Context) {
 
 func PPPNO(c *gin.Context) {
 	//validate entity must be bdmu || bdmup || kela
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return

@@ -15,7 +15,7 @@ import (
 
 func SPKGet(c *gin.Context) {
 	//validate entity that entity role is super-admin
-	_, err := services.ValidateTokenFromHeader(c)
+	_, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -38,7 +38,7 @@ func SPKGet(c *gin.Context) {
 
 func SPKPost(c *gin.Context) {
 	//validate entity must be ppk
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -333,7 +333,7 @@ func SPKLapor(c *gin.Context) {
 
 func SPKOK(c *gin.Context) {
 	//validate entity must be ppk
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -438,7 +438,7 @@ func SPKOK(c *gin.Context) {
 
 func SPKNO(c *gin.Context) {
 	//validate entity must be ppk
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return

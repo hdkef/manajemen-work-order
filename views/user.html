@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
+    <script defer src="/js/user.js"></script>
+</head>
+<body>
+    <div class="d-flex justify-content-center">
+        <div class="p-4">
+            <h1>User Dashboard</h1>
+            <hr>
+            <h3>Hello Hadekha Erfadila F.</h3>
+            <hr>
+            <div class="container mt-5 mb-5">
+                <div class="row mb-2">
+                    <div class="col-sm">
+                        <a href="/create-ppp"><button class="btn btn-primary">Buat Permohonan</button></a>
+                    </div>
+                    <div class="col-sm">
+                        <a href="/change-pwd"><button class="btn btn-primary">Ganti Password</button></a>
+                    </div>
+                    <div class="col-sm">
+                        <button class="btn btn-primary">Logout</button>
+                    </div>
+                </div>
+            </div>
+            <table class="table">
+                <p class="font-weight-light"><u>Riwayat Permohonan Permintaan Pekerjaan</u></p class="font-weight-light">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Pekerjaan</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Servis Diesel Engine</td>
+                        <td>Rejected</td>
+                        <td><a href="/sad">detail</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-primary">Muat Riwayat Permohonan</button>
+        </div>
+    </div>
+</body>
+</html>

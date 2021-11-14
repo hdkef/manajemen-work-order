@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buat Perkiraan Biaya</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
+    <script defer src="/js/create-perkiraan-biaya.js"></script>
+</head>
+<body>
+    <div class="d-flex justify-content-center">
+        <div class="p-4">
+            <h1>Buat Perkiraan Biaya</h1>
+            <hr>
+            <p>dibuat berdasarkan Rencana Pekerjaan dengan ID : 1</p>
+            <a href="/ddd">detail</a>
+            <hr>
+            <form>
+            <div class="mb-3">
+                <label for="input-towhom" class="form-label">Ditujukkan Ke</label>
+                <select id="input-towhom" aria-describedby="towhomHelp">
+                    <option value="PPE">Pejabat Pengadaan</option>
+                    <option value="ULP">Unit L Pengadaan</option>
+                </select>
+                <div id="towhomHelp" class="form-text">pilih penerima surat.</div>
+            </div>
+            <div class="mb-3">
+                <label for="input-estCost" class="form-label">Perkiraan Biaya</label>
+                <input type="text" class="form-control" id="input-estCost" aria-describedby="estCostHelp">
+                <div id="estCostHelp" class="form-text">masukkan nilai perkiraan biaya.</div>
+            </div>
+            <div class="mb-3">
+                <label for="input-rp" class="form-label">Dokumen Perkiraan Biaya</label>
+                <input type="file" class="form-control" id="input-rp" aria-describedby="rpHelp">
+                <div id="rpHelp" class="form-text">upload dokumen perkiraan biaya.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Buat Perkiraan Biaya</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

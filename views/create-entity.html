@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
+    <script defer src="/js/create-entity.js"></script>
+    <title>Buat Entity</title>
+</head>
+<body>
+  <div class="d-flex justify-content-center">
+    <div class="p-4">
+      <h1>Buat Entity</h1>
+      <hr>
+      <form>
+        <div class="mb-3">
+          <label for="input-fullname" class="form-label">Nama Lengkap</label>
+          <input type="text" class="form-control" id="input-fullname" aria-describedby="fullnameHelp">
+          <div id="fullnameHelp" class="form-text">masukkan nama lengkap.</div>
+        </div>
+        <div class="mb-3">
+          <label for="input-username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="input-username" aria-describedby="usernameHelp">
+          <div id="usernameHelp" class="form-text">pilih username yang akan digunakan untuk login.</div>
+        </div>
+        <div class="mb-3">
+          <label for="input-email" class="form-label">Email</label>
+          <input type="email" class="form-control" id="input-email" aria-describedby="emailHelp">
+          <div id="emailHelp" class="form-text">masukkan alamat email.</div>
+        </div>
+        <div class="mb-3">
+          <label for="input-password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="input-password" aria-describedby="passwordHelp">
+          <div id="passwordHelp" class="form-text">masukkan password awal. Password bisa diganti oleh entity nantinya.</div>
+        </div>
+        <div class="mb-3">
+          <label for="input-role" class="form-label">Peran</label>
+          <select id="input-role" aria-describedby="roleHelp">
+            <option value="BDMU">BAGIAN UMUM</option>
+            <option value="BDMUP">BAGIAN UMUM DAN KEPEGAWAIAN</option>
+            <option value="KELA">KELOMPOK A</option>
+            <option value="KELB">KELOMPOK B</option>
+            <option value="PPK">PEJABAT PEMBERI KOMITMEN</option>
+            <option value="PPE">PEJABAT PENGADAAN</option>
+            <option value="ULP">UNIT L PENGADAAN</option>
+          </select>
+          <div id="roleHelp" class="form-text">masukkan peran dari entity.</div>
+        </div>
+        <div class="mb-3">
+          <label for="input-signature" class="form-label">Tanda Tangan</label>
+          <input type="file" class="form-control" id="input-signature" aria-describedby="signatureHelp">
+          <div id="signatureHelp" class="form-text">upload tanda tangan.</div>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-create-entity">Buat Entity</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

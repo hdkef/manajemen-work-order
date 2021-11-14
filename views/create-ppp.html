@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buat Permohonan Permintaan Pekerjaan</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
+    <script defer src="/js/create-ppp.js"></script>
+</head>
+<body>
+    <div class="d-flex justify-content-center">
+        <div class="p-4">
+            <h1>Buat Permohonan Permintaan Pekerjaan</h1>
+            <hr>
+            <form>
+            <div class="mb-3">
+                <label for="input-nota" class="form-label">Nota</label>
+                <input type="text" class="form-control" id="input-nota" aria-describedby="notaHelp">
+                <div id="notaHelp" class="form-text">masukkan nomor nota dinas.</div>
+                </div>
+            <div class="mb-3">
+                <label for="input-perihal" class="form-label">Perihal</label>
+                <input type="text" class="form-control" id="input-perihal" aria-describedby="perihalHelp">
+                <div id="perihalHelp" class="form-text">masukkan perihal surat.</div>
+            </div>
+            <div class="mb-3">
+                <label for="input-sifat" class="form-label">Sifat</label>
+                <select id="input-sifat" aria-describedby="sifatHelp">
+                    <option value="Kilat">Kilat</option>
+                    <option value="Segera">Segera</option>
+                    <option value="Penting">Penting</option>
+                    <option value="Biasa">Biasa</option>
+                </select>
+                <div id="sifatHelp" class="form-text">masukkan sifat surat.</div>
+            </div>
+            <div class="mb-3">
+                <textarea class="w-100" rows="5" placeholder="Pekerjaan"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Buat Entity</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

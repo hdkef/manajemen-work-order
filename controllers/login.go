@@ -59,6 +59,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	//send token
-	c.JSON(http.StatusOK, token)
+	//set token as cookie
+	c.SetCookie("Authorization", token, 100000, "/", "", false, false)
+
+	//send
+	services.SendBasicResponse(c, http.StatusOK, true, "login success")
 }

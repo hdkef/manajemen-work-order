@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buat Rencana Pekerjaan</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
+    <script defer src="/js/create-rp.js"></script>
+</head>
+<body>
+    <div class="d-flex justify-content-center">
+        <div class="p-4">
+            <h1>Buat Rencana Pekerjaan</h1>
+            <hr>
+            <p>dibuat berdasarkan Permohonan Permintaan Pekerjaan dengan ID : 1</p>
+            <a href="/ddd">detail</a>
+            <hr>
+            <form>
+            <div class="mb-3">
+                <label for="input-rp" class="form-label">Rencana Pekerjaan</label>
+                <input type="file" class="form-control" id="input-rp" aria-describedby="rpHelp">
+                <div id="rpHelp" class="form-text">upload dokumen rencana pekerjaan.</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Buat Rencana Pekerjaan</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

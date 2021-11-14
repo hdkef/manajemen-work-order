@@ -14,7 +14,7 @@ import (
 
 func PerkiraanBiayaGet(c *gin.Context) {
 	//validate entity that entity role is super-admin
-	_, err := services.ValidateTokenFromHeader(c)
+	_, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -45,7 +45,7 @@ func PPEPerkiraanBiaya(c *gin.Context) {
 
 func PerkiraanBiayaHelper(c *gin.Context, role string) {
 	//validate entity must be kelb
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return

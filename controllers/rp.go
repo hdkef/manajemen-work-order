@@ -15,7 +15,7 @@ import (
 
 func RPGet(c *gin.Context) {
 	//validate entity that entity role is super-admin
-	_, err := services.ValidateTokenFromHeader(c)
+	_, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -38,7 +38,7 @@ func RPGet(c *gin.Context) {
 
 func RPPost(c *gin.Context) {
 	//validate entity must be kelb
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -170,7 +170,7 @@ func RPPost(c *gin.Context) {
 
 func RPOKKELA(c *gin.Context) {
 	//validate entity must be bdmu
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -260,7 +260,7 @@ func RPOKKELA(c *gin.Context) {
 
 func RPOKBDMUP(c *gin.Context) {
 	//validate entity must be bdmu
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -350,7 +350,7 @@ func RPOKBDMUP(c *gin.Context) {
 
 func RPOKBDMU(c *gin.Context) {
 	//validate entity must be bdmu
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -440,7 +440,7 @@ func RPOKBDMU(c *gin.Context) {
 
 func RPNO(c *gin.Context) {
 	//validate entity must be bdmu || bdmup || kela
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
