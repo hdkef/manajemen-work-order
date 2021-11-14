@@ -138,8 +138,6 @@ func main() {
 	r.GET("/create-perkiraan-biaya/:id", views.CreatePerkiraanBiaya)
 	r.GET("/create-pengadaan/:id", views.CreatePengadaan)
 
-	r.GET("/ppp/:id", views.PPPDetail)
-
 	r.GET("/change-pwd", views.ChangePWD)
 	r.GET("/spk-progress/:id", views.SPKProgress)
 	r.GET("/revision/:id", views.Revision)
