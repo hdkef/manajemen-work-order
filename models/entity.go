@@ -21,6 +21,15 @@ func (x *Entity) FindOne(db *sql.DB, ctx context.Context, fieldName string, valu
 	return db.QueryRowContext(ctx, fmt.Sprintf("SELECT id,fullname,username,password,email,role,signature FROM %s WHERE %s = ?", table.ENTITY, fieldName), value).Scan(&x.ID, &x.Fullname, &x.Username, &x.Password, &x.Email, &x.Role, &x.Signature)
 }
 
+func (x *Entity) FindSignature(db *sql.DB, ctx context.Context) (string, error) {
+	var signature string
+	err := db.QueryRowContext(ctx, fmt.Sprintf("SELECT signature FROM %s WHERE id = ?", table.ENTITY), x.ID).Scan(&signature)
+	if err != nil {
+		return "", err
+	}
+	return signature, nil
+}
+
 func (x *Entity) Insert(db *sql.DB, ctx context.Context) error {
 	return db.QueryRowContext(ctx, fmt.Sprintf("INSERT INTO %s (fullname,username,password,email,role,signature) VALUES (?,?,?,?,?,?)", table.ENTITY), x.Fullname, x.Username, x.Password, x.Email, x.Role, x.Signature).Err()
 }

@@ -15,7 +15,7 @@ func Login(c *gin.Context) {
 	}
 	//send response based on role
 	switch entity.Role {
-	case "User":
+	case "USER":
 		c.Redirect(http.StatusTemporaryRedirect, "/user")
 	case "BDMU":
 		c.Redirect(http.StatusTemporaryRedirect, "/bdmu")

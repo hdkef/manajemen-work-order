@@ -163,12 +163,22 @@ func EntityDelete(c *gin.Context) {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
-
-	//delete entity
 	ctx := context.Background()
 	entityModel := models.Entity{
 		ID: id,
 	}
+
+	//get entity
+	signature, err := entityModel.FindSignature(db, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//delete entity from disk
+	services.RemoveFile(signature)
+
+	//delete entity
 	err = entityModel.Delete(db, ctx)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
