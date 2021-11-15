@@ -409,9 +409,15 @@ func PPPNO(c *gin.Context) {
 		return
 	}
 
-	//extract ppp_id from param
+	//extract ppp_id and inboxid from param
 	val := c.Params.ByName("ppp_id")
 	pppid, err := strconv.ParseInt(val, 10, 64)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+	val2 := c.Params.ByName("inbox_id")
+	inboxid, err := strconv.ParseInt(val2, 10, 64)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -443,12 +449,50 @@ func PPPNO(c *gin.Context) {
 	//change status ppp
 
 	ctx := context.Background()
+	tx, err := db.BeginTx(ctx, nil)
+	if err != nil {
+		tx.Rollback()
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
 
 	ppp.ID = pppid
 	ppp.Status = "REJECTED"
 
-	_, err = ppp.UpdateStatusAndReason(db, ctx)
+	_, err = ppp.UpdateStatusAndReasonTx(tx, ctx)
 	if err != nil {
+		tx.Rollback()
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//delete inbox
+	switch entity.Role {
+	case "BDMU":
+		mdl := models.BDMUPPP{
+			ID: inboxid,
+		}
+		_, err = mdl.DeleteTx(tx, ctx)
+	case "BDMUP":
+		mdl := models.BDMUPPPP{
+			ID: inboxid,
+		}
+		_, err = mdl.DeleteTx(tx, ctx)
+	case "KELA":
+		mdl := models.KELAPPP{
+			ID: inboxid,
+		}
+		_, err = mdl.DeleteTx(tx, ctx)
+	}
+	if err != nil {
+		tx.Rollback()
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}

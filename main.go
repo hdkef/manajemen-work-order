@@ -74,7 +74,7 @@ func main() {
 	ppp.POST("/:ppp_id/ok/bdmup/:bdmup_id", controllers.PPPOKBDMUP)
 	ppp.POST("/:ppp_id/ok/kela/:kela_id", controllers.PPPOKKELA)
 
-	ppp.POST("/:ppp_id/no", controllers.PPPNO)
+	ppp.POST("/:ppp_id/no/:inbox_id", controllers.PPPNO)
 
 	rp.POST("/new/:ppp_id/:kelb_ppp_id", controllers.RPPost)
 
@@ -96,14 +96,14 @@ func main() {
 	pengadaan.POST("/:perkiraan_biaya_id/ppe/:inbox_id", controllers.PengadaanFromPPE)
 	//route delete
 	entity.DELETE("/:id", controllers.EntityDelete)
-	bdmuppp.DELETE("/:id", controllers.BDMUPPPDelete)
-	bdmupppp.DELETE("/:id", controllers.BDMUPPPPDelete)
-	kelappp.DELETE("/:id", controllers.KELAPPPDelete)
-	kelbppp.DELETE("/:id", controllers.KELBPPPDelete)
-	bdmurp.DELETE("/:id", controllers.BDMURPDelete)
-	bdmuprp.DELETE("/:id", controllers.BDMUPRPDelete)
-	kelarp.DELETE("/:id", controllers.KELARPDelete)
-	ppkrp.DELETE("/:id", controllers.PPKRPDelete)
+	// bdmuppp.DELETE("/:id", controllers.BDMUPPPDelete)
+	// bdmupppp.DELETE("/:id", controllers.BDMUPPPPDelete)
+	// kelappp.DELETE("/:id", controllers.KELAPPPDelete)
+	// kelbppp.DELETE("/:id", controllers.KELBPPPDelete)
+	// bdmurp.DELETE("/:id", controllers.BDMURPDelete)
+	// bdmuprp.DELETE("/:id", controllers.BDMUPRPDelete)
+	// kelarp.DELETE("/:id", controllers.KELARPDelete)
+	// ppkrp.DELETE("/:id", controllers.PPKRPDelete)
 
 	//route edit
 

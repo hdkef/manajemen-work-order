@@ -5,8 +5,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surat Perintah Kerja</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
 </head>
 <body>
-    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tanggal Dibuat</th>
+                <th>Status</th>
+                <th>Email Pekerja</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range $v := . }}
+            <tr>
+                <td>{{ $v.ID }}</td>
+                <td>{{ $v.DateCreated }}</td>
+                <td>{{ $v.Status }}</td>
+                <td>{{ $v.WorkerEmail }}</td>
+                <td>
+                    <a href="/{{$v.Doc}}" target="_blank"><button class="btn btn-primary">lihat dokumen</button></a>
+                    <a href="/spk/{{$v.ID}}" target="_blank"><button class="btn btn-primary">lihat detail</button></a>
+                    <a href="/entity/{{$v.CreatorID}}" target="_blank"><button class="btn btn-primary">detail pembuat</button></a>
+                </td>
+            </tr>
+            {{ end }}
+        </tbody>
+    </table>
 </body>
 </html>

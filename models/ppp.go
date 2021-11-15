@@ -67,10 +67,6 @@ func (x *PPP) UpdateStatusAndReasonTx(tx *sql.Tx, ctx context.Context) (sql.Resu
 	return tx.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=?,reason=? WHERE id=?", table.PPP), x.Status, x.Reason, x.ID)
 }
 
-func (x *PPP) UpdateStatusAndReason(db *sql.DB, ctx context.Context) (sql.Result, error) {
-	return db.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=?,reason=? WHERE id=?", table.PPP), x.Status, x.Reason, x.ID)
-}
-
 func (x *PPP) FindOne(db *sql.DB, ctx context.Context) (PPP, error) {
 	var tmpRepo PPPRepo
 	err := db.QueryRowContext(ctx, fmt.Sprintf("SELECT id,date_created,creator_id,doc,status,perihal,nota,pekerjaan,sifat,bdmu_id,bdmup_id,kela_id FROM %s WHERE id=?", table.PPP), x.ID).Scan(&tmpRepo.ID, &tmpRepo.DateCreated, &tmpRepo.CreatorID, &tmpRepo.Doc, &tmpRepo.Status, &tmpRepo.Perihal, &tmpRepo.Nota, &tmpRepo.Pekerjaan, &tmpRepo.Sifat, &tmpRepo.BDMUID, &tmpRepo.BDMUPID, &tmpRepo.KELAID)

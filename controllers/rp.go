@@ -458,6 +458,12 @@ func RPNO(c *gin.Context) {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
+	val2 := c.Params.ByName("inbox_id")
+	inboxid, err := strconv.ParseInt(val2, 10, 64)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
 
 	//decode payload
 	rp := models.RP{}
@@ -517,6 +523,30 @@ func RPNO(c *gin.Context) {
 	}
 
 	_, err = ppp.UpdateStatusAndReasonTx(tx, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		tx.Rollback()
+		return
+	}
+
+	//delete inbox
+	switch entity.Role {
+	case "BDMU":
+		mdl := models.BDMURP{
+			ID: inboxid,
+		}
+		_, err = mdl.DeleteTx(tx, ctx)
+	case "BDMUP":
+		mdl := models.BDMUPRP{
+			ID: inboxid,
+		}
+		_, err = mdl.DeleteTx(tx, ctx)
+	case "KELA":
+		mdl := models.KELARP{
+			ID: inboxid,
+		}
+		_, err = mdl.DeleteTx(tx, ctx)
+	}
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		tx.Rollback()
