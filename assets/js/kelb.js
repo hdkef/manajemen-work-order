@@ -16,10 +16,6 @@ let createRP = (id,pppID)=>{
     window.open(`/create-rp/${id}/${pppID}`)
 }
 
-let PPPDec = (id)=>{
-
-}
-
 let populateTablePPP = (slice)=>{
     let tablePPP = document.getElementById("table-ppp")
     for (let i=0;i<slice.length;i++){
@@ -46,7 +42,7 @@ let populateTablePPP = (slice)=>{
 
         btnDetail.classList.add("btn","m-1")
         btnDetail.onclick = ()=>{
-            PPPDetail(slice[i])
+            PPPDetail(pppid)
         }
         btnDetail.textContent = "detail"
 

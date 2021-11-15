@@ -4,28 +4,28 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revisi Pengerjaan</title>
+    <title>Tolak Rencana Pekerjaan</title>
     <link rel="stylesheet" href="/css/bootstrap.css">
     <script src="/js/bootstrap.js"></script>
-    <script defer src="/js/revision.js"></script>
+    <script defer src="/js/reject-rp.js"></script>
 </head>
 <body>
     <div class="d-flex justify-content-center">
         <div class="p-4">
-            <h1>Revisi Pengerjaan</h1>
+            <h1>Tolak Rencana Pekerjaan</h1>
             <hr>
-            <p>revisi untuk Surat Perintah Kerja dengan ID : {{ .SPKID }}</p>
-            <a href="/spk/{{.SPKID}}">detail</a>
+            <p>untuk Rencana Pekerjaan dengan ID : {{ .RPID }}</p>
+            <a href="/rp/{{.RPID}}">detail</a>
             <hr>
             <form>
             <div class="mb-3">
-                <input type="hidden" id="input-id" value="{{ .ID }}">
-                <input type="hidden" id="input-spk-id" value="{{ .SPKID }}">
+                <input type="hidden" id="input-rp-id" value="{{ .RPID }}">
+                <input type="hidden" id="input-inbox-id" value="{{ .INBOXID }}">
                 <label for="input-msg" class="form-label">Pesan</label>
                 <input type="text" class="form-control" id="input-msg" aria-describedby="msgHelp">
-                <div id="msgHelp" class="form-text">masukkan pesan untuk revisi pengerjaan.</div>
+                <div id="msgHelp" class="form-text">masukkan pesan.</div>
             </div>
-            <button type="button" class="btn btn-primary" id="btn-revisi">Revisi Pengerjaan</button>
+            <button type="button" class="btn btn-danger" id="btn-tolak">Tolak</button>
             <button class="btn" id="btn-exit">exit</button>
             </form>
         </div>

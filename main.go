@@ -82,7 +82,7 @@ func main() {
 	rp.POST("/:rp_id/ok/bdmup/:bdmup_id", controllers.RPOKBDMUP)
 	rp.POST("/:rp_id/ok/bdmu/:bdmu_id", controllers.RPOKBDMU)
 
-	rp.POST("/:rp_id/no", controllers.RPNO)
+	rp.POST("/:rp_id/no/:inbox_id", controllers.RPNO)
 
 	perkiraanBiaya.POST("/ulp/:rp_id/:ppk_rp_id", controllers.ULPPerkiraanBiaya)
 	perkiraanBiaya.POST("/ppe/:rp_id/:ppk_rp_id", controllers.PPEPerkiraanBiaya)
@@ -170,6 +170,10 @@ func main() {
 	r.GET("/perkiraan-biaya", views.PerkiraanBiayaAll)
 	r.GET("/pengadaan", views.PengadaanAll)
 	r.GET("/spk", views.SPKAll)
+
+	reject := r.Group("/reject")
+	reject.GET("/ppp/:ppp_id/:inbox_id", views.RejectPPP)
+	reject.GET("/rp/:rp_id/:inbox_id", views.RejectRP)
 
 	r.Run()
 }

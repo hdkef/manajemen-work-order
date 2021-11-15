@@ -82,6 +82,11 @@ func CreatePDFofPPP(ppp models.PPP, entity models.Entity, toWhom string) (string
 	createOpening(pdf, toWhom, entity.Role, ppp.Sifat, ppp.Perihal)
 	createBody(pdf, []string{ppp.Pekerjaan})
 	createSignature(pdf, entity.Fullname, entity.Signature)
+	w, _ := pdf.GetPageSize()
+
+	date := time.Now()
+	pdf.SetFont("arial", "", 8)
+	pdf.Text(w-50, 80, date.Format("Monday 02 January 2006"))
 
 	path := fmt.Sprintf("archive/ppp/%s%s.pdf", entity.Fullname, time.Now())
 

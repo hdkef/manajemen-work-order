@@ -28,8 +28,8 @@ let PPPAcc = (id,pppID)=>{
     })
 }
 
-let PPPDec = (id)=>{
-
+let PPPDec = (id,pppid)=>{
+    window.open(`/reject/ppp/${pppid}/${id}`)
 }
 
 let populateTablePPP = (slice)=>{
@@ -71,7 +71,7 @@ let populateTablePPP = (slice)=>{
 
         btnTolak.classList.add("btn","btn-danger","m-1")
         btnTolak.onclick = ()=>{
-            PPPDec(id)
+            PPPDec(id,pppID)
         }
         btnTolak.textContent = "tolak"
 
@@ -112,8 +112,8 @@ let RPAcc = (id,rpID)=>{
     })
 }
 
-let RPDec = (id)=>{
-
+let RPDec = (id,rpid)=>{
+    window.open(`/reject/rp/${rpid}/${id}`)
 }
 
 let populateTableRP = (slice)=>{
@@ -148,7 +148,7 @@ let populateTableRP = (slice)=>{
 
         btnTolak.classList.add("btn","btn-danger")
         btnTolak.onclick = ()=>{
-            RPDec(id)
+            RPDec(id,rpID)
         }
         btnTolak.textContent = "tolak"
 

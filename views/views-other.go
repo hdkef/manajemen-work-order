@@ -71,3 +71,23 @@ func Revision(c *gin.Context) {
 		SPKID: c.Params.ByName("spk_id"),
 	})
 }
+
+func RejectPPP(c *gin.Context) {
+	c.HTML(http.StatusOK, "reject-ppp.html", struct {
+		PPPID   string
+		INBOXID string
+	}{
+		PPPID:   c.Params.ByName("ppp_id"),
+		INBOXID: c.Params.ByName("inbox_id"),
+	})
+}
+
+func RejectRP(c *gin.Context) {
+	c.HTML(http.StatusOK, "reject-rp.html", struct {
+		RPID    string
+		INBOXID string
+	}{
+		RPID:    c.Params.ByName("rp_id"),
+		INBOXID: c.Params.ByName("inbox_id"),
+	})
+}
