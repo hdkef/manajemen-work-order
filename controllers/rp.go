@@ -72,7 +72,7 @@ func RPPost(c *gin.Context) {
 		return
 	}
 
-	docPath := fmt.Sprintf("archive/rp/%s%s", entity.Fullname, time.Now())
+	docPath := fmt.Sprintf("archive/rp/%s%s%s", entity.Fullname, time.Now(), doc.Filename)
 
 	err = c.SaveUploadedFile(doc, docPath)
 	if err != nil {
@@ -304,7 +304,7 @@ func RPOKBDMUP(c *gin.Context) {
 	rp := models.RP{
 		ID:     rpid,
 		Status: "ON ROUTE TO BDMU",
-		KELAID: entity.ID,
+		BDMUID: entity.ID,
 	}
 
 	_, err = rp.UpdateStatusAndBDMUPIDTx(tx, ctx)
@@ -394,7 +394,7 @@ func RPOKBDMU(c *gin.Context) {
 	rp := models.RP{
 		ID:     rpid,
 		Status: "ON ROUTE TO PPK",
-		KELAID: entity.ID,
+		BDMUID: entity.ID,
 	}
 
 	_, err = rp.UpdateStatusAndBDMUIDTx(tx, ctx)
@@ -416,7 +416,7 @@ func RPOKBDMU(c *gin.Context) {
 	}
 
 	//delete bdmu rp
-	bdmurp := models.BDMUPRP{
+	bdmurp := models.BDMURP{
 		ID: bdmuid,
 	}
 

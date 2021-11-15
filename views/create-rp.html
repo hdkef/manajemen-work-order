@@ -14,16 +14,19 @@
         <div class="p-4">
             <h1>Buat Rencana Pekerjaan</h1>
             <hr>
-            <p>dibuat berdasarkan Permohonan Permintaan Pekerjaan dengan ID : 1</p>
-            <a href="/ddd">detail</a>
+            <p>dibuat berdasarkan Permohonan Permintaan Pekerjaan dengan ID : {{ .PPPID }}</p>
+            <a href="/ppp/{{ .PPPID }}" target="_blank">detail</a>
             <hr>
             <form>
             <div class="mb-3">
+                <input type="hidden" id="input-id" value="{{ .ID }}">
+                <input type="hidden" id="input-ppp-id" value="{{ .PPPID }}">
                 <label for="input-rp" class="form-label">Rencana Pekerjaan</label>
                 <input type="file" class="form-control" id="input-rp" aria-describedby="rpHelp">
                 <div id="rpHelp" class="form-text">upload dokumen rencana pekerjaan.</div>
             </div>
-            <button type="submit" class="btn btn-primary">Buat Rencana Pekerjaan</button>
+            <button type="button" class="btn btn-primary" id="btn-create-rp">Buat Rencana Pekerjaan</button>
+            <button type="button" class="btn" id="btn-exit">exit</button>
             </form>
         </div>
     </div>

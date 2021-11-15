@@ -14,7 +14,7 @@ let login = ()=>{
     hitEndpoint(`http://${API_HOST}/api/v1/login`,payload,"post").then((resJSON)=>{
         handleSuccess(resJSON)
     }).catch((err)=>{
-        handleError()
+        handleError(err)
     })
 }
 

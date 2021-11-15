@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entity ID {{.ID}}</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
+</head>
+<body>
+    <div class="d-flex justify-content-center">
+        <div class="container m-5 p-3 border">
+            <div class="row mb-3">
+                <div class="col-sm">
+                    <p class="h5"><u>ID</u></p>
+                    <p class="h3">{{.ID}}</p>
+                </div>
+                <div class="col-sm">
+                    <p class="h5"><u>Nama Lengkap</u></p>
+                    <p class="h3">{{.Fullname}}</p>
+                </div>
+                <div class="col-sm">
+                    <p class="h5"><u>Username</u></p>
+                    <p class="h3">{{.Username}}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm">
+                    <p class="h5"><u>Email</u></p>
+                    <p class="h3">{{.Email}}</p>
+                </div>
+                <div class="col-sm">
+                    <p class="h5"><u>Peran</u></p>
+                    <p class="h3">{{.Role}}</p>
+                </div>
+                <div class="col-sm">
+                    <p class="h5"><u>Signature</u></p>
+                    <a href="/{{.Signature}}"><button class="btn btn-primary">lihat</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

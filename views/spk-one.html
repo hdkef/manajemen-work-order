@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surat Perintah Kerja ID {{.ID}}</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
+</head>
+<body>
+    <div class="d-flex justify-content-center">
+        <div class="container m-5 p-3 border">
+            <div class="row mb-3">
+                <div class="col-sm">
+                    <p class="h5"><u>Tanggal Dibuat</u></p>
+                    <p class="h3">{{.DateCreated}}</p>
+                </div>
+                <div class="col-sm">
+                    <p class="h5"><u>ID</u></p>
+                    <p class="h3">{{.ID}}</p>
+                </div>
+                <div class="col-sm">
+                    <p class="h5"><u>ID Pembuat</u></p>
+                    <p class="h3">{{.CreatorID}}</p>
+                </div>
+                <div class="col-sm">
+                    <p class="h5"><u>ID Pengadaan</u></p>
+                    <p class="h3">{{.PengadaanID}}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm">
+                    <p class="h2"><u>Status</u></p>
+                    <p class="h1">{{ .Status }}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm">
+                    <p class="h5"><u>Email Pekerja</u></p>
+                    <p class="h3">{{ .WorkerEmail }}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm">
+                    <a href="/{{ .Doc }}" target="_blank"><button class="btn btn-primary">lihat dokumen</button></a>
+                    <a href="/pengadaan/{{ .PengadaanID }}" target="_blank"><button class="btn btn-primary">lihat detail pengadaan</button></a>
+                    <a href="/entity/{{ .CreatorID }}" target="_blank"><button class="btn btn-primary">detail pembuat</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

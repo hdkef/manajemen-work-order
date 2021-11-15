@@ -14,10 +14,12 @@
         <div class="p-4">
             <h1>Buat Perkiraan Biaya</h1>
             <hr>
-            <p>dibuat berdasarkan Rencana Pekerjaan dengan ID : 1</p>
-            <a href="/ddd">detail</a>
+            <p>dibuat berdasarkan Rencana Pekerjaan dengan ID : {{ .RPID }}</p>
+            <a href="/rp/{{ .RPID }}" target="_blank">detail</a>
             <hr>
             <form>
+                <input type="hidden" id="input-id" value="{{ .ID }}">
+                <input type="hidden" id="input-rp-id" value="{{ .RPID }}">
             <div class="mb-3">
                 <label for="input-towhom" class="form-label">Ditujukkan Ke</label>
                 <select id="input-towhom" aria-describedby="towhomHelp">
@@ -27,16 +29,17 @@
                 <div id="towhomHelp" class="form-text">pilih penerima surat.</div>
             </div>
             <div class="mb-3">
-                <label for="input-estCost" class="form-label">Perkiraan Biaya</label>
-                <input type="text" class="form-control" id="input-estCost" aria-describedby="estCostHelp">
-                <div id="estCostHelp" class="form-text">masukkan nilai perkiraan biaya.</div>
+                <label for="input-est-cost" class="form-label">Perkiraan Biaya</label>
+                <input type="text" class="form-control" id="input-est-cost" aria-describedby="est-costHelp">
+                <div id="est-costHelp" class="form-text">masukkan nilai perkiraan biaya.</div>
             </div>
             <div class="mb-3">
-                <label for="input-rp" class="form-label">Dokumen Perkiraan Biaya</label>
-                <input type="file" class="form-control" id="input-rp" aria-describedby="rpHelp">
-                <div id="rpHelp" class="form-text">upload dokumen perkiraan biaya.</div>
+                <label for="input-doc" class="form-label">Dokumen Perkiraan Biaya</label>
+                <input type="file" class="form-control" id="input-doc" aria-describedby="docHelp">
+                <div id="docHelp" class="form-text">upload dokumen perkiraan biaya.</div>
             </div>
-            <button type="submit" class="btn btn-primary">Buat Perkiraan Biaya</button>
+            <button type="button" class="btn btn-primary" id="btn-create-perkiraan-biaya">Buat Perkiraan Biaya</button>
+            <button type="button" class="btn" id="btn-exit">exit</button>
             </form>
         </div>
     </div>

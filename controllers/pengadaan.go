@@ -78,7 +78,7 @@ func pengadaanHelper(c *gin.Context, role string) {
 		return
 	}
 
-	docPath := fmt.Sprintf("archive/pengadaan/%s%s", entity.Fullname, time.Now())
+	docPath := fmt.Sprintf("archive/pengadaan/%s%s%s", time.Now(), entity.Fullname, doc.Filename)
 
 	err = c.SaveUploadedFile(doc, docPath)
 	if err != nil {

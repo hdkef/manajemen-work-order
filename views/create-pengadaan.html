@@ -14,16 +14,19 @@
         <div class="p-4">
             <h1>Buat Pengadaan</h1>
             <hr>
-            <p>dibuat berdasarkan Perkiraan Biaya dengan ID : 1</p>
-            <a href="/ddd">detail</a>
+            <p>dibuat berdasarkan Perkiraan Biaya dengan ID : {{ .PerkiraanBiayaID }}</p>
+            <a href="/perkiraan-biaya/{{ .PerkiraanBiayaID }}" target="_blank">detail</a>
             <hr>
             <form>
+            <input type="hidden" id="input-id" value="{{ .ID }}">
+            <input type="hidden" id="input-perkiraan-biaya-id" value="{{ .PerkiraanBiayaID }}">
             <div class="mb-3">
-                <label for="input-pengadaan" class="form-label">Pengadaan</label>
-                <input type="file" class="form-control" id="input-pengadaan" aria-describedby="pengadaanHelp">
+                <label for="input-doc" class="form-label">Pengadaan</label>
+                <input type="file" class="form-control" id="input-doc" aria-describedby="pengadaanHelp">
                 <div id="pengadaanHelp" class="form-text">upload dokumen pengadaan.</div>
             </div>
-            <button type="submit" class="btn btn-primary">Buat Pengadaan</button>
+            <button type="button" class="btn btn-primary" id="btn-create-pengadaan">Buat Pengadaan</button>
+            <button type="button" class="btn" id="btn-exit">exit</button>
             </form>
         </div>
     </div>

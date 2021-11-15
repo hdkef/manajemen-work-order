@@ -5,12 +5,12 @@ document.getElementById("btn-changepwd").onclick = ()=>{
 }
 
 let changePWD = ()=>{
-    let passwordInput = document.getElementById("input-password")
-    let payload = JSON.stringify({password:passwordInput.value})
+    let inputPassword = document.getElementById("input-password")
+    let payload = JSON.stringify({password:inputPassword.value})
     hitEndpoint(`http://${API_HOST}/api/v1/changepwd`,payload,"put").then((resJSON)=>{
         handleSuccess(resJSON)
     }).catch((err)=>{
-        handleError()
+        handleError(err)
     })
 }
 

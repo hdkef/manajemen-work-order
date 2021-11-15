@@ -4,7 +4,7 @@ let getEntity = ()=>{
     hitEndpoint(`http://${API_HOST}/api/v1/entity`,null,"get").then((resJSON)=>{
         populateTableEntity(resJSON)
     }).catch((err)=>{
-        handleError()
+        handleError(err)
     })
 }
 
@@ -12,7 +12,7 @@ let deleteEntity = (id)=>{
     hitEndpoint(`http://${API_HOST}/api/v1/entity/${id}`,null,"delete").then((resJSON)=>{
         handleSuccess(resJSON)
     }).catch((err)=>{
-        handleError()
+        handleError(err)
     })
 }
 
@@ -33,6 +33,9 @@ let populateTableEntity = (slice)=>{
         let fullname = slice[i].fullname
         let username = slice[i].username
         let role = slice[i].role
+        if (role == "Super-Admin"){
+            continue
+        }
         let email = slice[i].email
         let signature = slice[i].signature
         

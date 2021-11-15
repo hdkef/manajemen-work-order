@@ -4,6 +4,7 @@ import (
 	"manajemen-work-order/controllers"
 	"manajemen-work-order/services"
 	"manajemen-work-order/views"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,6 +25,8 @@ func main() {
 	})
 
 	r.Static("archive", "archive")
+	r.Static("assets/signature", "assets/signature")
+	r.Static("assets/img", "assets/img")
 	r.Static("/js", "./assets/js")
 	r.Static("/css", "./assets/css")
 	r.Static("/img", "./assets/img")
@@ -130,17 +133,20 @@ func main() {
 	spk.GET("", controllers.SPKGet)
 
 	//frontend
+	r.GET("", func(c *gin.Context) {
+		c.Redirect(http.StatusTemporaryRedirect, "/login")
+	})
 	r.GET("/login", views.Login)
 	r.GET("/create-entity", views.CreateEntity)
 	r.GET("/create-ppp", views.CreatePPP)
-	r.GET("/create-rp/:id", views.CreateRP)
-	r.GET("/create-spk/:id", views.CreateSPK)
-	r.GET("/create-perkiraan-biaya/:id", views.CreatePerkiraanBiaya)
-	r.GET("/create-pengadaan/:id", views.CreatePengadaan)
+	r.GET("/create-rp/:id/:ppp_id", views.CreateRP)
+	r.GET("/create-spk/:id/:pengadaan_id", views.CreateSPK)
+	r.GET("/create-perkiraan-biaya/:id/:rp_id", views.CreatePerkiraanBiaya)
+	r.GET("/create-pengadaan/:id/:perkiraan_biaya_id", views.CreatePengadaan)
 
 	r.GET("/change-pwd", views.ChangePWD)
 	r.GET("/spk-progress/:id", views.SPKProgress)
-	r.GET("/revision/:id", views.Revision)
+	r.GET("/revision/:id/:spk_id", views.Revision)
 
 	r.GET("/user", views.User)
 	r.GET("/bdmu", views.BDMU)
@@ -151,6 +157,19 @@ func main() {
 	r.GET("/ppe", views.PPE)
 	r.GET("/ulp", views.ULP)
 	r.GET("/super-admin", views.SuperAdmin)
+
+	r.GET("/ppp/:id", views.PPPOne)
+	r.GET("/rp/:id", views.RPOne)
+	r.GET("/perkiraan-biaya/:id", views.PerkiraanBiayaOne)
+	r.GET("/pengadaan/:id", views.PengadaanOne)
+	r.GET("/spk/:id", views.SPKOne)
+	r.GET("/entity/:id", views.EntityOne)
+
+	r.GET("/ppp", views.PPPAll)
+	r.GET("/rp", views.RPAll)
+	r.GET("/perkiraan-biaya", views.PerkiraanBiayaAll)
+	r.GET("/pengadaan", views.PengadaanAll)
+	r.GET("/spk", views.SPKAll)
 
 	r.Run()
 }

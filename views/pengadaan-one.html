@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengadaan ID {{.ID}}</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
+</head>
+<body>
+    <div class="d-flex justify-content-center">
+        <div class="container m-5 p-3 border">
+            <div class="row mb-3">
+                <div class="col-sm">
+                    <p class="h5"><u>Tanggal Dibuat</u></p>
+                    <p class="h3">{{.DateCreated}}</p>
+                </div>
+                <div class="col-sm">
+                    <p class="h5"><u>ID</u></p>
+                    <p class="h3">{{.ID}}</p>
+                </div>
+                <div class="col-sm">
+                    <p class="h5"><u>ID Pembuat</u></p>
+                    <p class="h3">{{.CreatorID}}</p>
+                </div>
+                <div class="col-sm">
+                    <p class="h5"><u>ID Perkiraan Biaya</u></p>
+                    <p class="h3">{{.PerkiraanBiayaID}}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm">
+                    <a href="/{{ .Doc }}" target="_blank"><button class="btn btn-primary">lihat dokumen</button></a>
+                    <a href="/perkiraan-biaya/{{ .PerkiraanBiayaID }}" target="_blank"><button class="btn btn-primary">lihat detail Perkiraan Biaya</button></a>
+                    <a href="/entity/{{ .CreatorID }}" target="_blank"><button class="btn btn-primary">detail pembuat</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+</body>
+</html>

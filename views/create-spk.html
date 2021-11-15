@@ -14,21 +14,24 @@
         <div class="p-4">
             <h1>Buat Surat Kerja</h1>
             <hr>
-            <p>dibuat berdasarkan Dokumen Pengadaan dengan ID : 1</p>
-            <a href="/ddd">detail</a>
+            <p>dibuat berdasarkan Dokumen Pengadaan dengan ID : {{ .PengadaanID }}</p>
+            <a href="/pengadaan/{{ .PengadaanID }}" target="_blank">detail</a>
             <hr>
             <form>
+            <input type="hidden" id="input-id" value="{{ .ID }}">
+            <input type="hidden" id="input-pengadaan-id" value="{{ .PengadaanID }}">
             <div class="mb-3">
-                <label for="input-worker-Email" class="form-label">Email Pekerja</label>
-                <input type="email" class="form-control" id="input-worker-Email" aria-describedby="worker-EmailHelp">
+                <label for="input-worker-email" class="form-label">Email Pekerja</label>
+                <input type="email" class="form-control" id="input-worker-email" aria-describedby="worker-EmailHelp">
                 <div id="worker-EmailHelp" class="form-text">masukkan email pekerja.</div>
             </div>
             <div class="mb-3">
-                <label for="input-rp" class="form-label">Surat Perintah Kerja</label>
-                <input type="file" class="form-control" id="input-rp" aria-describedby="rpHelp">
-                <div id="rpHelp" class="form-text">upload dokumen surat perintah kerja.</div>
+                <label for="input-doc" class="form-label">Surat Perintah Kerja</label>
+                <input type="file" class="form-control" id="input-doc" aria-describedby="docHelp">
+                <div id="docHelp" class="form-text">upload dokumen surat perintah kerja.</div>
             </div>
-            <button type="submit" class="btn btn-primary">Buat Surat Perintah Kerja</button>
+            <button type="button" class="btn btn-primary" id="btn-create-spk">Buat Surat Perintah Kerja</button>
+            <button class="btn" id="btn-exit">exit</button>
             </form>
         </div>
     </div>

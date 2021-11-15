@@ -37,13 +37,37 @@ func Login(c *gin.Context) {
 }
 
 func SPKProgress(c *gin.Context) {
-	c.HTML(http.StatusOK, "spk-progress.html", nil)
+	c.HTML(http.StatusOK, "spk-progress.html", struct {
+		ID string
+	}{
+		ID: c.Params.ByName("id"),
+	})
 }
 
 func ChangePWD(c *gin.Context) {
+	_, err := services.ValidateTokenFromCookie(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, "forbidden")
+		return
+	}
 	c.HTML(http.StatusOK, "change-pwd.html", nil)
 }
 
 func Revision(c *gin.Context) {
-	c.HTML(http.StatusOK, "revision.html", nil)
+	entity, err := services.ValidateTokenFromCookie(c)
+	if err != nil {
+		c.JSON(http.StatusForbidden, "forbidden")
+		return
+	}
+	if entity.Role != "PPK" {
+		c.Redirect(http.StatusTemporaryRedirect, "/login")
+		return
+	}
+	c.HTML(http.StatusOK, "revision.html", struct {
+		ID    string
+		SPKID string
+	}{
+		ID:    c.Params.ByName("id"),
+		SPKID: c.Params.ByName("spk_id"),
+	})
 }

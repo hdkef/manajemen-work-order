@@ -85,7 +85,7 @@ func PerkiraanBiayaHelper(c *gin.Context, role string) {
 		return
 	}
 
-	docPath := fmt.Sprintf("archive/perkiraan-biaya/%s%s", entity.Fullname, time.Now())
+	docPath := fmt.Sprintf("archive/perkiraan-biaya/%s%s%s", entity.Fullname, time.Now(), doc.Filename)
 
 	err = c.SaveUploadedFile(doc, docPath)
 	if err != nil {

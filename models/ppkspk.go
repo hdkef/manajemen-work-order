@@ -37,7 +37,7 @@ func (x *PPKSPK) FindAll(db *sql.DB, ctx context.Context) ([]PPKSPK, error) {
 
 	for rows.Next() {
 		var tmp PPKSPK
-		err = rows.Scan(&tmp.ID, &tmp.DateCreated, &tmp.SPKID, &tmp.SPK.DateCreated, &tmp.SPK.Doc, &tmp.SPK.PengadaanID, &tmp.SPK.Status, &tmp.SPK.Doc)
+		err = rows.Scan(&tmp.ID, &tmp.DateCreated, &tmp.SPKID, &tmp.SPK.DateCreated, &tmp.SPK.Doc, &tmp.SPK.PengadaanID, &tmp.SPK.Status, &tmp.SPK.WorkerEmail)
 		if err != nil {
 			return nil, err
 		}

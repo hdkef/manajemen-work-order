@@ -22,6 +22,15 @@ func (x *Pengadaan) InsertTx(tx *sql.Tx, ctx context.Context, creatorid int64) (
 	return tx.ExecContext(ctx, fmt.Sprintf("INSERT %s (creator_id,date_created,doc,perkiraan_biaya_id) VALUES (?,?,?,?)", table.PENGADAAN), creatorid, date, x.Doc, x.PerkiraanBiayaID)
 }
 
+func (x *Pengadaan) FindOne(db *sql.DB, ctx context.Context) (Pengadaan, error) {
+	var tmp Pengadaan
+	err := db.QueryRowContext(ctx, fmt.Sprintf("SELECT id,creator_id,date_created,doc,perkiraan_biaya_id FROM %s WHERE id=?", table.PENGADAAN), x.ID).Scan(&tmp.ID, &tmp.CreatorID, &tmp.DateCreated, &tmp.Doc, &tmp.PerkiraanBiayaID)
+	if err != nil {
+		return Pengadaan{}, err
+	}
+	return tmp, nil
+}
+
 func (x *Pengadaan) FindAll(db *sql.DB, ctx context.Context) ([]Pengadaan, error) {
 	var result []Pengadaan
 

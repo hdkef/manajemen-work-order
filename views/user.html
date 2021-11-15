@@ -11,45 +11,53 @@
     <script defer src="/js/logout.js"></script>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="/assets/img/ppsdm.png" width="50" height="50" alt="logo">
+          </a>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/ppp" target="_blank">Lihat PPP</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rp" target="_blank">Lihat RP</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/perkiraan-biaya" target="_blank">Lihat Perkiraan Biaya</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pengadaan" target="_blank">Lihat Pengadaan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/spk" target="_blank">Lihat SPK</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/change-pwd">Ganti Password</a>
+                </li>
+                <li class="nav-item" style="cursor: pointer;">
+                    <a class="nav-link" id="btn-logout">Logout</a>
+                </li>
+            </ul>
+            </form>
+        </div>
+    </nav>
+
+    
     <div class="d-flex justify-content-center">
         <div class="p-4">
             <h1>User Dashboard</h1>
             <hr>
-            <h3>Hello Hadekha Erfadila F.</h3>
+            <h3>Hello {{ . }}</h3>
             <hr>
             <div class="container mt-5 mb-5">
                 <div class="row mb-2">
                     <div class="col-sm">
                         <a href="/create-ppp"><button class="btn btn-primary">Buat Permohonan</button></a>
                     </div>
-                    <div class="col-sm">
-                        <a href="/change-pwd"><button class="btn btn-primary">Ganti Password</button></a>
-                    </div>
-                    <div class="col-sm">
-                        <button class="btn btn-primary" id="btn-logout">Logout</button>
-                    </div>
                 </div>
             </div>
-            <table class="table">
-                <p class="font-weight-light"><u>Riwayat Permohonan Permintaan Pekerjaan</u></p class="font-weight-light">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Pekerjaan</th>
-                        <th>Status</th>
-                        <th>Aksi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Servis Diesel Engine</td>
-                        <td>Rejected</td>
-                        <td><a href="/sad">detail</a></td>
-                    </tr>
-                </tbody>
-            </table>
-            <button class="btn btn-primary">Muat Riwayat Permohonan</button>
         </div>
     </div>
 </body>

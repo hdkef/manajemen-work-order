@@ -71,6 +71,28 @@ func (x *PPP) UpdateStatusAndReason(db *sql.DB, ctx context.Context) (sql.Result
 	return db.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=?,reason=? WHERE id=?", table.PPP), x.Status, x.Reason, x.ID)
 }
 
+func (x *PPP) FindOne(db *sql.DB, ctx context.Context) (PPP, error) {
+	var tmpRepo PPPRepo
+	err := db.QueryRowContext(ctx, fmt.Sprintf("SELECT id,date_created,creator_id,doc,status,perihal,nota,pekerjaan,sifat,bdmu_id,bdmup_id,kela_id FROM %s WHERE id=?", table.PPP), x.ID).Scan(&tmpRepo.ID, &tmpRepo.DateCreated, &tmpRepo.CreatorID, &tmpRepo.Doc, &tmpRepo.Status, &tmpRepo.Perihal, &tmpRepo.Nota, &tmpRepo.Pekerjaan, &tmpRepo.Sifat, &tmpRepo.BDMUID, &tmpRepo.BDMUPID, &tmpRepo.KELAID)
+	if err != nil {
+		return PPP{}, err
+	}
+	return PPP{
+		ID:          tmpRepo.ID,
+		DateCreated: tmpRepo.DateCreated,
+		CreatorID:   tmpRepo.CreatorID,
+		Doc:         tmpRepo.Doc,
+		Status:      tmpRepo.Status,
+		Perihal:     tmpRepo.Perihal,
+		Nota:        tmpRepo.Nota,
+		Pekerjaan:   tmpRepo.Pekerjaan,
+		Sifat:       tmpRepo.Sifat,
+		BDMUID:      tmpRepo.BDMUID.Int64,
+		BDMUPID:     tmpRepo.BDMUPID.Int64,
+		KELAID:      tmpRepo.KELAID.Int64,
+	}, nil
+}
+
 func (x *PPP) FindAll(db *sql.DB, ctx context.Context) ([]PPP, error) {
 	var result []PPP
 	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,date_created,creator_id,doc,status,perihal,nota,pekerjaan,sifat,bdmu_id,bdmup_id,kela_id FROM %s", table.PPP))

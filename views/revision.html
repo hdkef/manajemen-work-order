@@ -14,16 +14,19 @@
         <div class="p-4">
             <h1>Revisi Pengerjaan</h1>
             <hr>
-            <p>revisi untuk Surat Perintah Kerja dengan ID : 1</p>
+            <p>revisi untuk Surat Perintah Kerja dengan ID : {{ .SPKID }}</p>
             <a href="/ddd">detail</a>
             <hr>
             <form>
             <div class="mb-3">
-                <label for="input-revisi" class="form-label">Pesan</label>
-                <input type="text" class="form-control" id="input-revisi" aria-describedby="revisiHelp">
-                <div id="revisiHelp" class="form-text">masukkan pesan untuk revisi pengerjaan.</div>
+                <input type="hidden" id="input-id" value="{{ .ID }}">
+                <input type="hidden" id="input-spk-id" value="{{ .SPKID }}">
+                <label for="input-msg" class="form-label">Pesan</label>
+                <input type="text" class="form-control" id="input-msg" aria-describedby="msgHelp">
+                <div id="msgHelp" class="form-text">masukkan pesan untuk revisi pengerjaan.</div>
             </div>
-            <button type="submit" class="btn btn-primary">Revisi Pengerjaan</button>
+            <button type="button" class="btn btn-primary" id="btn-revisi">Revisi Pengerjaan</button>
+            <button class="btn" id="btn-exit">exit</button>
             </form>
         </div>
     </div>

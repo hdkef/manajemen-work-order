@@ -83,7 +83,7 @@ func EntityPost(c *gin.Context) {
 		return
 	}
 
-	signaturePath := fmt.Sprintf("assets/signature/%s", fullname)
+	signaturePath := fmt.Sprintf("assets/signature/%s%s", fullname, signature.Filename)
 
 	err = c.SaveUploadedFile(signature, signaturePath)
 	if err != nil {

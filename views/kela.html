@@ -8,31 +8,62 @@
     <link rel="stylesheet" href="/css/bootstrap.css">
     <script src="/js/bootstrap.js"></script>
     <script defer src="/js/kela.js"></script>
+    <script defer src="/js/logout.js"></script>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="/assets/img/ppsdm.png" width="50" height="50" alt="logo">
+          </a>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/ppp" target="_blank">Lihat PPP</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rp" target="_blank">Lihat RP</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/perkiraan-biaya" target="_blank">Lihat Perkiraan Biaya</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pengadaan" target="_blank">Lihat Pengadaan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/spk" target="_blank">Lihat SPK</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/change-pwd">Ganti Password</a>
+                </li>
+                <li class="nav-item" style="cursor: pointer;">
+                    <a class="nav-link" id="btn-logout">Logout</a>
+                </li>
+            </ul>
+            </form>
+        </div>
+    </nav>
     <div class="d-flex justify-content-center">
         <div class="p-4">
             <h1>Kelompok A Dashboard</h1>
             <hr>
-            <h3>Hello Hadekha Erfadila F.</h3>
+            <h3>Hello {{ . }}</h3>
             <hr>
             <table class="table">
                 <p class="font-weight-light"><u>Inbox Permohonan Permintaan Pekerjaan</u></p class="font-weight-light">
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Tanggal Dibuat</th>
+                        <th>Nota</th>
+                        <th>Perihal</th>
+                        <th>Sifat</th>
                         <th>Pekerjaan</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Servis Diesel Engine</td>
-                        <td>Rejected</td>
-                        <td><button class="btn m-1">detail</button><button class="btn btn-success m-1">terima</button><button class="btn btn-danger m-1">tolak</button></td>
-                    </tr>
+                <tbody id="table-ppp">
                 </tbody>
             </table>
             <table class="table">
@@ -40,18 +71,13 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>PPP ID</th>
+                        <th>RP ID</th>
                         <th>Tanggal Dibuat</th>
+                        <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>1</td>
-                        <td>22/2/21</td>
-                        <td><button class="btn m-1">lihat</button><button class="btn btn-success m-1">terima</button><button class="btn btn-danger m-1">tolak</button></td>
-                    </tr>
+                <tbody id="table-rp">
                 </tbody>
             </table>
         </div>
