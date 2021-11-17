@@ -73,6 +73,12 @@ func createSignature(pdf *gofpdf.Fpdf, fromName string, signature string) {
 	pdf.Text(w-65, 235, fromName)
 }
 
+func addImage(pdf *gofpdf.Fpdf, imageLoc string) {
+	pdf.AddPage()
+	w, _ := pdf.GetPageSize()
+	pdf.ImageOptions(imageLoc, (w/2)-75, 75, 150, 150, false, gofpdf.ImageOptions{}, 0, "")
+}
+
 func CreatePDFofPPP(ppp models.PPP, entity models.Entity, toWhom string) (string, error) {
 	pdf := gofpdf.New("P", "mm", "A4", "")
 	pdf.AddPage()
@@ -89,6 +95,8 @@ func CreatePDFofPPP(ppp models.PPP, entity models.Entity, toWhom string) (string
 	pdf.Text(w-50, 80, date.Format("Monday 02 January 2006"))
 
 	path := fmt.Sprintf("archive/ppp/%s%s.pdf", entity.Fullname, time.Now())
+
+	addImage(pdf, ppp.Photo)
 
 	err := pdf.OutputFileAndClose(path)
 	if err != nil {

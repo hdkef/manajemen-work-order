@@ -72,7 +72,7 @@ func (x *RP) FindPPPIDTx(tx *sql.Tx, ctx context.Context) (int64, error) {
 
 func (x *RP) FindOne(db *sql.DB, ctx context.Context) (RP, error) {
 	var tmpRepo RPRepo
-	err := db.QueryRowContext(ctx, fmt.Sprintf("SELECT id,creator_id,date_created,doc,status,ppp_id,bdmu_id,bdmup_id,kela_id FROM %s WHERE id=?", table.RP), x.ID).Scan(&tmpRepo.ID, &tmpRepo.CreatorID, &tmpRepo.DateCreated, &tmpRepo.Doc, &tmpRepo.Status, &tmpRepo.PPPID, &tmpRepo.BDMUID, &tmpRepo.BDMUPID, &tmpRepo.KELAID)
+	err := db.QueryRowContext(ctx, fmt.Sprintf("SELECT id,creator_id,date_created,doc,status,ppp_id,bdmu_id,bdmup_id,kela_id,reason FROM %s WHERE id=?", table.RP), x.ID).Scan(&tmpRepo.ID, &tmpRepo.CreatorID, &tmpRepo.DateCreated, &tmpRepo.Doc, &tmpRepo.Status, &tmpRepo.PPPID, &tmpRepo.BDMUID, &tmpRepo.BDMUPID, &tmpRepo.KELAID, &tmpRepo.Reason)
 	if err != nil {
 		return RP{}, err
 	}
@@ -86,6 +86,7 @@ func (x *RP) FindOne(db *sql.DB, ctx context.Context) (RP, error) {
 		BDMUID:      tmpRepo.BDMUID.Int64,
 		BDMUPID:     tmpRepo.BDMUPID.Int64,
 		KELAID:      tmpRepo.KELAID.Int64,
+		Reason:      tmpRepo.Reason.String,
 	}, nil
 }
 
