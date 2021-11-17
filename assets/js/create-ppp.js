@@ -9,29 +9,37 @@ let CreatePPP = ()=>{
     let inputPerihal = document.getElementById("input-perihal")
     let inputSifat = document.getElementById("input-sifat")
     let inputPekerjaan = document.getElementById("input-pekerjaan")
+    let inputPhoto = document.getElementById("input-photo")
     
-    let payload = JSON.stringify({
-        nota:inputNota.value,
-        pekerjaan:inputPekerjaan.value,
-        sifat:inputSifat.value,
-        perihal:inputPerihal.value
-    })
+    let formData = new FormData()
+
+    if (inputPhoto.files[0]){
+        formData.append("photo",inputPhoto.files[0])
+    }
+
+    formData.append("nota",inputNota.value)
+    formData.append("perihal",inputPerihal.value)
+    formData.append("sifat",inputSifat.value)
+    formData.append("pekerjaan",inputPekerjaan.value)
     
-    hitEndpoint(`http://${API_HOST}/api/v1/ppp`,payload,"post").then((resJSON)=>{
-        handleSuccess(resJSON)
-    }).catch((err)=>{
-        handleError(err)
-    })
+    sendXML(`http://${API_HOST}/api/v1/ppp`,formData,"post")
 }
 
-let hitEndpoint = (endpoint,payload,method) => {
-    return fetch(endpoint,{
-        method:method,
-        headers:{
-            "Content-Type":"application/json"
-        },
-        body:payload
-    }).then((res)=>{return res.json()})
+let sendXML = (endpoint,payload,method) => {
+    let request = new XMLHttpRequest();
+    request.open(method, endpoint);
+    request.send(payload);
+    request.onreadystatechange = ()=>{
+        if(request.readyState === XMLHttpRequest.DONE){
+            let status = request.status
+            let resJSON = JSON.parse(request.responseText)
+            if (status == 200) {
+                handleSuccess(resJSON)
+            }else{
+                handleError(resJSON.msg)
+            }
+        }
+    }
 }
 
 let handleSuccess = (resJSON) => {

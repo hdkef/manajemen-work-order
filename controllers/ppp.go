@@ -3,13 +3,17 @@ package controllers
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"manajemen-work-order/models"
 	"manajemen-work-order/services"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
+
+const NOIMGPATH = "archive/img/noimg.png"
 
 func PPPGet(c *gin.Context) {
 	//validate entity that entity role is super-admin
@@ -60,25 +64,49 @@ func PPPPost(c *gin.Context) {
 
 	//decode ppp
 	var payload models.PPP
-	err = json.NewDecoder(c.Request.Body).Decode(&payload)
+
+	nota := c.PostForm("nota")
+	pekerjaan := c.PostForm("pekerjaan")
+	perihal := c.PostForm("perihal")
+	sifat := c.PostForm("sifat")
+	photo, err := c.FormFile("photo")
+
+	//if there is photo payload, then store and set payload.Photo = pathImage if not set payload.Photo to NOIMG
 	if err != nil {
-		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
-		return
+		payload.Photo = NOIMGPATH
+	} else {
+		pathImage := fmt.Sprintf("archive/img/%s%s%s", entity.Fullname, time.Now(), photo.Filename)
+
+		err = c.SaveUploadedFile(photo, pathImage)
+		if err != nil {
+			services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+			return
+		}
+
+		payload.Photo = pathImage
 	}
 
-	//generate pdf and store it on disk
-	path, err := services.CreatePDFofPPP(payload, entity, "BDMU")
+	payload.Nota = nota
+	payload.Pekerjaan = pekerjaan
+	payload.Perihal = perihal
+	payload.Sifat = sifat
+
+	//TOBE generate pdf and store it on disk
+	pathDoc, err := services.CreatePDFofPPP(payload, entity, "BDMU")
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
-	payload.Doc = path
+	payload.Doc = pathDoc
 	payload.Status = "ON ROUTE TO BDMU"
 
 	//validation
-	err = services.IsNotEmpty(payload.Doc, payload.Sifat, payload.Status, payload.Nota, payload.Perihal, payload.Pekerjaan)
+	err = services.IsNotEmpty(payload.Doc, payload.Sifat, payload.Status, payload.Nota, payload.Perihal, payload.Pekerjaan, payload.Photo)
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
 		return
 	}
@@ -86,7 +114,10 @@ func PPPPost(c *gin.Context) {
 	//extract db
 	db, err := services.GetDB(c)
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
@@ -96,7 +127,10 @@ func PPPPost(c *gin.Context) {
 
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -104,7 +138,10 @@ func PPPPost(c *gin.Context) {
 
 	res, err := payload.InsertTx(tx, ctx, entity.ID)
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -112,7 +149,10 @@ func PPPPost(c *gin.Context) {
 
 	insertedID, err := res.LastInsertId()
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -125,7 +165,10 @@ func PPPPost(c *gin.Context) {
 
 	_, err = bdmuppp.InsertTx(tx, ctx)
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -133,7 +176,10 @@ func PPPPost(c *gin.Context) {
 
 	err = tx.Commit()
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return

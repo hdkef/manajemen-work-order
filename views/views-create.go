@@ -21,13 +21,9 @@ func CreateEntity(c *gin.Context) {
 }
 
 func CreatePPP(c *gin.Context) {
-	entity, err := services.ValidateTokenFromCookie(c)
+	_, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		c.JSON(http.StatusForbidden, "forbidden")
-		return
-	}
-	if entity.Role != "USER" {
-		c.Redirect(http.StatusTemporaryRedirect, "/login")
 		return
 	}
 	c.HTML(http.StatusOK, "create-ppp.html", nil)
