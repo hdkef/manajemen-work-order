@@ -51,10 +51,10 @@ func (x *SPK) FindOne(db *sql.DB, ctx context.Context) (SPK, error) {
 	return tmp, nil
 }
 
-func (x *SPK) FindAll(db *sql.DB, ctx context.Context) ([]SPK, error) {
+func (x *SPK) FindAll(db *sql.DB, ctx context.Context, lastid int64) ([]SPK, error) {
 	var result []SPK
 
-	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,creator_id,date_created,doc,pengadaan_id,status,worker_email FROM %s", table.SPK))
+	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,creator_id,date_created,doc,pengadaan_id,status,worker_email FROM %s WHERE id > ? LIMIT 10", table.SPK), lastid)
 	if err != nil {
 		return nil, err
 	}

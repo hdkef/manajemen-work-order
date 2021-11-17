@@ -22,6 +22,20 @@ func SPKGet(c *gin.Context) {
 		return
 	}
 	mdl := models.SPK{}
+	//get last-id
+	val, _ := c.GetQuery("last-id")
+	var lastID int64
+
+	if val == "" {
+		lastID = 0
+	} else {
+		valInt, err := strconv.ParseInt(val, 10, 64)
+		if err != nil {
+			services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
+			return
+		}
+		lastID = valInt
+	}
 	//extract db
 	ctx := context.Background()
 	db, err := services.GetDB(c)
@@ -29,7 +43,7 @@ func SPKGet(c *gin.Context) {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
-	res, err := mdl.FindAll(db, ctx)
+	res, err := mdl.FindAll(db, ctx, lastID)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -171,7 +185,7 @@ func SPKPost(c *gin.Context) {
 	}
 
 	//TOBE send email to worker
-	emailMsg := fmt.Sprintf("work order has been created click this link to see details. Please submit work progression to http://localhost:8080/spk-progress/%d and use work order id of %d and pin %d", lastInsertedID, lastInsertedID, pin)
+	emailMsg := fmt.Sprintf("work order has been created click this link to see details. Please submit work progression to HOST/spk-progress/%d and use work order id of %d and pin %d", lastInsertedID, lastInsertedID, pin)
 
 	err = services.SendEmail(workerEmail, "Email dari Server", emailMsg)
 	if err != nil {

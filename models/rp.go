@@ -89,10 +89,10 @@ func (x *RP) FindOne(db *sql.DB, ctx context.Context) (RP, error) {
 	}, nil
 }
 
-func (x *RP) FindAll(db *sql.DB, ctx context.Context) ([]RP, error) {
+func (x *RP) FindAll(db *sql.DB, ctx context.Context, lastID int64) ([]RP, error) {
 	var result []RP
 
-	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,creator_id,date_created,doc,status,ppp_id,bdmu_id,bdmup_id,kela_id FROM %s", table.RP))
+	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,creator_id,date_created,doc,status,ppp_id,bdmu_id,bdmup_id,kela_id FROM %s WHERE id > ? LIMIT 10", table.RP), lastID)
 	if err != nil {
 		return nil, err
 	}

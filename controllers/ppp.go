@@ -19,6 +19,21 @@ func PPPGet(c *gin.Context) {
 		return
 	}
 	mdl := models.PPP{}
+	//get last-id
+	val, _ := c.GetQuery("last-id")
+	var lastID int64
+
+	if val == "" {
+		lastID = 0
+	} else {
+		valInt, err := strconv.ParseInt(val, 10, 64)
+		if err != nil {
+			services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
+			return
+		}
+		lastID = valInt
+	}
+
 	//extract db
 	ctx := context.Background()
 	db, err := services.GetDB(c)
@@ -26,7 +41,7 @@ func PPPGet(c *gin.Context) {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
-	res, err := mdl.FindAll(db, ctx)
+	res, err := mdl.FindAll(db, ctx, lastID)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return

@@ -7,6 +7,7 @@
     <title>Permintaan Permohonan Pekerjaan</title>
     <link rel="stylesheet" href="/css/bootstrap.css">
     <script src="/js/bootstrap.js"></script>
+    <script defer src="/js/ppp.js"></script>
 </head>
 <body>
     <table class="table">
@@ -22,7 +23,7 @@
                 <th>Aksi</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="table-ppp">
             {{ range $v := . }}
             <tr>
                 <td>{{ $v.ID }}</td>
@@ -33,13 +34,12 @@
                 <td>{{ $v.Pekerjaan }}</td>
                 <td>{{ $v.Status }}</td>
                 <td>
-                    <a href="/{{$v.Doc}}" target="_blank"><button class="btn btn-primary">lihat dokumen</button></a>
-                    <a href="/ppp/{{$v.ID}}" target="_blank"><button class="btn btn-primary">lihat detail</button></a>
-                    <a href="/entity/{{$v.CreatorID}}" target="_blank"><button class="btn btn-primary">detail pembuat</button></a>
+                    <a href="/{{$v.Doc}}" target="_blank" class="m-2"><button class="btn btn-primary">lihat dokumen</button></a><a href="/ppp/{{$v.ID}}" target="_blank" class="m-2"><button class="btn btn-primary">lihat detail</button></a><a href="/entity/{{$v.CreatorID}}" target="_blank" class="m-2"><button class="btn btn-primary">detail pembuat</button></a>
                 </td>
             </tr>
             {{ end }}
         </tbody>
     </table>
+    <button class="btn" id="btn-paging">Muat lebih</button>
 </body>
 </html>

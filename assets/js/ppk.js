@@ -1,4 +1,4 @@
-const API_HOST = "localhost:8080"
+const API_HOST = window.location.hostname + ":8080"
 
 let getPPKRP = ()=>{
     hitEndpoint(`http://${API_HOST}/api/v1/ppk/rp`,null,"get").then((resJSON)=>{

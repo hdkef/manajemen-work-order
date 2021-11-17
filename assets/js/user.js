@@ -1,4 +1,4 @@
-const API_HOST = "localhost:8080"
+const API_HOST = window.location.hostname + ":8080"
 
 let getRiwayat = ()=>{
     alert("function is not implemented yet")

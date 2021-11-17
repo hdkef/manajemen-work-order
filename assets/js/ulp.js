@@ -1,4 +1,4 @@
-const API_HOST = "localhost:8080"
+const API_HOST = window.location.hostname + ":8080"
 
 let getULPPerkiraanBiaya = ()=>{
     hitEndpoint(`http://${API_HOST}/api/v1/ulp/perkiraan-biaya`,null,"get").then((resJSON)=>{

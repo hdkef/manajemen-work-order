@@ -89,9 +89,9 @@ func (x *PPP) FindOne(db *sql.DB, ctx context.Context) (PPP, error) {
 	}, nil
 }
 
-func (x *PPP) FindAll(db *sql.DB, ctx context.Context) ([]PPP, error) {
+func (x *PPP) FindAll(db *sql.DB, ctx context.Context, lastID int64) ([]PPP, error) {
 	var result []PPP
-	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,date_created,creator_id,doc,status,perihal,nota,pekerjaan,sifat,bdmu_id,bdmup_id,kela_id FROM %s", table.PPP))
+	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,date_created,creator_id,doc,status,perihal,nota,pekerjaan,sifat,bdmu_id,bdmup_id,kela_id FROM %s WHERE id > ? LIMIT 10", table.PPP), lastID)
 	if err != nil {
 		return nil, err
 	}

@@ -25,7 +25,7 @@ func PPPAll(c *gin.Context) {
 	}
 	//get data
 	mdl := models.PPP{}
-	data, err := mdl.FindAll(db, ctx)
+	data, err := mdl.FindAll(db, ctx, 0)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
@@ -50,7 +50,7 @@ func RPAll(c *gin.Context) {
 	}
 	//get data
 	mdl := models.RP{}
-	data, err := mdl.FindAll(db, ctx)
+	data, err := mdl.FindAll(db, ctx, 0)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
@@ -75,7 +75,7 @@ func PerkiraanBiayaAll(c *gin.Context) {
 	}
 	//get data
 	mdl := models.PerkiraanBiaya{}
-	data, err := mdl.FindAll(db, ctx)
+	data, err := mdl.FindAll(db, ctx, 0)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
@@ -100,7 +100,7 @@ func PengadaanAll(c *gin.Context) {
 	}
 	//get data
 	mdl := models.Pengadaan{}
-	data, err := mdl.FindAll(db, ctx)
+	data, err := mdl.FindAll(db, ctx, 0)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return
@@ -125,7 +125,7 @@ func SPKAll(c *gin.Context) {
 	}
 	//get data
 	mdl := models.SPK{}
-	data, err := mdl.FindAll(db, ctx)
+	data, err := mdl.FindAll(db, ctx, 0)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err.Error())
 		return

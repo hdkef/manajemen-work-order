@@ -31,10 +31,10 @@ func (x *Pengadaan) FindOne(db *sql.DB, ctx context.Context) (Pengadaan, error) 
 	return tmp, nil
 }
 
-func (x *Pengadaan) FindAll(db *sql.DB, ctx context.Context) ([]Pengadaan, error) {
+func (x *Pengadaan) FindAll(db *sql.DB, ctx context.Context, lastid int64) ([]Pengadaan, error) {
 	var result []Pengadaan
 
-	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,creator_id,date_created,doc,perkiraan_biaya_id FROM %s", table.PENGADAAN))
+	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,creator_id,date_created,doc,perkiraan_biaya_id FROM %s WHERE id > ? LIMIT 10", table.PENGADAAN), lastid)
 	if err != nil {
 		return nil, err
 	}

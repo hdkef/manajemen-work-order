@@ -1,4 +1,4 @@
-const API_HOST = "localhost:8080"
+const API_HOST = window.location.hostname + ":8080"
 
 let getKELBPPP = ()=>{
     hitEndpoint(`http://${API_HOST}/api/v1/kelb/ppp`,null,"get").then((resJSON)=>{
