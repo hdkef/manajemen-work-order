@@ -12,9 +12,11 @@ let createPengadaan = ()=>{
     let inputID = document.getElementById("input-id")
     let inputPerkiraanBiayaID = document.getElementById("input-perkiraan-biaya-id")
     let inputDOC = document.getElementById("input-doc")
+    let inputRole = document.getElementById("input-role")
     
     let id = +inputID.value
     let perkiraanBiayaID = +inputPerkiraanBiayaID.value
+    let role = inputRole.value
 
     let formData = new FormData()
 
@@ -24,7 +26,16 @@ let createPengadaan = ()=>{
     }
     formData.append("doc",inputDOC.files[0])
     
-    sendXML(`http://${API_HOST}/api/v1/pengadaan/${perkiraanBiayaID}/ppe/${id}`,formData,"post")
+    switch(role){
+        case "PPE":
+            sendXML(`http://${API_HOST}/api/v1/pengadaan/${perkiraanBiayaID}/ppe/${id}`,formData,"post")
+            return
+        case "ULP":
+            sendXML(`http://${API_HOST}/api/v1/pengadaan/${perkiraanBiayaID}/ulp/${id}`,formData,"post")
+            return
+        default:
+            alert("NOT ULP / PPE")
+    }
 }
 
 let sendXML = (endpoint,payload,method) => {

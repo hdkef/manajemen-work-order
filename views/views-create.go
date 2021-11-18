@@ -73,17 +73,18 @@ func CreatePengadaan(c *gin.Context) {
 		c.JSON(http.StatusForbidden, "forbidden")
 		return
 	}
-	x := entity.Role != "ULP"
-	if x || entity.Role != "PPE" {
+	if entity.Role != "ULP" && entity.Role != "PPE" {
 		c.Redirect(http.StatusTemporaryRedirect, "/login")
 		return
 	}
 	c.HTML(http.StatusOK, "create-pengadaan.html", struct {
 		ID               string
 		PerkiraanBiayaID string
+		Role             string
 	}{
 		ID:               c.Params.ByName("id"),
 		PerkiraanBiayaID: c.Params.ByName("perkiraan_biaya_id"),
+		Role:             entity.Role,
 	})
 }
 

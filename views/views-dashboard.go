@@ -76,7 +76,7 @@ func PPE(c *gin.Context) {
 		c.JSON(http.StatusForbidden, "forbidden")
 		return
 	}
-	c.HTML(http.StatusOK, "ppe.html", nil)
+	c.HTML(http.StatusOK, "ppe.html", entity.Fullname)
 }
 
 func ULP(c *gin.Context) {
@@ -85,5 +85,5 @@ func ULP(c *gin.Context) {
 		c.JSON(http.StatusForbidden, "forbidden")
 		return
 	}
-	c.HTML(http.StatusOK, "ulp.html", nil)
+	c.HTML(http.StatusOK, "ulp.html", entity.Fullname)
 }

@@ -33,6 +33,9 @@ let PPPDec = (id,pppid)=>{
 }
 
 let populateTablePPP = (slice)=>{
+    if (!slice){
+        return
+    }
     let tablePPP = document.getElementById("table-ppp")
     for (let i=0;i<slice.length;i++){
         let id = +slice[i].id
@@ -117,6 +120,9 @@ let RPDec = (id,rpid)=>{
 }
 
 let populateTableRP = (slice)=>{
+    if (!slice){
+        return
+    }
     let tableRP = document.getElementById("table-rp")
     for (let i=0;i < slice.length;i++){
         let id = +slice[i].id

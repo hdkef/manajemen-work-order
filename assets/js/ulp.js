@@ -16,10 +16,10 @@ let createPengadaan = (id,perkiraanBiayaID)=>{
     window.open(`http://${API_HOST}/create-pengadaan/${id}/${perkiraanBiayaID}`)
 }
 
-let perkiraanBiayaDec = (id)=>{
-}
-
 let populateTablePerkiraanBiaya = (slice)=>{
+    if (!slice){
+        return
+    }
     let tablePerkiraanBiaya = document.getElementById("table-perkiraan-biaya")
     for (let i=0;i < slice.length;i++){
         let id = +slice[i].id

@@ -17,6 +17,9 @@ let createPengadaan = (id,perkiraanBiayaID)=>{
 }
 
 let populateTablePerkiraanBiaya = (slice)=>{
+    if (!slice){
+        return
+    }
     let tablePerkiraanBiaya = document.getElementById("table-perkiraan-biaya")
     for (let i=0;i < slice.length;i++){
         let id = +slice[i].id

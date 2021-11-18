@@ -17,6 +17,9 @@ let createRP = (id,pppID)=>{
 }
 
 let populateTablePPP = (slice)=>{
+    if (!slice){
+        return
+    }
     let tablePPP = document.getElementById("table-ppp")
     for (let i=0;i<slice.length;i++){
         let id = +slice[i].id

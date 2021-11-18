@@ -37,6 +37,9 @@ let RPDec = (id)=>{
 }
 
 let populateTableRP = (slice)=>{
+    if (!slice){
+        return
+    }
     let tableRP = document.getElementById("table-rp")
     for (let i=0;i < slice.length;i++){
         let id = +slice[i].id
@@ -100,6 +103,9 @@ let createSPK = (id,pengadaanID)=>{
 }
 
 let populateTablePengadaan = (slice)=>{
+    if (!slice){
+        return
+    }
     let tablePengadaan = document.getElementById("table-pengadaan")
     for (let i=0;i < slice.length;i++){
         let id = +slice[i].id
@@ -159,6 +165,9 @@ let SPKRevisi = (spkID,id)=>{
 }
 
 let populateTableWork = (slice)=>{
+    if (!slice){
+        return
+    }
     let tableWorker = document.getElementById("table-worker")
     for (let i=0;i < slice.length;i++){
         console.log(slice)
