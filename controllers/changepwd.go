@@ -12,7 +12,7 @@ import (
 
 func ChangePWD(c *gin.Context) {
 	//validate entity must be bdmu
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return

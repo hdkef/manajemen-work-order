@@ -3,6 +3,8 @@ package main
 import (
 	"manajemen-work-order/controllers"
 	"manajemen-work-order/services"
+	"manajemen-work-order/views"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,6 +25,12 @@ func main() {
 	})
 
 	r.Static("archive", "archive")
+	r.Static("assets/signature", "assets/signature")
+	r.Static("assets/img", "assets/img")
+	r.Static("/js", "./assets/js")
+	r.Static("/css", "./assets/css")
+	r.Static("/img", "./assets/img")
+	r.LoadHTMLGlob("views/*")
 
 	//backend
 	api := r.Group("/api/v1")
@@ -66,7 +74,7 @@ func main() {
 	ppp.POST("/:ppp_id/ok/bdmup/:bdmup_id", controllers.PPPOKBDMUP)
 	ppp.POST("/:ppp_id/ok/kela/:kela_id", controllers.PPPOKKELA)
 
-	ppp.POST("/:ppp_id/no", controllers.PPPNO)
+	ppp.POST("/:ppp_id/no/:inbox_id", controllers.PPPNO)
 
 	rp.POST("/new/:ppp_id/:kelb_ppp_id", controllers.RPPost)
 
@@ -74,7 +82,7 @@ func main() {
 	rp.POST("/:rp_id/ok/bdmup/:bdmup_id", controllers.RPOKBDMUP)
 	rp.POST("/:rp_id/ok/bdmu/:bdmu_id", controllers.RPOKBDMU)
 
-	rp.POST("/:rp_id/no", controllers.RPNO)
+	rp.POST("/:rp_id/no/:inbox_id", controllers.RPNO)
 
 	perkiraanBiaya.POST("/ulp/:rp_id/:ppk_rp_id", controllers.ULPPerkiraanBiaya)
 	perkiraanBiaya.POST("/ppe/:rp_id/:ppk_rp_id", controllers.PPEPerkiraanBiaya)
@@ -88,14 +96,14 @@ func main() {
 	pengadaan.POST("/:perkiraan_biaya_id/ppe/:inbox_id", controllers.PengadaanFromPPE)
 	//route delete
 	entity.DELETE("/:id", controllers.EntityDelete)
-	bdmuppp.DELETE("/:id", controllers.BDMUPPPDelete)
-	bdmupppp.DELETE("/:id", controllers.BDMUPPPPDelete)
-	kelappp.DELETE("/:id", controllers.KELAPPPDelete)
-	kelbppp.DELETE("/:id", controllers.KELBPPPDelete)
-	bdmurp.DELETE("/:id", controllers.BDMURPDelete)
-	bdmuprp.DELETE("/:id", controllers.BDMUPRPDelete)
-	kelarp.DELETE("/:id", controllers.KELARPDelete)
-	ppkrp.DELETE("/:id", controllers.PPKRPDelete)
+	// bdmuppp.DELETE("/:id", controllers.BDMUPPPDelete)
+	// bdmupppp.DELETE("/:id", controllers.BDMUPPPPDelete)
+	// kelappp.DELETE("/:id", controllers.KELAPPPDelete)
+	// kelbppp.DELETE("/:id", controllers.KELBPPPDelete)
+	// bdmurp.DELETE("/:id", controllers.BDMURPDelete)
+	// bdmuprp.DELETE("/:id", controllers.BDMUPRPDelete)
+	// kelarp.DELETE("/:id", controllers.KELARPDelete)
+	// ppkrp.DELETE("/:id", controllers.PPKRPDelete)
 
 	//route edit
 
@@ -103,6 +111,8 @@ func main() {
 	api.PUT("/changepwd", controllers.ChangePWD)
 
 	//route get
+	entity.GET("", controllers.EntityGet)
+
 	bdmuppp.GET("", controllers.BDMUPPPGet)
 	bdmupppp.GET("", controllers.BDMUPPPPGet)
 	kelappp.GET("", controllers.KELAPPPGet)
@@ -121,6 +131,49 @@ func main() {
 	perkiraanBiaya.GET("", controllers.PerkiraanBiayaGet)
 	pengadaan.GET("", controllers.PengadaanGet)
 	spk.GET("", controllers.SPKGet)
+
+	//frontend
+	r.GET("", func(c *gin.Context) {
+		c.Redirect(http.StatusTemporaryRedirect, "/login")
+	})
+	r.GET("/login", views.Login)
+	r.GET("/create-entity", views.CreateEntity)
+	r.GET("/create-ppp", views.CreatePPP)
+	r.GET("/create-rp/:id/:ppp_id", views.CreateRP)
+	r.GET("/create-spk/:id/:pengadaan_id", views.CreateSPK)
+	r.GET("/create-perkiraan-biaya/:id/:rp_id", views.CreatePerkiraanBiaya)
+	r.GET("/create-pengadaan/:id/:perkiraan_biaya_id", views.CreatePengadaan)
+
+	r.GET("/change-pwd", views.ChangePWD)
+	r.GET("/spk-progress/:id", views.SPKProgress)
+	r.GET("/revision/:id/:spk_id", views.Revision)
+
+	r.GET("/user", views.User)
+	r.GET("/bdmu", views.BDMU)
+	r.GET("/bdmup", views.BDMUP)
+	r.GET("/kela", views.KELA)
+	r.GET("/kelb", views.KELB)
+	r.GET("/ppk", views.PPK)
+	r.GET("/ppe", views.PPE)
+	r.GET("/ulp", views.ULP)
+	r.GET("/super-admin", views.SuperAdmin)
+
+	r.GET("/ppp/:id", views.PPPOne)
+	r.GET("/rp/:id", views.RPOne)
+	r.GET("/perkiraan-biaya/:id", views.PerkiraanBiayaOne)
+	r.GET("/pengadaan/:id", views.PengadaanOne)
+	r.GET("/spk/:id", views.SPKOne)
+	r.GET("/entity/:id", views.EntityOne)
+
+	r.GET("/ppp", views.PPPAll)
+	r.GET("/rp", views.RPAll)
+	r.GET("/perkiraan-biaya", views.PerkiraanBiayaAll)
+	r.GET("/pengadaan", views.PengadaanAll)
+	r.GET("/spk", views.SPKAll)
+
+	reject := r.Group("/reject")
+	reject.GET("/ppp/:ppp_id/:inbox_id", views.RejectPPP)
+	reject.GET("/rp/:rp_id/:inbox_id", views.RejectRP)
 
 	r.Run()
 }

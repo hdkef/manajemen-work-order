@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tolak Rencana Pekerjaan</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
+    <script defer src="/js/reject-rp.js"></script>
+    <script defer src="/js/logout.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="/assets/img/ppsdm.png" width="50" height="50" alt="logo">
+          </a>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/create-ppp"><strong>buat PPP</strong></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ppp">PPP</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rp">RP</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/perkiraan-biaya">Perkiraan Biaya</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pengadaan">Pengadaan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/spk">SPK</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/change-pwd">Ganti Password</a>
+                </li>
+                <li class="nav-item" style="cursor: pointer;">
+                    <a class="nav-link" id="btn-logout">Logout</a>
+                </li>
+            </ul>
+            </form>
+        </div>
+    </nav>
+    <div class="d-flex justify-content-center">
+        <div class="p-4">
+            <h1>Tolak Rencana Pekerjaan</h1>
+            <hr>
+            <p>untuk Rencana Pekerjaan dengan ID : {{ .RPID }}</p>
+            <a href="/rp/{{.RPID}}">detail</a>
+            <hr>
+            <form>
+            <div class="mb-3">
+                <input type="hidden" id="input-rp-id" value="{{ .RPID }}">
+                <input type="hidden" id="input-inbox-id" value="{{ .INBOXID }}">
+                <label for="input-msg" class="form-label">Pesan</label>
+                <input type="text" class="form-control" id="input-msg" aria-describedby="msgHelp">
+                <div id="msgHelp" class="form-text">masukkan pesan.</div>
+            </div>
+            <button type="button" class="btn btn-danger" id="btn-tolak">Tolak</button>
+            <button class="btn" id="btn-exit">exit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

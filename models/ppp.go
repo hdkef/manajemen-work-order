@@ -22,6 +22,7 @@ type PPP struct {
 	BDMUPID     int64     `json:"bdmup_id"`
 	KELAID      int64     `json:"kela_id"`
 	Reason      string    `json:"reason"`
+	Photo       string    `json:"photo"`
 }
 
 type PPPRepo struct {
@@ -38,13 +39,14 @@ type PPPRepo struct {
 	BDMUPID     sql.NullInt64
 	KELAID      sql.NullInt64
 	Reason      sql.NullString
+	Photo       sql.NullString
 }
 
 func (x *PPP) InsertTx(tx *sql.Tx, ctx context.Context, creatorid int64) (sql.Result, error) {
 
 	date := time.Now()
 
-	return tx.ExecContext(ctx, fmt.Sprintf("INSERT INTO %s(date_created,creator_id, doc, status, perihal, nota, sifat, pekerjaan) VALUES (?,?,?,?,?,?,?,?)", table.PPP), date, creatorid, x.Doc, x.Status, x.Perihal, x.Nota, x.Sifat, x.Pekerjaan)
+	return tx.ExecContext(ctx, fmt.Sprintf("INSERT INTO %s(date_created,creator_id, doc, status, perihal, nota, sifat, pekerjaan, photo) VALUES (?,?,?,?,?,?,?,?,?)", table.PPP), date, creatorid, x.Doc, x.Status, x.Perihal, x.Nota, x.Sifat, x.Pekerjaan, x.Photo)
 }
 
 func (x *PPP) UpdateStatusAndBDMUIDTx(tx *sql.Tx, ctx context.Context) (sql.Result, error) {
@@ -67,13 +69,33 @@ func (x *PPP) UpdateStatusAndReasonTx(tx *sql.Tx, ctx context.Context) (sql.Resu
 	return tx.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=?,reason=? WHERE id=?", table.PPP), x.Status, x.Reason, x.ID)
 }
 
-func (x *PPP) UpdateStatusAndReason(db *sql.DB, ctx context.Context) (sql.Result, error) {
-	return db.ExecContext(ctx, fmt.Sprintf("UPDATE %s SET status=?,reason=? WHERE id=?", table.PPP), x.Status, x.Reason, x.ID)
+func (x *PPP) FindOne(db *sql.DB, ctx context.Context) (PPP, error) {
+	var tmpRepo PPPRepo
+	err := db.QueryRowContext(ctx, fmt.Sprintf("SELECT id,date_created,creator_id,doc,status,perihal,nota,pekerjaan,sifat,bdmu_id,bdmup_id,kela_id,photo,reason FROM %s WHERE id=?", table.PPP), x.ID).Scan(&tmpRepo.ID, &tmpRepo.DateCreated, &tmpRepo.CreatorID, &tmpRepo.Doc, &tmpRepo.Status, &tmpRepo.Perihal, &tmpRepo.Nota, &tmpRepo.Pekerjaan, &tmpRepo.Sifat, &tmpRepo.BDMUID, &tmpRepo.BDMUPID, &tmpRepo.KELAID, &tmpRepo.Photo, &tmpRepo.Reason)
+	if err != nil {
+		return PPP{}, err
+	}
+	return PPP{
+		ID:          tmpRepo.ID,
+		DateCreated: tmpRepo.DateCreated,
+		CreatorID:   tmpRepo.CreatorID,
+		Doc:         tmpRepo.Doc,
+		Status:      tmpRepo.Status,
+		Perihal:     tmpRepo.Perihal,
+		Nota:        tmpRepo.Nota,
+		Pekerjaan:   tmpRepo.Pekerjaan,
+		Sifat:       tmpRepo.Sifat,
+		BDMUID:      tmpRepo.BDMUID.Int64,
+		BDMUPID:     tmpRepo.BDMUPID.Int64,
+		KELAID:      tmpRepo.KELAID.Int64,
+		Photo:       tmpRepo.Photo.String,
+		Reason:      tmpRepo.Reason.String,
+	}, nil
 }
 
-func (x *PPP) FindAll(db *sql.DB, ctx context.Context) ([]PPP, error) {
+func (x *PPP) FindAll(db *sql.DB, ctx context.Context, lastID int64) ([]PPP, error) {
 	var result []PPP
-	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,date_created,creator_id,doc,status,perihal,nota,pekerjaan,sifat,bdmu_id,bdmup_id,kela_id FROM %s", table.PPP))
+	rows, err := db.QueryContext(ctx, fmt.Sprintf("SELECT id,date_created,creator_id,doc,status,perihal,nota,pekerjaan,sifat,bdmu_id,bdmup_id,kela_id FROM %s WHERE id > ? LIMIT 10", table.PPP), lastID)
 	if err != nil {
 		return nil, err
 	}

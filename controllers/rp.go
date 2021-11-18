@@ -15,12 +15,26 @@ import (
 
 func RPGet(c *gin.Context) {
 	//validate entity that entity role is super-admin
-	_, err := services.ValidateTokenFromHeader(c)
+	_, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
 	}
 	mdl := models.RP{}
+	//get last-id
+	val, _ := c.GetQuery("last-id")
+	var lastID int64
+
+	if val == "" {
+		lastID = 0
+	} else {
+		valInt, err := strconv.ParseInt(val, 10, 64)
+		if err != nil {
+			services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
+			return
+		}
+		lastID = valInt
+	}
 	//extract db
 	ctx := context.Background()
 	db, err := services.GetDB(c)
@@ -28,7 +42,7 @@ func RPGet(c *gin.Context) {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
-	res, err := mdl.FindAll(db, ctx)
+	res, err := mdl.FindAll(db, ctx, lastID)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -38,7 +52,7 @@ func RPGet(c *gin.Context) {
 
 func RPPost(c *gin.Context) {
 	//validate entity must be kelb
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -72,7 +86,7 @@ func RPPost(c *gin.Context) {
 		return
 	}
 
-	docPath := fmt.Sprintf("archive/rp/%s%s", entity.Fullname, time.Now())
+	docPath := fmt.Sprintf("archive/rp/%s%s%s", entity.Fullname, time.Now(), doc.Filename)
 
 	err = c.SaveUploadedFile(doc, docPath)
 	if err != nil {
@@ -170,7 +184,7 @@ func RPPost(c *gin.Context) {
 
 func RPOKKELA(c *gin.Context) {
 	//validate entity must be bdmu
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -260,7 +274,7 @@ func RPOKKELA(c *gin.Context) {
 
 func RPOKBDMUP(c *gin.Context) {
 	//validate entity must be bdmu
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -304,7 +318,7 @@ func RPOKBDMUP(c *gin.Context) {
 	rp := models.RP{
 		ID:     rpid,
 		Status: "ON ROUTE TO BDMU",
-		KELAID: entity.ID,
+		BDMUID: entity.ID,
 	}
 
 	_, err = rp.UpdateStatusAndBDMUPIDTx(tx, ctx)
@@ -350,7 +364,7 @@ func RPOKBDMUP(c *gin.Context) {
 
 func RPOKBDMU(c *gin.Context) {
 	//validate entity must be bdmu
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -394,7 +408,7 @@ func RPOKBDMU(c *gin.Context) {
 	rp := models.RP{
 		ID:     rpid,
 		Status: "ON ROUTE TO PPK",
-		KELAID: entity.ID,
+		BDMUID: entity.ID,
 	}
 
 	_, err = rp.UpdateStatusAndBDMUIDTx(tx, ctx)
@@ -416,7 +430,7 @@ func RPOKBDMU(c *gin.Context) {
 	}
 
 	//delete bdmu rp
-	bdmurp := models.BDMUPRP{
+	bdmurp := models.BDMURP{
 		ID: bdmuid,
 	}
 
@@ -440,7 +454,7 @@ func RPOKBDMU(c *gin.Context) {
 
 func RPNO(c *gin.Context) {
 	//validate entity must be bdmu || bdmup || kela
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -454,6 +468,12 @@ func RPNO(c *gin.Context) {
 	//extract rp_id from param
 	val := c.Params.ByName("rp_id")
 	rpid, err := strconv.ParseInt(val, 10, 64)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+	val2 := c.Params.ByName("inbox_id")
+	inboxid, err := strconv.ParseInt(val2, 10, 64)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -517,6 +537,30 @@ func RPNO(c *gin.Context) {
 	}
 
 	_, err = ppp.UpdateStatusAndReasonTx(tx, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		tx.Rollback()
+		return
+	}
+
+	//delete inbox
+	switch entity.Role {
+	case "BDMU":
+		mdl := models.BDMURP{
+			ID: inboxid,
+		}
+		_, err = mdl.DeleteTx(tx, ctx)
+	case "BDMUP":
+		mdl := models.BDMUPRP{
+			ID: inboxid,
+		}
+		_, err = mdl.DeleteTx(tx, ctx)
+	case "KELA":
+		mdl := models.KELARP{
+			ID: inboxid,
+		}
+		_, err = mdl.DeleteTx(tx, ctx)
+	}
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		tx.Rollback()

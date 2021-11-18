@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Surat Perintah Kerja</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
+    <script defer src="/js/spk-progress.js"></script>
+</head>
+<body>
+    <div class="d-flex justify-content-center">
+        <div class="p-4">
+            <h1>Progress Surat Perintah Kerja</h1>
+            <hr>
+            <p>update status dari Surat Perintah Kerja dengan ID : {{ .ID }}</p>
+            <a href="/ddd">detail</a>
+            <hr>
+            <form>
+            <input type="hidden" id="input-id" value="{{ .ID }}">
+            <div class="mb-3">
+                <label for="input-status" class="form-label">Status</label>
+                <input type="text" class="form-control" id="input-status" aria-describedby="statusHelp">
+                <div id="statusHelp" class="form-text">masukkan status dari pekerjaan yang ingin diubah.</div>
+            </div>
+            <div class="mb-3">
+                <label for="input-pin" class="form-label">pin</label>
+                <input type="text" class="form-control" id="input-pin" aria-describedby="pinHelp">
+                <div id="pinHelp" class="form-text">masukkan pin.</div>
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-submit-status">Submit Status</button>
+            <button type="button" class="btn btn-success" id="btn-report-done">Laporkan Pekerjaan Selesai</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

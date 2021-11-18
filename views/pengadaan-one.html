@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengadaan ID {{.ID}}</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
+    <script defer src="/js/logout.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="/assets/img/ppsdm.png" width="50" height="50" alt="logo">
+          </a>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/create-ppp"><strong>buat PPP</strong></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ppp">PPP</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rp">RP</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/perkiraan-biaya">Perkiraan Biaya</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pengadaan">Pengadaan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/spk">SPK</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/change-pwd">Ganti Password</a>
+                </li>
+                <li class="nav-item" style="cursor: pointer;">
+                    <a class="nav-link" id="btn-logout">Logout</a>
+                </li>
+            </ul>
+            </form>
+        </div>
+    </nav>
+    <div class="d-flex justify-content-center">
+        <div class="container m-5 p-3 border">
+            <div class="row mb-3">
+                <div class="col-sm">
+                    <p class="h5"><u>Tanggal Dibuat</u></p>
+                    <p class="h3">{{.DateCreated}}</p>
+                </div>
+                <div class="col-sm">
+                    <p class="h5"><u>ID</u></p>
+                    <p class="h3">{{.ID}}</p>
+                </div>
+                <div class="col-sm">
+                    <p class="h5"><u>ID Pembuat</u></p>
+                    <p class="h3">{{.CreatorID}}</p>
+                </div>
+                <div class="col-sm">
+                    <p class="h5"><u>ID Perkiraan Biaya</u></p>
+                    <p class="h3">{{.PerkiraanBiayaID}}</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm">
+                    <a href="/{{ .Doc }}" target="_blank"><button class="btn btn-primary">lihat dokumen</button></a>
+                    <a href="/perkiraan-biaya/{{ .PerkiraanBiayaID }}" target="_blank"><button class="btn btn-primary">lihat detail Perkiraan Biaya</button></a>
+                    <a href="/entity/{{ .CreatorID }}" target="_blank"><button class="btn btn-primary">detail pembuat</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+</body>
+</html>

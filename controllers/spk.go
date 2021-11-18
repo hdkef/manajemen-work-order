@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"manajemen-work-order/models"
 	"manajemen-work-order/services"
@@ -15,12 +16,26 @@ import (
 
 func SPKGet(c *gin.Context) {
 	//validate entity that entity role is super-admin
-	_, err := services.ValidateTokenFromHeader(c)
+	_, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
 	}
 	mdl := models.SPK{}
+	//get last-id
+	val, _ := c.GetQuery("last-id")
+	var lastID int64
+
+	if val == "" {
+		lastID = 0
+	} else {
+		valInt, err := strconv.ParseInt(val, 10, 64)
+		if err != nil {
+			services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
+			return
+		}
+		lastID = valInt
+	}
 	//extract db
 	ctx := context.Background()
 	db, err := services.GetDB(c)
@@ -28,7 +43,7 @@ func SPKGet(c *gin.Context) {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
-	res, err := mdl.FindAll(db, ctx)
+	res, err := mdl.FindAll(db, ctx, lastID)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -38,7 +53,7 @@ func SPKGet(c *gin.Context) {
 
 func SPKPost(c *gin.Context) {
 	//validate entity must be ppk
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -85,7 +100,7 @@ func SPKPost(c *gin.Context) {
 		return
 	}
 
-	docPath := fmt.Sprintf("archive/spk/%s%s", entity.Fullname, time.Now())
+	docPath := fmt.Sprintf("archive/spk/%s%s%s", entity.Fullname, time.Now(), doc.Filename)
 
 	err = c.SaveUploadedFile(doc, docPath)
 	if err != nil {
@@ -170,7 +185,7 @@ func SPKPost(c *gin.Context) {
 	}
 
 	//TOBE send email to worker
-	emailMsg := fmt.Sprintf("work order has been created click this link to see details. Please submit work progression to http://localhost:8080/spk/progress and use work order id of %d and pin %d", lastInsertedID, pin)
+	emailMsg := fmt.Sprintf("work order has been created click this link to see details. Please submit work progression to HOST/spk-progress/%d and use work order id of %d and pin %d", lastInsertedID, lastInsertedID, pin)
 
 	err = services.SendEmail(workerEmail, "Email dari Server", emailMsg)
 	if err != nil {
@@ -192,16 +207,15 @@ func SPKEdit(c *gin.Context) {
 	}
 
 	//decode payload
-	status := c.PostForm("status")
-	pinString := c.PostForm("pin")
-	pin, err := strconv.ParseInt(pinString, 10, 64)
+	payload := models.SPKProgress{}
+	err = json.NewDecoder(c.Request.Body).Decode(&payload)
 	if err != nil {
-		services.SendBasicResponse(c, http.StatusBadRequest, true, err.Error())
+		services.SendBasicResponse(c, http.StatusInternalServerError, true, err.Error())
 		return
 	}
 
 	//validate
-	err = services.IsNotEmpty(status)
+	err = services.IsNotEmpty(payload.Status)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusBadRequest, true, err.Error())
 		return
@@ -227,7 +241,7 @@ func SPKEdit(c *gin.Context) {
 	}
 
 	//compare pin
-	if emailSessionFromDB.PIN != pin {
+	if emailSessionFromDB.PIN != payload.PIN {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, "wrong pin")
 		return
 	}
@@ -235,7 +249,7 @@ func SPKEdit(c *gin.Context) {
 	//update status spk
 	spk := models.SPK{
 		ID:     spkid,
-		Status: status,
+		Status: payload.Status,
 	}
 	_, err = spk.UpdateStatus(db, ctx)
 	if err != nil {
@@ -257,10 +271,10 @@ func SPKLapor(c *gin.Context) {
 	}
 
 	//decode payload
-	pinString := c.PostForm("pin")
-	pin, err := strconv.ParseInt(pinString, 10, 64)
+	payload := models.SPKProgress{}
+	err = json.NewDecoder(c.Request.Body).Decode(&payload)
 	if err != nil {
-		services.SendBasicResponse(c, http.StatusBadRequest, true, err.Error())
+		services.SendBasicResponse(c, http.StatusInternalServerError, true, err.Error())
 		return
 	}
 
@@ -290,7 +304,7 @@ func SPKLapor(c *gin.Context) {
 	}
 
 	//compare pin
-	if emailSessionFromDB.PIN != pin {
+	if emailSessionFromDB.PIN != payload.PIN {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, "wrong pin")
 		return
 	}
@@ -333,7 +347,7 @@ func SPKLapor(c *gin.Context) {
 
 func SPKOK(c *gin.Context) {
 	//validate entity must be ppk
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -426,7 +440,7 @@ func SPKOK(c *gin.Context) {
 	}
 
 	//send email
-	err = services.SendEmail(workerEmail, "Email dari Server", fmt.Sprintf("work order dengan id %d, telah ditutup oleh PPK", spkid))
+	err = services.SendEmail(workerEmail, "Email dari Server", fmt.Sprintf("work order dengan id %d, telah ditutup oleh PPK. Terima kasih.", spkid))
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusOK, true, fmt.Sprintf("spk is closed by PPK but email respond has not been sent to worker (%s). Please send it manually", workerEmail))
 		return
@@ -438,7 +452,7 @@ func SPKOK(c *gin.Context) {
 
 func SPKNO(c *gin.Context) {
 	//validate entity must be ppk
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -465,9 +479,16 @@ func SPKNO(c *gin.Context) {
 	}
 
 	//decode payload
-	msg := c.PostForm("msg")
+	payload := struct {
+		Msg string `json:"msg"`
+	}{}
+	err = json.NewDecoder(c.Request.Body).Decode(&payload)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
+		return
+	}
 
-	err = services.IsNotEmpty(msg)
+	err = services.IsNotEmpty(payload.Msg)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
 		return
@@ -529,7 +550,7 @@ func SPKNO(c *gin.Context) {
 	}
 
 	//send email
-	err = services.SendEmail(workerEmail, "Email dari Server", fmt.Sprintf("work order dengan id %d rejected dengan pesan ==> %s", spkid, msg))
+	err = services.SendEmail(workerEmail, "Email dari Server", fmt.Sprintf("work order dengan id %d rejected dengan pesan ==> %s", spkid, payload.Msg))
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusOK, true, fmt.Sprintf("SPK is rejected and need revision but email respond has not been sent to worker (%s). Please send it manually", workerEmail))
 		return

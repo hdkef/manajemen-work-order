@@ -11,9 +11,41 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func EntityGet(c *gin.Context) {
+	//validate entity that entity role is super-admin
+	entity, err := services.ValidateTokenFromCookie(c)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
+		return
+	}
+
+	if entity.Role != "Super-Admin" {
+		services.SendBasicResponse(c, http.StatusUnauthorized, false, "NOT Super-Admin")
+		return
+	}
+
+	//extract db
+	ctx := context.Background()
+	db, err := services.GetDB(c)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	mdl := models.Entity{}
+
+	entities, err := mdl.FindAll(db, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, entities)
+}
+
 func EntityPost(c *gin.Context) {
 	//validate entity that entity role is super-admin
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -51,7 +83,7 @@ func EntityPost(c *gin.Context) {
 		return
 	}
 
-	signaturePath := fmt.Sprintf("assets/signature/%s", fullname)
+	signaturePath := fmt.Sprintf("assets/signature/%s%s", fullname, signature.Filename)
 
 	err = c.SaveUploadedFile(signature, signaturePath)
 	if err != nil {
@@ -100,7 +132,7 @@ func EntityPost(c *gin.Context) {
 
 func EntityDelete(c *gin.Context) {
 	//validate entity that entity role is super-admin
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -131,12 +163,22 @@ func EntityDelete(c *gin.Context) {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
-
-	//delete entity
 	ctx := context.Background()
 	entityModel := models.Entity{
 		ID: id,
 	}
+
+	//get entity
+	signature, err := entityModel.FindSignature(db, ctx)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//delete entity from disk
+	services.RemoveFile(signature)
+
+	//delete entity
 	err = entityModel.Delete(db, ctx)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())

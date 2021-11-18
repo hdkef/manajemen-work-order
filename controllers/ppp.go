@@ -3,22 +3,41 @@ package controllers
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"manajemen-work-order/models"
 	"manajemen-work-order/services"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
+const NOIMGPATH = "archive/img/noimg.png"
+
 func PPPGet(c *gin.Context) {
 	//validate entity that entity role is super-admin
-	_, err := services.ValidateTokenFromHeader(c)
+	_, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
 	}
 	mdl := models.PPP{}
+	//get last-id
+	val, _ := c.GetQuery("last-id")
+	var lastID int64
+
+	if val == "" {
+		lastID = 0
+	} else {
+		valInt, err := strconv.ParseInt(val, 10, 64)
+		if err != nil {
+			services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
+			return
+		}
+		lastID = valInt
+	}
+
 	//extract db
 	ctx := context.Background()
 	db, err := services.GetDB(c)
@@ -26,7 +45,7 @@ func PPPGet(c *gin.Context) {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
-	res, err := mdl.FindAll(db, ctx)
+	res, err := mdl.FindAll(db, ctx, lastID)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -37,7 +56,7 @@ func PPPGet(c *gin.Context) {
 func PPPPost(c *gin.Context) {
 
 	//validate entity
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -45,25 +64,49 @@ func PPPPost(c *gin.Context) {
 
 	//decode ppp
 	var payload models.PPP
-	err = json.NewDecoder(c.Request.Body).Decode(&payload)
+
+	nota := c.PostForm("nota")
+	pekerjaan := c.PostForm("pekerjaan")
+	perihal := c.PostForm("perihal")
+	sifat := c.PostForm("sifat")
+	photo, err := c.FormFile("photo")
+
+	//if there is photo payload, then store and set payload.Photo = pathImage if not set payload.Photo to NOIMG
 	if err != nil {
-		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
-		return
+		payload.Photo = NOIMGPATH
+	} else {
+		pathImage := fmt.Sprintf("archive/img/%s%s%s", entity.Fullname, time.Now(), photo.Filename)
+
+		err = c.SaveUploadedFile(photo, pathImage)
+		if err != nil {
+			services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+			return
+		}
+
+		payload.Photo = pathImage
 	}
 
-	//generate pdf and store it on disk
-	path, err := services.CreatePDFofPPP(payload, entity, "BDMU")
+	payload.Nota = nota
+	payload.Pekerjaan = pekerjaan
+	payload.Perihal = perihal
+	payload.Sifat = sifat
+
+	//TOBE generate pdf and store it on disk
+	pathDoc, err := services.CreatePDFofPPP(payload, entity, "BDMU")
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
-	payload.Doc = path
+	payload.Doc = pathDoc
 	payload.Status = "ON ROUTE TO BDMU"
 
 	//validation
-	err = services.IsNotEmpty(payload.Doc, payload.Sifat, payload.Status, payload.Nota, payload.Perihal, payload.Pekerjaan)
+	err = services.IsNotEmpty(payload.Doc, payload.Sifat, payload.Status, payload.Nota, payload.Perihal, payload.Pekerjaan, payload.Photo)
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
 		return
 	}
@@ -71,7 +114,10 @@ func PPPPost(c *gin.Context) {
 	//extract db
 	db, err := services.GetDB(c)
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
@@ -81,7 +127,10 @@ func PPPPost(c *gin.Context) {
 
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -89,7 +138,10 @@ func PPPPost(c *gin.Context) {
 
 	res, err := payload.InsertTx(tx, ctx, entity.ID)
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -97,7 +149,10 @@ func PPPPost(c *gin.Context) {
 
 	insertedID, err := res.LastInsertId()
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -110,7 +165,10 @@ func PPPPost(c *gin.Context) {
 
 	_, err = bdmuppp.InsertTx(tx, ctx)
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -118,7 +176,10 @@ func PPPPost(c *gin.Context) {
 
 	err = tx.Commit()
 	if err != nil {
-		services.RemoveFile(path)
+		if payload.Photo != NOIMGPATH {
+			services.RemoveFile(payload.Photo)
+		}
+		services.RemoveFile(pathDoc)
 		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -129,7 +190,7 @@ func PPPPost(c *gin.Context) {
 
 func PPPOKBDMU(c *gin.Context) {
 	//validate entity must be bdmu
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -218,7 +279,7 @@ func PPPOKBDMU(c *gin.Context) {
 
 func PPPOKBDMUP(c *gin.Context) {
 	//validate entity must be bdmu
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -308,7 +369,7 @@ func PPPOKBDMUP(c *gin.Context) {
 
 func PPPOKKELA(c *gin.Context) {
 	//validate entity must be bdmu
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -398,7 +459,7 @@ func PPPOKKELA(c *gin.Context) {
 
 func PPPNO(c *gin.Context) {
 	//validate entity must be bdmu || bdmup || kela
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -409,9 +470,15 @@ func PPPNO(c *gin.Context) {
 		return
 	}
 
-	//extract ppp_id from param
+	//extract ppp_id and inboxid from param
 	val := c.Params.ByName("ppp_id")
 	pppid, err := strconv.ParseInt(val, 10, 64)
+	if err != nil {
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+	val2 := c.Params.ByName("inbox_id")
+	inboxid, err := strconv.ParseInt(val2, 10, 64)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -443,12 +510,50 @@ func PPPNO(c *gin.Context) {
 	//change status ppp
 
 	ctx := context.Background()
+	tx, err := db.BeginTx(ctx, nil)
+	if err != nil {
+		tx.Rollback()
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
 
 	ppp.ID = pppid
 	ppp.Status = "REJECTED"
 
-	_, err = ppp.UpdateStatusAndReason(db, ctx)
+	_, err = ppp.UpdateStatusAndReasonTx(tx, ctx)
 	if err != nil {
+		tx.Rollback()
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	//delete inbox
+	switch entity.Role {
+	case "BDMU":
+		mdl := models.BDMUPPP{
+			ID: inboxid,
+		}
+		_, err = mdl.DeleteTx(tx, ctx)
+	case "BDMUP":
+		mdl := models.BDMUPPPP{
+			ID: inboxid,
+		}
+		_, err = mdl.DeleteTx(tx, ctx)
+	case "KELA":
+		mdl := models.KELAPPP{
+			ID: inboxid,
+		}
+		_, err = mdl.DeleteTx(tx, ctx)
+	}
+	if err != nil {
+		tx.Rollback()
+		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
+		return
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}

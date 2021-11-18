@@ -75,8 +75,11 @@ func validateTokenString(token *string) (models.Entity, error) {
 	}, nil
 }
 
-func ValidateTokenFromHeader(c *gin.Context) (models.Entity, error) {
-	token := c.GetHeader("Authorization")
+func ValidateTokenFromCookie(c *gin.Context) (models.Entity, error) {
+	token, err := c.Cookie("Authorization")
+	if err != nil {
+		return models.Entity{}, err
+	}
 
 	return validateTokenString(&token)
 }

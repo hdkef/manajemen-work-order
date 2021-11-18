@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buat Perkiraan Biaya</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
+    <script defer src="/js/create-perkiraan-biaya.js"></script>
+    <script defer src="/js/logout.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="/assets/img/ppsdm.png" width="50" height="50" alt="logo">
+          </a>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/create-ppp"><strong>buat PPP</strong></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ppp">PPP</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rp">RP</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/perkiraan-biaya">Perkiraan Biaya</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pengadaan">Pengadaan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/spk">SPK</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/change-pwd">Ganti Password</a>
+                </li>
+                <li class="nav-item" style="cursor: pointer;">
+                    <a class="nav-link" id="btn-logout">Logout</a>
+                </li>
+            </ul>
+            </form>
+        </div>
+    </nav>
+    <div class="d-flex justify-content-center">
+        <div class="p-4">
+            <h1>Buat Perkiraan Biaya</h1>
+            <hr>
+            <p>dibuat berdasarkan Rencana Pekerjaan dengan ID : {{ .RPID }}</p>
+            <a href="/rp/{{ .RPID }}" target="_blank">detail</a>
+            <hr>
+            <form>
+                <input type="hidden" id="input-id" value="{{ .ID }}">
+                <input type="hidden" id="input-rp-id" value="{{ .RPID }}">
+            <div class="mb-3">
+                <label for="input-towhom" class="form-label">Ditujukkan Ke</label>
+                <select id="input-towhom" aria-describedby="towhomHelp">
+                    <option value="PPE">Pejabat Pengadaan</option>
+                    <option value="ULP">Unit L Pengadaan</option>
+                </select>
+                <div id="towhomHelp" class="form-text">pilih penerima surat.</div>
+            </div>
+            <div class="mb-3">
+                <label for="input-est-cost" class="form-label">Perkiraan Biaya</label>
+                <input type="text" class="form-control" id="input-est-cost" aria-describedby="est-costHelp">
+                <div id="est-costHelp" class="form-text">masukkan nilai perkiraan biaya.</div>
+            </div>
+            <div class="mb-3">
+                <label for="input-doc" class="form-label">Dokumen Perkiraan Biaya</label>
+                <input type="file" class="form-control" id="input-doc" aria-describedby="docHelp">
+                <div id="docHelp" class="form-text">upload dokumen perkiraan biaya.</div>
+            </div>
+            <button type="button" class="btn btn-primary" id="btn-create-perkiraan-biaya">Buat Perkiraan Biaya</button>
+            <button type="button" class="btn" id="btn-exit">exit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

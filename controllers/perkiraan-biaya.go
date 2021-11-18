@@ -14,12 +14,26 @@ import (
 
 func PerkiraanBiayaGet(c *gin.Context) {
 	//validate entity that entity role is super-admin
-	_, err := services.ValidateTokenFromHeader(c)
+	_, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
 	}
 	mdl := models.PerkiraanBiaya{}
+	//get last-id
+	val, _ := c.GetQuery("last-id")
+	var lastID int64
+
+	if val == "" {
+		lastID = 0
+	} else {
+		valInt, err := strconv.ParseInt(val, 10, 64)
+		if err != nil {
+			services.SendBasicResponse(c, http.StatusBadRequest, false, err.Error())
+			return
+		}
+		lastID = valInt
+	}
 	//extract db
 	ctx := context.Background()
 	db, err := services.GetDB(c)
@@ -27,7 +41,7 @@ func PerkiraanBiayaGet(c *gin.Context) {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
 	}
-	res, err := mdl.FindAll(db, ctx)
+	res, err := mdl.FindAll(db, ctx, lastID)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusInternalServerError, false, err.Error())
 		return
@@ -45,7 +59,7 @@ func PPEPerkiraanBiaya(c *gin.Context) {
 
 func PerkiraanBiayaHelper(c *gin.Context, role string) {
 	//validate entity must be kelb
-	entity, err := services.ValidateTokenFromHeader(c)
+	entity, err := services.ValidateTokenFromCookie(c)
 	if err != nil {
 		services.SendBasicResponse(c, http.StatusUnauthorized, false, err.Error())
 		return
@@ -85,7 +99,7 @@ func PerkiraanBiayaHelper(c *gin.Context, role string) {
 		return
 	}
 
-	docPath := fmt.Sprintf("archive/perkiraan-biaya/%s%s", entity.Fullname, time.Now())
+	docPath := fmt.Sprintf("archive/perkiraan-biaya/%s%s%s", entity.Fullname, time.Now(), doc.Filename)
 
 	err = c.SaveUploadedFile(doc, docPath)
 	if err != nil {

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengadaan</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <script src="/js/bootstrap.js"></script>
+    <script defer src="/js/pengadaan.js"></script>
+    <script defer src="/js/logout.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">
+            <img src="/assets/img/ppsdm.png" width="50" height="50" alt="logo">
+          </a>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/create-ppp"><strong>buat PPP</strong></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ppp">PPP</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/rp">RP</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/perkiraan-biaya">Perkiraan Biaya</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/pengadaan">Pengadaan</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/spk">SPK</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/change-pwd">Ganti Password</a>
+                </li>
+                <li class="nav-item" style="cursor: pointer;">
+                    <a class="nav-link" id="btn-logout">Logout</a>
+                </li>
+            </ul>
+            </form>
+        </div>
+    </nav>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tanggal Dibuat</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="table-pengadaan">
+            {{ range $v := . }}
+            <tr>
+                <td>{{ $v.ID }}</td>
+                <td>{{ $v.DateCreated }}</td>
+                <td>
+                    <a href="/{{$v.Doc}}" target="_blank" class="m-2"><button class="btn btn-primary">lihat dokumen</button></a><a href="/pengadaan/{{$v.ID}}" target="_blank" class="m-2"><button class="btn btn-primary">lihat detail</button></a><a href="/entity/{{$v.CreatorID}}" target="_blank" class="m-2"><button class="btn btn-primary">detail pembuat</button></a>
+                </td>
+            </tr>
+            {{ end }}
+        </tbody>
+    </table>
+    <button class="btn" id="btn-paging">Muat lebih</button>
+</body>
+</html>
